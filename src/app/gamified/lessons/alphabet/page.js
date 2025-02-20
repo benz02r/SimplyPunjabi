@@ -32,7 +32,7 @@ export default function AlphabetPage() {
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-6 py-10">
             <div className="max-w-4xl w-full bg-white shadow-xl rounded-xl p-8 border border-gray-200">
                 <h2 className="text-3xl font-bold text-center text-[var(--primary)] mb-6">
-                    Learn the Punjabi Alphabet 🇮🇳
+                    Learn the Punjabi Alphabet
                 </h2>
 
                 {/* Alphabet Grid */}

@@ -20,7 +20,7 @@ export default function Navbar() {
                 {/* Brand Name */}
                 <Link href="/" className="flex items-center space-x-2">
                     <h1 className="text-3xl font-extrabold text-[var(--primary)] cursor-pointer transition-transform duration-200 hover:scale-105">
-                        Simply Punjabi 🇮🇳
+                        Simply Punjabi
                     </h1>
                 </Link>
 
