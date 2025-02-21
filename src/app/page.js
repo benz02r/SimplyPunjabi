@@ -9,7 +9,7 @@ export default function Home() {
                     Simply Punjabi, <span className="text-green-500">the Fun Way!</span>
                 </h1>
                 <p className="text-lg mt-3 text-gray-700 max-w-xl mx-auto">
-                    Learn Punjabi the simple way,
+                    The simple way to learn Punjabi,
                     Start your journey today!
                 </p>
 
@@ -20,7 +20,7 @@ export default function Home() {
                             Get Started 🚀
                         </button>
                     </Link>
-                    <Link href="/gamified/lessons">
+                    <Link href="/explore-lessons">
                         <button className="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-green-600 transition">
                             Explore Lessons 🎮
                         </button>
