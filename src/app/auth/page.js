@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../lib/supabaseClient"; // ✅ Ensure correct import path
+import { supabase } from "../../lib/supabaseClient";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -11,12 +11,12 @@ export default function SignIn() {
     const [errorMessage, setErrorMessage] = useState("");
     const router = useRouter();
 
-    const handleLogin = async (e) => {np
+    const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
         setErrorMessage("");
 
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
         if (error) {
             setErrorMessage("Invalid email or password.");
@@ -24,9 +24,13 @@ export default function SignIn() {
             return;
         }
 
+        if (!data?.session) {
+            setErrorMessage("Login failed. Please try again.");
+            setLoading(false);
+            return;
+        }
+
         router.push("/profile");
-        setPassword("");
-        setLoading(false);
     };
 
     return (
