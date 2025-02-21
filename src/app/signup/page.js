@@ -54,14 +54,12 @@ export default function Signup() {
                 setErrorMessage("User created in Auth but not saved in database.");
             } else {
                 console.log("✅ User successfully inserted into users table!");
-                alert("Signup successful! Check your email for verification.");
-                router.push("/auth");
+                router.push("/signup-success");
             }
         }
 
         setLoading(false);
     };
-
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6">
