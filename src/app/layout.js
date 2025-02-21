@@ -1,7 +1,7 @@
-import { Inter, JetBrains_Mono } from "next/font/google"; // ✅ Import new fonts
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import ClientNavbar from "./components/ClientNavbar"; // ✅ Client-side Navbar
-import { AuthProvider } from "./context/AuthContext"; // ✅ Import Authentication Provider
+import ClientWrapper from "./components/ClientWrapper"; // ✅ Import Client Wrapper
+import { AuthProvider } from "./context/AuthContext";
 
 // New Fonts
 const inter = Inter({
@@ -24,8 +24,7 @@ export default function RootLayout({ children }) {
         <html lang="en">
         <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         <AuthProvider> {/* ✅ Wrap everything inside the AuthProvider */}
-            <ClientNavbar /> {/* ✅ Navbar remains visible except on home */}
-            <main className="container mx-auto">{children}</main>
+            <ClientWrapper>{children}</ClientWrapper> {/* ✅ Navbar logic inside Client Component */}
         </AuthProvider>
         </body>
         </html>
