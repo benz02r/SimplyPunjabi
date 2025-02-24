@@ -142,7 +142,7 @@ export default function Profile() {
                     <button onClick={updatePassword} className="mt-4 w-48 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition">Change Password</button>
                 </div>
 
-                <button onClick={async () => { await supabase.auth.signOut(); router.push("/signin"); }} className="mt-6 w-48 bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition">Logout</button>
+                <button onClick={async () => { await supabase.auth.signOut(); router.push("/auth"); }} className="mt-6 w-48 bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition">Logout</button>
             </div>
         </div>
     );
