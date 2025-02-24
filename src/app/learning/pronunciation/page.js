@@ -11,8 +11,8 @@ export default function Pronunciation() {
 
     // Dummy lesson names (2 Unlocked, 8 Locked)
     const lessons = [
-        { title: "Lesson 1: Basic Punjabi Sounds", link: "/lesson/basic-sounds", locked: false },
-        { title: "Lesson 2: Common Greetings & Phrases", link: "/lesson/common-greetings", locked: false },
+        { title: "Lesson 1: Basic Punjabi Sounds", link: "/gamified/lessons/basic-punjabi-sounds", locked: false },
+        { title: "Lesson 2: Common Greetings & Phrases", link: "/gamified/lessons/common-greetings", locked: false },
         { title: "Lesson 3: Difficult Consonants", link: "/lesson/difficult-consonants", locked: true },
         { title: "Lesson 4: Vowel Sounds & Tones", link: "/lesson/vowel-tones", locked: true },
         { title: "Lesson 5: Speaking Fluency Drills", link: "/lesson/speaking-fluency", locked: true },

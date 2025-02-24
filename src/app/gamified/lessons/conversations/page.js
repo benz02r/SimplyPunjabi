@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const conversations = [
     {
-        id: "greetings",
+        id: "common-greetings",
         title: "Greetings & Introductions",
         dialogue: [
             { english: "Hello! How are you?", punjabi: "Sat Sri Akal! Tusi kiven ho?" },

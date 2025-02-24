@@ -6,7 +6,7 @@ const lessons = [
     { id: "alphabet", title: "Punjabi Alphabet", description: "Learn the Gurmukhi script from scratch.", emoji: "🔠" },
     { id: "basic-phrases", title: "Basic Phrases", description: "Start speaking Punjabi with common expressions.", emoji: "🗣️" },
     { id: "numbers", title: "Numbers in Punjabi", description: "Learn to count and use numbers in Punjabi.", emoji: "🔢" },
-    { id: "greetings", title: "Greetings", description: "Say hello and introduce yourself in Punjabi.", emoji: "👋" },
+    { id: "common-greetings", title: "Greetings", description: "Say hello and introduce yourself in Punjabi.", emoji: "👋" },
 ];
 
 export default function ExploreLessonsPage() {
