@@ -3,6 +3,7 @@ import "./globals.css";
 import ClientWrapper from "./components/ClientWrapper"; // ✅ Import Client Wrapper
 import { AuthProvider } from "./context/AuthContext";
 import { Analytics } from "@vercel/analytics/react"; // ✅ Import Vercel Analytics
+import { SpeedInsights } from "@vercel/speed-insights/next"; // ✅ Import Vercel Speed Insights
 
 // New Fonts
 const inter = Inter({
@@ -16,8 +17,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-    title: "Punjabi Learning",
-    description: "Interactive Punjabi Learning Platform",
+    title: "Simply Punjabi",
+    description: "The simple way to learn Punjabi",
 };
 
 export default function RootLayout({ children }) {
@@ -26,7 +27,8 @@ export default function RootLayout({ children }) {
         <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         <AuthProvider> {/* ✅ Wrap everything inside the AuthProvider */}
             <ClientWrapper>{children}</ClientWrapper> {/* ✅ Navbar logic inside Client Component */}
-            <Analytics /> {/* ✅ Vercel Analytics added to track user activity */}
+            <Analytics /> {/* ✅ Vercel Analytics to track user activity */}
+            <SpeedInsights /> {/* ✅ Vercel Speed Insights to monitor performance */}
         </AuthProvider>
         </body>
         </html>
