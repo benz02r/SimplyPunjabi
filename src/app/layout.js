@@ -2,6 +2,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import ClientWrapper from "./components/ClientWrapper"; // ✅ Import Client Wrapper
 import { AuthProvider } from "./context/AuthContext";
+import { Analytics } from "@vercel/analytics/react"; // ✅ Import Vercel Analytics
 
 // New Fonts
 const inter = Inter({
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
         <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         <AuthProvider> {/* ✅ Wrap everything inside the AuthProvider */}
             <ClientWrapper>{children}</ClientWrapper> {/* ✅ Navbar logic inside Client Component */}
+            <Analytics /> {/* ✅ Vercel Analytics added to track user activity */}
         </AuthProvider>
         </body>
         </html>
