@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 
 const avatars = [
     "/avatars/avatar1.png",
@@ -13,11 +13,11 @@ const avatars = [
 ];
 
 export default function Profile() {
-    const [darkMode, setDarkMode] = useState(false);
     const [selectedAvatar, setSelectedAvatar] = useState(avatars[0]);
     const [name, setName] = useState("");
     const [newName, setNewName] = useState("");
     const [email, setEmail] = useState("");
+    const [userId, setUserId] = useState(null);
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -36,23 +36,17 @@ export default function Profile() {
 
             const user = sessionData.session.user;
             setEmail(user.email);
+            setUserId(user.id); // ✅ Store user ID for updates
 
-            // 🛠️ Fix: Ensure a single row is fetched using .limit(1)
+            // Fetch user name from database using user ID
             const { data, error } = await supabase
                 .from("users")
                 .select("name")
-                .eq("email", user.email)
-                .limit(1)
+                .eq("id", user.id)
                 .single();
 
             if (error) {
-                console.error("Supabase Fetch Error:", error.message);
                 setMessage(`❌ Error fetching user data: ${error.message}`);
-                return;
-            }
-
-            if (!data) {
-                setMessage("❌ No user data found. Please complete your profile.");
                 return;
             }
 
@@ -67,15 +61,20 @@ export default function Profile() {
         setLoading(true);
         setMessage("");
 
-        if (!email) {
-            setMessage("❌ User email not found.");
+        if (!newName.trim()) {
+            setMessage("⚠️ Name cannot be empty.");
             setLoading(false);
             return;
         }
 
-        const { error } = await supabase.from("users").update({ name: newName }).eq("email", email);
+        // ✅ Ensure proper authorization to update user details
+        const { error } = await supabase
+            .from("users")
+            .update({ name: newName })
+            .eq("id", userId);
+
         if (error) {
-            console.error("Supabase Update Error:", error.message);
+            console.error("Update Error:", error);
             setMessage(`❌ Error updating profile: ${error.message}`);
         } else {
             setName(newName);
@@ -95,8 +94,8 @@ export default function Profile() {
         }
 
         const { error } = await supabase.auth.updateUser({ password: newPassword });
+
         if (error) {
-            console.error("Password Update Error:", error.message);
             setMessage(`❌ Error updating password: ${error.message}`);
         } else {
             setMessage("✅ Password updated successfully!");
@@ -107,14 +106,22 @@ export default function Profile() {
     };
 
     return (
-        <div className={`min-h-screen flex items-center justify-center px-6 pt-24 ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}>
-            <div className="p-8 rounded-xl shadow-lg w-full max-w-4xl text-center border border-gray-300 bg-gray-100">
+        <div className="min-h-screen flex flex-col items-center justify-center px-6 pt-24 bg-gradient-to-b from-blue-50 to-white">
+            <div className="p-8 rounded-xl shadow-lg w-full max-w-4xl text-center border border-gray-300 bg-white">
+                {/* Back to Dashboard Button */}
+                <div className="flex justify-start">
+                    <button onClick={() => router.push("/dashboard")} className="mb-4 bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-600 transition">
+                        ← Back to Dashboard
+                    </button>
+                </div>
+
                 <div className="flex flex-col items-center">
                     <Image src={selectedAvatar} alt="User Avatar" width={96} height={96} className="rounded-full mb-4 shadow-md border-4 border-gray-300" />
                     <h1 className="text-3xl font-bold">{name}</h1>
                     <p className="text-gray-500">Customize your learning experience!</p>
                 </div>
 
+                {/* Avatar Selection */}
                 <div className="mt-6">
                     <h2 className="text-lg font-semibold">Choose Your Avatar:</h2>
                     <div className="flex justify-center space-x-4 mt-3">
@@ -124,25 +131,32 @@ export default function Profile() {
                     </div>
                 </div>
 
+                {/* Display Error or Success Messages */}
                 {message && <p className="text-center text-red-500 mt-4">{message}</p>}
 
-                <div className="mt-6 grid grid-cols-2 gap-6">
-                    <div>
-                        <label className="block font-semibold">Name</label>
-                        <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} className="w-full p-3 rounded-md border border-gray-300 bg-white text-gray-900" />
-                    </div>
+                {/* Update Name Section */}
+                <div className="mt-6">
+                    <label className="block font-semibold">Name</label>
+                    <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} className="w-full p-3 rounded-md border border-gray-300 bg-white text-gray-900" />
+                    <button onClick={updateProfile} className="mt-4 w-48 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition">
+                        Update Name
+                    </button>
                 </div>
 
-                <button onClick={updateProfile} className="mt-4 w-48 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition">Update Profile</button>
-
+                {/* Reset Password Section */}
                 <div className="mt-6">
                     <label className="block font-semibold">Change Password</label>
                     <input type="password" placeholder="Enter old password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} className="w-full p-3 rounded-md border border-gray-300 mt-2" />
                     <input type="password" placeholder="Enter new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full p-3 rounded-md border border-gray-300 mt-2" />
-                    <button onClick={updatePassword} className="mt-4 w-48 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition">Change Password</button>
+                    <button onClick={updatePassword} className="mt-4 w-48 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition">
+                        Change Password
+                    </button>
                 </div>
 
-                <button onClick={async () => { await supabase.auth.signOut(); router.push("/auth"); }} className="mt-6 w-48 bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition">Logout</button>
+                {/* Logout Button */}
+                <button onClick={async () => { await supabase.auth.signOut(); router.push("/auth"); }} className="mt-6 w-48 bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition">
+                    Logout
+                </button>
             </div>
         </div>
     );

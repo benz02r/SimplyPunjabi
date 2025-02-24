@@ -41,15 +41,15 @@ export default function Navbar() {
         <nav className="bg-white shadow-lg py-4 fixed top-0 left-0 right-0 z-50">
             <div className="container mx-auto flex justify-between items-center px-6">
                 {/* Brand Name */}
-                <Link href="/" className="flex items-center space-x-2">
-                    <h1 className="text-3xl font-extrabold text-[var(--primary)] cursor-pointer transition-transform duration-200 hover:scale-105">
-                        Simply Punjabi
-                    </h1>
-                </Link>
+                <h1 className="text-3xl font-extrabold text-[var(--primary)] cursor-default">
+                    Simply Punjabi
+                </h1>
 
-                {/* Desktop Navigation */}
+                {/* Desktop Navigation (Removed "Home") */}
                 <ul className="hidden md:flex space-x-6">
-                    <NavItem href="/" label="Home" pathname={pathname} />
+                    {user && <NavItem href="/dashboard" label="Dashboard" pathname={pathname} />}
+                    {user && <NavItem href="/learning" label="Learning" pathname={pathname} />}
+                    {user && <NavItem href="/profile" label="Profile" pathname={pathname} />}
                 </ul>
 
                 {/* Logout Button (Only if user is logged in) */}
@@ -87,7 +87,9 @@ export default function Navbar() {
                     <X className="w-6 h-6" />
                 </button>
                 <div className="mt-16 flex flex-col items-center space-y-6">
-                    <NavItem href="/" label="Home" pathname={pathname} isMobile />
+                    {user && <NavItem href="/dashboard" label="Dashboard" pathname={pathname} isMobile />}
+                    {user && <NavItem href="/learning" label="Learning" pathname={pathname} isMobile />}
+                    {user && <NavItem href="/profile" label="Profile" pathname={pathname} isMobile />}
                     {user && (
                         <button
                             onClick={handleLogout}

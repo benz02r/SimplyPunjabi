@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 // Complete Punjabi Gurmukhi alphabet with example words
 const alphabet = [
@@ -27,8 +29,16 @@ const alphabet = [
 
 export default function AlphabetPage() {
     const [audio, setAudio] = useState(null);
+    const [user, setUser] = useState(null);
+    const router = useRouter();
 
     useEffect(() => {
+        async function checkUser() {
+            const { data: sessionData } = await supabase.auth.getSession();
+            setUser(sessionData?.session?.user || null);
+        }
+        checkUser();
+
         if (typeof window !== "undefined") {
             setAudio(new Audio());
         }
@@ -44,19 +54,44 @@ export default function AlphabetPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-6 py-10">
-            <div className="max-w-4xl w-full bg-white shadow-xl rounded-xl p-8 border border-gray-200">
-                <h2 className="text-3xl font-bold text-center text-[var(--primary)] mb-6">
-                    Learn the Punjabi Alphabet
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-6 pt-32 pb-20">
+
+            {/* Back Button - Shows Home for Guests, Alphabet & Numbers for Logged-in Users */}
+            <div className="w-full max-w-4xl mb-8 flex justify-start">
+                <button
+                    onClick={() => router.push(user ? "/gamified/learning/alphabet-numbers" : "/")}
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition"
+                >
+                    ← {user ? "Back to Alphabet & Numbers" : "Back to Home"}
+                </button>
+            </div>
+
+            {/* Interactive Introduction Button */}
+            <div className="w-full max-w-4xl mb-8 flex justify-center">
+                <button
+                    onClick={() => router.push("/gamified/lessons/alphabet-intro")}
+                    className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-green-600 transition transform hover:scale-105"
+                >
+                    🎥 Start Animated Introduction
+                </button>
+            </div>
+
+            <div className="max-w-4xl w-full bg-white shadow-xl rounded-xl p-10 border border-gray-200">
+                <h2 className="text-3xl font-bold text-center text-[var(--primary)] mb-8">
+                    Learn Gurmukhi (Punjabi Alphabet)
                 </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     {alphabet.map(({ gurmukhi, roman, word, meaning, icon, sound }, index) => (
-                        <button key={index} onClick={() => playSound(sound)} className="flex flex-col items-center justify-center p-4 bg-gray-100 text-gray-800 text-lg font-bold rounded-lg shadow-md transition hover:bg-[var(--primary)] hover:text-white">
-                            <span className="text-4xl">{gurmukhi}</span>
-                            <span className="text-sm mt-1">{roman}</span>
-                            <span className="text-md mt-2 font-semibold">{word}</span>
+                        <button
+                            key={index}
+                            onClick={() => playSound(sound)}
+                            className="flex flex-col items-center justify-center p-5 bg-gray-100 text-gray-800 text-lg font-bold rounded-lg shadow-md transition hover:bg-[var(--primary)] hover:text-white"
+                        >
+                            <span className="text-5xl">{gurmukhi}</span>
+                            <span className="text-sm mt-2">{roman}</span>
+                            <span className="text-md mt-3 font-semibold">{word}</span>
                             <span className="text-sm text-gray-600">{meaning}</span>
-                            <span className="text-2xl mt-2">{icon}</span>
+                            <span className="text-3xl mt-3">{icon}</span>
                         </button>
                     ))}
                 </div>

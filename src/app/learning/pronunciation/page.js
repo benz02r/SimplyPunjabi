@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function Pronunciation() {
     const [user, setUser] = useState(null);
+    const router = useRouter();
 
     // Dummy lesson names (2 Unlocked, 8 Locked)
     const lessons = [
@@ -23,14 +25,38 @@ export default function Pronunciation() {
 
     useEffect(() => {
         async function checkUser() {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
+            const { data: sessionData, error } = await supabase.auth.getSession();
+            if (error) {
+                console.error("Supabase Auth Error:", error);
+            } else {
+                setUser(sessionData?.session?.user || null);
+            }
         }
         checkUser();
     }, []);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-24">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-24 pb-12">
+
+            {/* Back Button - Shows Home for Guests, Dashboard for Logged-in Users */}
+            <div className="w-full max-w-5xl mb-6 flex justify-start">
+                {user !== null ? (
+                    <button
+                        onClick={() => router.push("/dashboard")}
+                        className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition"
+                    >
+                        ← Back to Dashboard
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => router.push("/")}
+                        className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition"
+                    >
+                        ← Back to Home
+                    </button>
+                )}
+            </div>
+
             <div className="text-center max-w-3xl mb-8">
                 <h1 className="text-4xl font-extrabold text-[var(--primary)] leading-tight">
                     Pronunciation 🔊

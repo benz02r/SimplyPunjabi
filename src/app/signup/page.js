@@ -113,7 +113,7 @@ export default function Signup() {
                         />
                     </div>
 
-                    {/* Submit Button */}
+                    {/* Signup Button */}
                     <button
                         type="submit"
                         className="w-full bg-[var(--primary)] text-white p-3 rounded-lg font-semibold hover:bg-[var(--secondary)] transition"
@@ -122,6 +122,14 @@ export default function Signup() {
                         {loading ? "Signing up..." : "Sign Up"}
                     </button>
                 </form>
+
+                {/* Back to Home Button (Blue Button) */}
+                <button
+                    onClick={() => router.push("/")}
+                    className="mt-4 w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition"
+                >
+                    ← Back to Home
+                </button>
 
                 {/* Login Link */}
                 <p className="mt-4 text-center text-sm text-gray-500">

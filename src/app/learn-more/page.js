@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function LearnMore() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-24">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-24 pb-12"> {/* ✅ Added 'pb-12' for bottom margin */}
             {/* Header Section */}
             <div className="text-center max-w-3xl mb-12">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--primary)] leading-tight">
@@ -61,10 +61,19 @@ export default function LearnMore() {
                 </div>
             </div>
 
-            {/* CTA Button */}
-            <div className="mt-12">
+            {/* Buttons Section */}
+            <div className="mt-12 w-full max-w-md flex flex-col space-y-4">
+                {/* Back to Home Button (Blue Button) */}
+                <button
+                    onClick={() => window.location.href = "/"}
+                    className="w-full bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-600 transition transform hover:scale-105"
+                >
+                    ← Back to Home
+                </button>
+
+                {/* CTA Button */}
                 <Link href="/signup">
-                    <button className="bg-[var(--primary)] text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-[var(--secondary)] transition transform hover:scale-105">
+                    <button className="w-full bg-[var(--primary)] text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-[var(--secondary)] transition transform hover:scale-105">
                         Sign Up Now 🚀
                     </button>
                 </Link>
@@ -91,5 +100,3 @@ function InfoCard({ title, text, list }) {
         </div>
     );
 }
-
-
