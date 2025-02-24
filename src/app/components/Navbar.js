@@ -1,17 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react"; // Icons for mobile menu toggle
+import { supabase } from "@/lib/supabaseClient"; // ✅ Import Supabase
 
 export default function Navbar() {
     const pathname = usePathname();
     const router = useRouter();
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [user, setUser] = useState(null);
 
-    const handleLogout = () => {
-        router.push("/auth"); // Redirect to login after logout
+    // ✅ Check if user is logged in and listen for auth state changes
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: sessionData } = await supabase.auth.getSession();
+            setUser(sessionData?.session?.user || null);
+        };
+
+        fetchUser();
+
+        // ✅ Listen for auth state changes (login/logout)
+        const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user || null);
+        });
+
+        return () => {
+            authListener?.subscription?.unsubscribe();
+        };
+    }, []);
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut(); // ✅ Log out from Supabase
+        setUser(null); // ✅ Remove user from state immediately
+        router.push("/auth"); // ✅ Redirect to login page
     };
 
     return (
@@ -27,16 +50,17 @@ export default function Navbar() {
                 {/* Desktop Navigation */}
                 <ul className="hidden md:flex space-x-6">
                     <NavItem href="/" label="Home" pathname={pathname} />
-                    <NavItem href="/profile" label="Profile" pathname={pathname} />
                 </ul>
 
-                {/* Logout Button */}
-                <button
-                    onClick={handleLogout}
-                    className="hidden md:block bg-red-500 text-white px-5 py-2 rounded-full font-semibold shadow-md hover:bg-red-600 transition-transform transform hover:scale-105"
-                >
-                    Logout
-                </button>
+                {/* Logout Button (Only if user is logged in) */}
+                {user && (
+                    <button
+                        onClick={handleLogout}
+                        className="hidden md:block bg-red-500 text-white px-5 py-2 rounded-full font-semibold shadow-md hover:bg-red-600 transition-transform transform hover:scale-105"
+                    >
+                        Logout
+                    </button>
+                )}
 
                 {/* Mobile Menu Button */}
                 <button
@@ -64,13 +88,14 @@ export default function Navbar() {
                 </button>
                 <div className="mt-16 flex flex-col items-center space-y-6">
                     <NavItem href="/" label="Home" pathname={pathname} isMobile />
-                    <NavItem href="/profile" label="Profile" pathname={pathname} isMobile />
-                    <button
-                        onClick={handleLogout}
-                        className="bg-red-500 text-white px-5 py-2 rounded-full font-semibold shadow-md hover:bg-red-600 transition-transform transform hover:scale-105"
-                    >
-                        Logout
-                    </button>
+                    {user && (
+                        <button
+                            onClick={handleLogout}
+                            className="bg-red-500 text-white px-5 py-2 rounded-full font-semibold shadow-md hover:bg-red-600 transition-transform transform hover:scale-105"
+                        >
+                            Logout
+                        </button>
+                    )}
                 </div>
             </div>
         </nav>

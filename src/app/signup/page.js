@@ -63,7 +63,7 @@ export default function Signup() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6">
-            <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg border border-gray-200">
+            <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl">
 
                 <h1 className="text-3xl font-extrabold text-[var(--primary)] text-center">Sign Up</h1>
                 <p className="text-center text-gray-600 text-sm mt-2">Create your account to start learning Punjabi!</p>
@@ -78,7 +78,7 @@ export default function Signup() {
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">Name</label>
                         <input
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                            className="w-full p-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                             type="text"
                             placeholder="Enter your name"
                             value={name}
@@ -91,7 +91,7 @@ export default function Signup() {
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">Email</label>
                         <input
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                            className="w-full p-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                             type="email"
                             placeholder="Enter your email"
                             value={email}
@@ -104,7 +104,7 @@ export default function Signup() {
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">Password</label>
                         <input
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                            className="w-full p-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                             type="password"
                             placeholder="Enter your password"
                             value={password}
