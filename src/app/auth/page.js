@@ -34,7 +34,7 @@ export default function SignIn() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white px-6">
             <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl">
 
                 <h1 className="text-3xl font-extrabold text-[var(--primary)] text-center">Login</h1>
@@ -79,7 +79,7 @@ export default function SignIn() {
                     </button>
                 </form>
 
-                {/* Back to Home Button (Blue Button) */}
+                {/* Back to Home Button */}
                 <button
                     onClick={() => router.push("/")}
                     className="mt-4 w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition"

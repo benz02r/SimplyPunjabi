@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react"; // Icons for mobile menu toggle
 import { supabase } from "@/lib/supabaseClient"; // ✅ Import Supabase
@@ -38,25 +39,48 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="bg-white shadow-lg py-4 fixed top-0 left-0 right-0 z-50">
+        <nav className="bg-[#F5B169] shadow-lg py-4 fixed top-0 left-0 right-0 z-50">
             <div className="container mx-auto flex justify-between items-center px-6">
-                {/* Brand Name */}
-                <h1 className="text-3xl font-extrabold text-[var(--primary)] cursor-default">
-                    Simply Punjabi
-                </h1>
 
-                {/* Desktop Navigation (Removed "Home") */}
-                <ul className="hidden md:flex space-x-6">
-                    {user && <NavItem href="/dashboard" label="Dashboard" pathname={pathname} />}
-                    {user && <NavItem href="/learning" label="Learning" pathname={pathname} />}
-                    {user && <NavItem href="/profile" label="Profile" pathname={pathname} />}
+                {/* Logo */}
+                <Link href="/">
+                    <div className="flex items-center space-x-3 cursor-pointer">
+                        <Image
+                            src="/images/HD files/Simply Punjabi-2-Main Title - pic.png"
+                            alt="Simply Punjabi Logo"
+                            width={50}
+                            height={50}
+                            className="w-[60px] h-auto transition transform hover:scale-105"
+                        />
+                        <span className="text-white text-2xl font-bold tracking-wide">
+                            Simply Punjabi
+                        </span>
+                    </div>
+                </Link>
+
+                {/* Desktop Navigation */}
+                <ul className="hidden md:flex space-x-6 text-lg font-semibold text-white">
+                    {user ? (
+                        <>
+                            <NavItem href="/dashboard" label="Dashboard" pathname={pathname} />
+                            <NavItem href="/learning" label="Learning" pathname={pathname} />
+                            <NavItem href="/profile" label="Profile" pathname={pathname} />
+                        </>
+                    ) : (
+                        <>
+                            <NavItem href="/" label="Home" pathname={pathname} />
+                            <NavItem href="/learn-more" label="Learn More" pathname={pathname} />
+                            <NavItem href="/signup" label="Sign Up" pathname={pathname} />
+                            <NavItem href="/auth" label="Login" pathname={pathname} />
+                        </>
+                    )}
                 </ul>
 
                 {/* Logout Button (Only if user is logged in) */}
                 {user && (
                     <button
                         onClick={handleLogout}
-                        className="hidden md:block bg-red-500 text-white px-5 py-2 rounded-full font-semibold shadow-md hover:bg-red-600 transition-transform transform hover:scale-105"
+                        className="hidden md:block bg-white text-[#F5B169] px-5 py-2 rounded-full font-semibold shadow-md hover:bg-gray-200 transition transform hover:scale-105"
                     >
                         Logout
                     </button>
@@ -69,34 +93,43 @@ export default function Navbar() {
                     aria-label="Toggle Menu"
                     aria-expanded={isMobileMenuOpen}
                 >
-                    {isMobileMenuOpen ? <X className="w-7 h-7 text-gray-700" /> : <Menu className="w-7 h-7 text-gray-700" />}
+                    {isMobileMenuOpen ? <X className="w-7 h-7 text-white" /> : <Menu className="w-7 h-7 text-white" />}
                 </button>
             </div>
 
-            {/* Mobile Menu - Slide In Effect */}
+            {/* Mobile Menu */}
             <div
-                className={`fixed top-0 right-0 h-full w-64 bg-white shadow-2xl transform ${
+                className={`fixed top-0 right-0 h-full w-64 bg-[#F5B169] shadow-2xl transform ${
                     isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
                 } transition-transform duration-300 ease-in-out md:hidden`}
             >
                 <button
-                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+                    className="absolute top-4 right-4 text-white hover:text-gray-200"
                     onClick={() => setMobileMenuOpen(false)}
                     aria-label="Close Menu"
                 >
                     <X className="w-6 h-6" />
                 </button>
                 <div className="mt-16 flex flex-col items-center space-y-6">
-                    {user && <NavItem href="/dashboard" label="Dashboard" pathname={pathname} isMobile />}
-                    {user && <NavItem href="/learning" label="Learning" pathname={pathname} isMobile />}
-                    {user && <NavItem href="/profile" label="Profile" pathname={pathname} isMobile />}
-                    {user && (
-                        <button
-                            onClick={handleLogout}
-                            className="bg-red-500 text-white px-5 py-2 rounded-full font-semibold shadow-md hover:bg-red-600 transition-transform transform hover:scale-105"
-                        >
-                            Logout
-                        </button>
+                    {user ? (
+                        <>
+                            <NavItem href="/dashboard" label="Dashboard" pathname={pathname} isMobile />
+                            <NavItem href="/learning" label="Learning" pathname={pathname} isMobile />
+                            <NavItem href="/profile" label="Profile" pathname={pathname} isMobile />
+                            <button
+                                onClick={handleLogout}
+                                className="bg-white text-[#F5B169] px-5 py-2 rounded-full font-semibold shadow-md hover:bg-gray-200 transition-transform transform hover:scale-105"
+                            >
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <NavItem href="/" label="Home" pathname={pathname} isMobile />
+                            <NavItem href="/learn-more" label="Learn More" pathname={pathname} isMobile />
+                            <NavItem href="/signup" label="Sign Up" pathname={pathname} isMobile />
+                            <NavItem href="/auth" label="Login" pathname={pathname} isMobile />
+                        </>
                     )}
                 </div>
             </div>
@@ -104,7 +137,7 @@ export default function Navbar() {
     );
 }
 
-// ✅ Navigation Item Component
+// ✅ Updated Navigation Item Component
 function NavItem({ href, label, pathname, isMobile = false }) {
     return (
         <li>
@@ -112,8 +145,8 @@ function NavItem({ href, label, pathname, isMobile = false }) {
                 href={href}
                 className={`block px-5 py-2 rounded-full font-semibold transition-transform duration-200 ${
                     pathname === href
-                        ? "bg-[var(--primary)] text-white scale-105 shadow-md"
-                        : "text-gray-700 hover:text-[var(--primary)] hover:scale-105"
+                        ? "bg-white text-[#F5B169] scale-105 shadow-md"
+                        : "text-white hover:text-gray-200 hover:scale-105"
                 } ${isMobile ? "text-lg py-3 w-full text-center" : ""}`}
             >
                 {label}

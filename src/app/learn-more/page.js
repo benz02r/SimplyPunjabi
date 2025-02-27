@@ -4,11 +4,12 @@ import Link from "next/link";
 
 export default function LearnMore() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-24 pb-12"> {/* ✅ Added 'pb-12' for bottom margin */}
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-36 pb-12">
+
             {/* Header Section */}
             <div className="text-center max-w-3xl mb-12">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--primary)] leading-tight">
-                    Learn More About <span className="text-green-500">Simply Punjabi</span>
+                    Learn More About <span className="text-orange-400">Simply Punjabi</span>
                 </h1>
                 <p className="text-lg mt-3 text-gray-700">
                     Master Punjabi in a fun, interactive, and personalized way!
@@ -23,7 +24,7 @@ export default function LearnMore() {
                 />
                 <InfoCard
                     title="💰 Subscription Details"
-                    text='Simply Punjabi is a <strong>paid platform</strong> at <span class="text-green-500 font-bold">£3 per month</span>. We are currently in beta, but new content is added <strong>monthly</strong>.'
+                    text='Simply Punjabi is a <strong>paid platform</strong> at <span class="text-orange-400 font-bold">£3 per month</span>. We are currently in beta, but new content is added <strong>monthly</strong>.'
                 />
                 <InfoCard
                     title="🚀 Why Subscribe?"
@@ -42,7 +43,7 @@ export default function LearnMore() {
             </div>
 
             {/* FAQ Section */}
-            <div className="mt-12 bg-white rounded-lg shadow-lg p-8 max-w-4xl w-full border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl">
+            <div className="mt-12 bg-white rounded-lg shadow-lg p-8 max-w-4xl w-full border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-400 hover:shadow-xl">
                 <h2 className="text-2xl md:text-3xl font-bold text-[var(--primary)]">❓ Frequently Asked Questions</h2>
                 <div className="mt-4 space-y-4">
                     {[
@@ -82,10 +83,10 @@ export default function LearnMore() {
     );
 }
 
-// ✅ Reusable Information Card Component with a More Noticeable Orange Hover Effect
+// ✅ Reusable Information Card Component
 function InfoCard({ title, text, list }) {
     return (
-        <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl">
+        <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-400 hover:shadow-xl">
             <h3 className="text-2xl font-bold text-[var(--primary)]">{title}</h3>
             {text && <p className="text-gray-700 mt-3 text-lg" dangerouslySetInnerHTML={{ __html: text }} />}
             {list && (
