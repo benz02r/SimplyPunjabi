@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-// Expanded Punjabi Numbers with pronunciation guide
+// Expanded Punjabi Numbers with speak-with-confidence guide
 const numbers = [
     { gurmukhi: "੧", roman: "Ik", meaning: "One", sound: "/sounds/ik.mp3" },
     { gurmukhi: "੨", roman: "Do", meaning: "Two", sound: "/sounds/do.mp3" },

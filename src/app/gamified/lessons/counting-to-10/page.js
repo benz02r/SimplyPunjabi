@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
-// Numbers 1-10 in Punjabi with pronunciation and visuals
+// Numbers 1-10 in Punjabi with speak-with-confidence and visuals
 const numbers = [
     { digit: "੧", roman: "Ikk", word: "ਇੱਕ (Ikk)", meaning: "One", icon: "1️⃣", sound: "/sounds/1.mp3" },
     { digit: "੨", roman: "Do", word: "ਦੋ (Do)", meaning: "Two", icon: "2️⃣", sound: "/sounds/2.mp3" },

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Home() {
     const videoRef = useRef(null);
@@ -11,20 +10,15 @@ export default function Home() {
         const video = videoRef.current;
 
         if (video) {
-            // Ensure autoplay on mobile
             const playVideo = () => {
                 video.play().catch(error => console.error("Autoplay failed:", error));
             };
 
-            // Try to play immediately
             playVideo();
-
-            // If autoplay fails, wait for user interaction
             document.addEventListener("click", playVideo);
             document.addEventListener("touchstart", playVideo);
             document.addEventListener("scroll", playVideo);
 
-            // Cleanup event listeners
             return () => {
                 document.removeEventListener("click", playVideo);
                 document.removeEventListener("touchstart", playVideo);
@@ -36,7 +30,7 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-40 md:pt-48 pb-40 space-y-16">
 
-            {/* New Animated Logo Section */}
+            {/* Animated Logo Section */}
             <div className="border-[4px] border-[var(--primary)] rounded-lg transition-all duration-300 hover:border-[var(--secondary)] inline-block overflow-hidden shadow-lg hover:shadow-xl">
                 <video
                     ref={videoRef}
@@ -54,7 +48,7 @@ export default function Home() {
                     The Simple Way To Learn Punjabi!
                 </h2>
                 <p className="text-lg text-gray-700 text-center max-w-xl">
-                    Explore interactive lessons, pronunciation guides, and writing practice.
+                    Explore interactive lessons, pronunciation guides, and speaking practice.
                 </p>
                 <div className="mt-6 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
                     <Link href="/signup" className="w-full md:w-auto">
@@ -70,34 +64,54 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Featured Lessons Section */}
+            {/* Course Sections */}
             <div className="text-center w-full max-w-4xl mt-16">
                 <h2 className="text-2xl md:text-3xl font-bold text-[var(--primary)] mb-6">
-                    📚 Featured Lessons
+                    📚 Course Sections
                 </h2>
                 <p className="text-lg text-gray-700">
-                    Start learning with our interactive lessons.
+                    Learn at your own pace and master Punjabi step by step!
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
-                    <LessonCard title="Alphabet & Numbers" description="Master Gurmukhi letters and counting." link="/learning/alphabet-numbers" icon="🔢" />
-                    <LessonCard title="Pronunciation" description="Learn how to speak Punjabi and conversate." link="/learning/pronunciation" icon="🔊" />
-                    <LessonCard title="Reading & Writing" description="Develop Punjabi reading and writing skills." link="/learning/reading-writing" icon="✍️" />
+                    <CourseSectionCard
+                        title="Essential Punjabi for Real Conversations"
+                        description="Start speaking from Day 1 with must-know words & phrases!"
+                        link="/learning/essential-punjabi"
+                        icon="🟢"
+                        emoji="🗣️"
+                    />
+                    <CourseSectionCard
+                        title="Speak with Confidence – Beyond the Basics"
+                        description="Expand your vocabulary and engage in longer conversations!"
+                        link="/learning/speak-with-confidence"
+                        icon="🟡"
+                        emoji="🎙️"
+                    />
+                    <CourseSectionCard
+                        title="Master Punjabi Conversations with Ease"
+                        description="Achieve fluency, understand native speakers, and sound natural!"
+                        link="/learning/master-punjabi"
+                        icon="🔴"
+                        emoji="🏆"
+                    />
                 </div>
             </div>
         </div>
     );
 }
 
-// ✅ Improved Lesson Card Component
-function LessonCard({ title, description, link, icon }) {
+// ✅ Course Section Card Component with Icons
+function CourseSectionCard({ title, description, link, icon, emoji }) {
     return (
         <Link href={link} className="w-full">
-            <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-orange-400 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center">
-                <div className="text-5xl">{icon}</div>
-                <h3 className="text-xl font-bold text-[var(--primary)] mt-4">{title}</h3>
-                <p className="text-base text-gray-600 mt-2">{description}</p>
+            <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-orange-400 hover:shadow-xl transform hover:scale-105 cursor-pointer min-h-[220px] flex flex-col justify-between text-center">
+                <div>
+                    <div className="text-5xl">{emoji}</div>
+                    <h3 className="text-xl font-bold text-[var(--primary)] mt-4">{icon} {title}</h3>
+                    <p className="text-base text-gray-600 mt-2">{description}</p>
+                </div>
                 <button className="mt-6 bg-[var(--primary)] text-white px-6 py-3 rounded-lg hover:bg-[var(--secondary)] transition w-full hover:scale-105">
-                    Start Now
+                    Explore
                 </button>
             </div>
         </Link>

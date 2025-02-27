@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
-// Common Punjabi common-greetings & phrases with pronunciation and usage
+// Common Punjabi common-greetings & phrases with speak-with-confidence and usage
 const greetings = [
     { phrase: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ", roman: "Sat Sri Akal", meaning: "A respectful greeting", icon: "🙏", sound: "/sounds/sat-sri-akal.mp3", scenario: "You're greeting someone formally in Punjabi." },
     { phrase: "ਹੈਲੋ", roman: "Hello", meaning: "Casual greeting", icon: "👋", sound: "/sounds/hello.mp3", scenario: "You're meeting a friend casually." },

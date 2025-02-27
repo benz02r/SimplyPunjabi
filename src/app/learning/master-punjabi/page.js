@@ -1,0 +1,100 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+
+export default function MasterPunjabiConversations() {
+    const [user, setUser] = useState(null);
+    const router = useRouter();
+
+    // Updated Lessons for Master Punjabi Conversations
+    const lessons = [
+        { title: "Lesson 1: Fix the Top 3 Mistakes English Speakers Make", link: "/gamified/lessons/common-mistakes", locked: false },
+        { title: "Lesson 2: The Secret to Thinking in Punjabi", link: "/gamified/lessons/think-in-punjabi", locked: false },
+        { title: "Lesson 3: How to Tell a Great Story in Punjabi", link: "/lesson/storytelling-in-punjabi", locked: true },
+        { title: "Lesson 4: Deep Conversations – Express Your Thoughts & Emotions", link: "/lesson/deep-conversations", locked: true },
+        { title: "Lesson 5: Mastering Punjabi Idioms & Sounding Like a Local", link: "/lesson/punjabi-idioms", locked: true },
+        { title: "Lesson 6: Handling Arguments & Disagreements in Punjabi", link: "/lesson/arguing-politely", locked: true },
+        { title: "Lesson 7: Punjabi Humor – Understanding Jokes & Slang", link: "/lesson/punjabi-humor", locked: true },
+        { title: "Lesson 8: Mastering Fast Punjabi – Understanding Native Speakers", link: "/lesson/fast-punjabi", locked: true },
+        { title: "Lesson 9: Perfecting Your Accent – Sound Like a Native Speaker", link: "/lesson/perfecting-accent", locked: true },
+        { title: "Lesson 10: Final Fluency Challenge – Speak Punjabi for 5 Minutes!", link: "/lesson/final-speaking-test", locked: true },
+    ];
+
+    useEffect(() => {
+        async function checkUser() {
+            const { data: sessionData, error } = await supabase.auth.getSession();
+            if (error) {
+                console.error("Supabase Auth Error:", error);
+            } else {
+                setUser(sessionData?.session?.user || null);
+            }
+        }
+        checkUser();
+    }, []);
+
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-40 pb-16">
+
+            {/* Back Button - More Space Below Navbar */}
+            <div className="w-full max-w-5xl mb-10 flex justify-start">
+                <button
+                    onClick={() => router.push(user ? "/learning" : "/")}
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition"
+                >
+                    ← Back to {user ? "Learning" : "Home"}
+                </button>
+            </div>
+
+            {/* Title & Description */}
+            <div className="text-center max-w-3xl mb-12">
+                <h1 className="text-4xl font-extrabold text-[var(--primary)] leading-tight">
+                    Master Punjabi Conversations with Ease 🏆
+                </h1>
+                <p className="text-lg mt-3 text-gray-700">
+                    Achieve fluency, understand native speakers, and sound like a local!
+                </p>
+            </div>
+
+            {/* Lesson Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-5xl w-full">
+                {lessons.map((lesson, index) => (
+                    <LessonCard key={index} lesson={lesson} user={user} />
+                ))}
+            </div>
+
+            {/* Subscription Prompt */}
+            {!user && (
+                <div className="mt-12 text-center">
+                    <p className="text-lg font-semibold text-gray-700">🔒 Want full access to all lessons?</p>
+                    <Link href="/signup">
+                        <button className="mt-4 bg-[var(--primary)] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[var(--secondary)] transition transform hover:scale-105">
+                            Subscribe to Unlock 🚀
+                        </button>
+                    </Link>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ✅ Lesson Card Component (Uniform Size & Styling)
+function LessonCard({ lesson, user }) {
+    return (
+        <div className={`p-6 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] ${lesson.locked && !user ? "hover:border-red-500" : "hover:border-green-500"} hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[200px] flex flex-col justify-between`}>
+            {lesson.locked && !user ? (
+                <>
+                    <div className="text-4xl">🔒</div>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-700 mt-2">{lesson.title}</h3>
+                    <p className="text-sm text-gray-500">Subscribe to unlock</p>
+                </>
+            ) : (
+                <Link href={lesson.link}>
+                    <h3 className="text-lg md:text-xl font-bold text-[var(--primary)] mt-2">{lesson.title}</h3>
+                </Link>
+            )}
+        </div>
+    );
+}
