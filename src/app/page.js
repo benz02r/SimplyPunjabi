@@ -8,13 +8,33 @@ export default function Home() {
     const videoRef = useRef(null);
 
     useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.play();
+        const video = videoRef.current;
+
+        if (video) {
+            // Ensure autoplay on mobile
+            const playVideo = () => {
+                video.play().catch(error => console.error("Autoplay failed:", error));
+            };
+
+            // Try to play immediately
+            playVideo();
+
+            // If autoplay fails, wait for user interaction
+            document.addEventListener("click", playVideo);
+            document.addEventListener("touchstart", playVideo);
+            document.addEventListener("scroll", playVideo);
+
+            // Cleanup event listeners
+            return () => {
+                document.removeEventListener("click", playVideo);
+                document.removeEventListener("touchstart", playVideo);
+                document.removeEventListener("scroll", playVideo);
+            };
         }
     }, []);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-24 space-y-12">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-32 md:pt-40 pb-32">
 
             {/* New Animated Logo Section */}
             <div className="border-[4px] border-[var(--primary)] rounded-lg transition-all duration-300 hover:border-[var(--secondary)] inline-block overflow-hidden shadow-lg hover:shadow-xl">

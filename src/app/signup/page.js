@@ -62,8 +62,8 @@ export default function Signup() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white px-6">
-            <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white px-6 pt-32 md:pt-40">
+            <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-400 hover:shadow-xl">
 
                 <h1 className="text-3xl font-extrabold text-[var(--primary)] text-center">Sign Up</h1>
                 <p className="text-center text-gray-600 text-sm mt-2">Create your account to start learning Punjabi!</p>
