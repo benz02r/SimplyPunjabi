@@ -47,3 +47,35 @@ export const signInWithMagicLink = async (email) => {
     console.log("✅ Authentication email sent!");
     return { success: true };
 };
+
+/**
+ * ✅ Sends a password reset email
+ */
+export const sendPasswordResetEmail = async (email) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`, // ✅ Redirects to reset page
+    });
+
+    if (error) {
+        console.error("❌ Error sending password reset email:", error.message);
+        return { error };
+    }
+
+    console.log("✅ Password reset email sent!");
+    return { success: true };
+};
+
+/**
+ * ✅ Updates user's password after they click the reset link
+ */
+export const updatePassword = async (newPassword) => {
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+    if (error) {
+        console.error("❌ Error updating password:", error.message);
+        return { error };
+    }
+
+    console.log("✅ Password updated successfully!");
+    return { success: true };
+};

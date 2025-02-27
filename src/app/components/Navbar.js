@@ -43,7 +43,7 @@ export default function Navbar() {
             <div className="container mx-auto flex justify-between items-center px-4">
 
                 {/* Logo (Larger but Fits in Compact Navbar) */}
-                <Link href="/">
+
                     <div className="flex items-center cursor-pointer">
                         <Image
                             src="/images/HD files/Simply Punjabi-2-Main Title - pic.png" // ✅ Updated Image Path
@@ -53,7 +53,7 @@ export default function Navbar() {
                             className="w-[120px] h-auto transition transform hover:scale-105"
                         />
                     </div>
-                </Link>
+
 
                 {/* Desktop Navigation */}
                 <ul className="hidden md:flex space-x-5 text-lg font-semibold text-white">

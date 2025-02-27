@@ -67,6 +67,12 @@ export default function SignIn() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                        {/* Forgot Password Link */}
+                        <div className="mt-2 text-right">
+                            <a href="/forgot-password" className="text-sm text-[var(--primary)] font-semibold hover:underline">
+                                Forgot Password?
+                            </a>
+                        </div>
                     </div>
 
                     {/* Login Button */}

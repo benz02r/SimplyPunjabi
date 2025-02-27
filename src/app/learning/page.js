@@ -22,18 +22,18 @@ export default function LearningHub() {
     }, [router]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-24 pb-12">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-32 md:pt-24 pb-16">
 
             {/* Back to Dashboard Button */}
-            <div className="absolute top-6 left-6">
-                <button onClick={() => router.push("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-600 transition">
+            <div className="absolute top-4 left-4 md:top-6 md:left-6">
+                <button onClick={() => router.push("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-600 transition">
                     ← Back to Dashboard
                 </button>
             </div>
 
             {/* Title & Subtitle */}
-            <div className="text-center max-w-3xl mb-10">
-                <h1 className="text-4xl font-extrabold text-[var(--primary)] leading-tight">
+            <div className="text-center max-w-3xl mb-12 md:mb-10">
+                <h1 className="text-3xl md:text-4xl font-extrabold text-[var(--primary)] leading-tight">
                     Start Learning! 📚
                 </h1>
                 <p className="text-lg mt-3 text-gray-700">
@@ -70,9 +70,9 @@ export default function LearningHub() {
 function LearningCard({ title, description, link, bgColor }) {
     return (
         <Link href={link} className="w-full">
-            <div className={`p-6 ${bgColor} text-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl transform hover:scale-105 cursor-pointer h-[230px] flex flex-col justify-between items-center`}>
+            <div className={`p-6 ${bgColor} text-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl transform hover:scale-105 cursor-pointer min-h-[230px] flex flex-col justify-between items-center text-center`}>
                 <h3 className="text-lg md:text-xl font-bold">{title}</h3>
-                <p className="text-sm md:text-base mt-2 text-center">{description}</p>
+                <p className="text-sm md:text-base mt-2">{description}</p>
             </div>
         </Link>
     );
