@@ -14,7 +14,7 @@ export const signUpWithEmail = async (email, password) => {
         email,
         password,
         options: {
-            emailRedirectTo: `${window.location.origin}/auth-callback`, // ✅ Redirect to new callback page
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth-callback`, // ✅ Uses correct URL
         },
     });
 
@@ -35,7 +35,7 @@ export const signInWithMagicLink = async (email) => {
     const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-            emailRedirectTo: `${window.location.origin}/auth-callback`, // ✅ Redirect to new callback page
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth-callback`, // ✅ Uses correct URL
         },
     });
 
