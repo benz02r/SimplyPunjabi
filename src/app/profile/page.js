@@ -108,11 +108,11 @@ export default function Profile() {
         <div className="min-h-screen flex flex-col items-center justify-center px-6 pt-32 md:pt-24 pb-16 bg-gradient-to-b from-blue-50 to-white">
             <div className="p-8 rounded-xl shadow-lg w-full max-w-4xl text-center border border-gray-300 bg-white">
 
-                {/* Back to Dashboard Button */}
-                <div className="w-full flex justify-start mb-6">
+                {/* Back to Dashboard Button with More Space */}
+                <div className="w-full flex justify-start mb-10 mt-4">
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-600 transition"
+                        className="bg-gray-700 text-white px-5 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-all"
                     >
                         ← Back to Dashboard
                     </button>

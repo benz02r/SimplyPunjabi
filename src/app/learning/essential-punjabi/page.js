@@ -12,8 +12,8 @@ export default function EssentialPunjabi() {
     // Updated Lessons for Essential Punjabi
     const lessons = [
         { title: "Lesson 1: How to Greet Like a Native!", link: "/lessons/lesson1", locked: false },
-        { title: "Lesson 2: Crack the Punjabi Code – Gurmukhi Alphabet", link: "/gamified/lessons/gurmukhi-basics", locked: false },
-        { title: "Lesson 3: Numbers 1-10 & Shopping Skills", link: "/lesson/numbers-and-shopping", locked: true },
+        { title: "Lesson 2: Crack the Punjabi Code – Gurmukhi Alphabet", link: "/lessons/lesson2", locked: false },
+        { title: "Lesson 3: Numbers 1-10", link: "/lessons/lesson3", locked: true },
         { title: "Lesson 4: Ordering Food & Restaurant Conversations", link: "/lesson/ordering-food", locked: true },
         { title: "Lesson 5: Asking for Directions in Punjabi", link: "/lesson/asking-directions", locked: true },
         { title: "Lesson 6: Must-Know Verbs for Everyday Speaking", link: "/lesson/everyday-verbs", locked: true },
