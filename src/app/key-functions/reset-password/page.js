@@ -19,7 +19,7 @@ export default function ResetPassword() {
             setMessage("❌ Error resetting password. Please try again.");
         } else {
             setMessage("✅ Password reset successfully! Redirecting to login...");
-            setTimeout(() => router.push("/auth"), 2000);
+            setTimeout(() => router.push("/key-functions/auth"), 2000);
         }
     };
 

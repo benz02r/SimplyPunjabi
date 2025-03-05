@@ -14,7 +14,7 @@ export default function Dashboard() {
         async function fetchUser() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
-                router.push("/login"); // Redirect if not logged in
+                router.push("/key-functions/auth"); // Redirect if not logged in
             } else {
                 setUser(user);
                 fetchUserName(user.id);

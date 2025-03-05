@@ -9,7 +9,7 @@ export default function SignupSuccess() {
     // ✅ Automatically redirect to login after a delay
     useEffect(() => {
         const timer = setTimeout(() => {
-            router.push("/auth");
+            router.push("/key-functions/auth");
         }, 5000); // Redirect after 5 seconds
 
         return () => clearTimeout(timer);
@@ -31,7 +31,7 @@ export default function SignupSuccess() {
                 <p className="text-sm text-gray-500 mt-6">Redirecting to login in 5 seconds...</p>
 
                 {/* Manual Login Button */}
-                <a href="/auth">
+                <a href="/key-functions/auth">
                     <button className="mt-4 bg-[var(--primary)] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[var(--secondary)] transition">
                         Go to Login
                     </button>

@@ -54,7 +54,7 @@ export default function Signup() {
                 setErrorMessage("User created in Auth but not saved in database.");
             } else {
                 console.log("✅ User successfully inserted into users table!");
-                router.push("/signup-success");
+                router.push("/key-functions/signup-success");
             }
         }
 
@@ -134,7 +134,7 @@ export default function Signup() {
                 {/* Login Link */}
                 <p className="mt-4 text-center text-sm text-gray-500">
                     Already have an account?{" "}
-                    <a href="/auth" className="text-[var(--primary)] font-semibold hover:underline">Login</a>
+                    <a href="/key-functions/auth" className="text-[var(--primary)] font-semibold hover:underline">Login</a>
                 </p>
             </div>
         </div>

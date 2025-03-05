@@ -1,7 +1,7 @@
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import ClientWrapper from "./components/ClientWrapper"; // ✅ Import Client Wrapper
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "@/app/key-functions/context/AuthContext";
 import { Analytics } from "@vercel/analytics/react"; // ✅ Import Vercel Analytics
 import { SpeedInsights } from "@vercel/speed-insights/next"; // ✅ Import Vercel Speed Insights
 
@@ -19,6 +19,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
     title: "Simply Punjabi",
     description: "The simple way to learn Punjabi",
+    icons: {
+        icon: "/favicon.ico", // Standard favicon
+        shortcut: "/favicon.ico",
+        apple: "/apple-touch-icon.png", // Apple Touch Icon for iOS
+    },
 };
 
 export default function RootLayout({ children }) {

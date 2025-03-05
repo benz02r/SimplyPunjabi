@@ -52,7 +52,7 @@ export default function Home() {
                     Explore interactive lessons, pronunciation guides, and speaking practice.
                 </p>
                 <div className="mt-6 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
-                    <Link href="/signup" className="w-full md:w-auto">
+                    <Link href="/key-functions/signup" className="w-full md:w-auto">
                         <button className="w-full md:w-auto bg-[var(--primary)] text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-orange-400 transition transform hover:scale-110 hover:shadow-lg">
                             Get Started 🚀
                         </button>

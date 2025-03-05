@@ -73,7 +73,7 @@ export default function LearnMore() {
                 </button>
 
                 {/* CTA Button */}
-                <Link href="/signup">
+                <Link href="/key-functions/signup">
                     <button className="w-full bg-[var(--primary)] text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-[var(--secondary)] transition transform hover:scale-105">
                         Sign Up Now 🚀
                     </button>

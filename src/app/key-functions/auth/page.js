@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../../lib/supabaseClient";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -30,7 +30,7 @@ export default function SignIn() {
             return;
         }
 
-        router.push("/dashboard");
+        router.push("/key-functions/dashboard");
     };
 
     return (
@@ -69,7 +69,7 @@ export default function SignIn() {
                         />
                         {/* Forgot Password Link */}
                         <div className="mt-2 text-right">
-                            <a href="/forgot-password" className="text-sm text-[var(--primary)] font-semibold hover:underline">
+                            <a href="/key-functions/forgot-password" className="text-sm text-[var(--primary)] font-semibold hover:underline">
                                 Forgot Password?
                             </a>
                         </div>
@@ -96,7 +96,7 @@ export default function SignIn() {
                 {/* Signup Link */}
                 <p className="mt-4 text-center text-sm text-gray-500">
                     Don't have an account?{" "}
-                    <a href="/signup" className="text-[var(--primary)] font-semibold hover:underline">
+                    <a href="/key-functions/signup" className="text-[var(--primary)] font-semibold hover:underline">
                         Sign up
                     </a>
                 </p>

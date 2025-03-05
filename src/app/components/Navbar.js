@@ -35,7 +35,7 @@ export default function Navbar() {
     const handleLogout = async () => {
         await supabase.auth.signOut(); // ✅ Log out from Supabase
         setUser(null); // ✅ Remove user from state immediately
-        router.push("/auth"); // ✅ Redirect to login page
+        router.push("/key-functions/auth"); // ✅ Redirect to login page
     };
 
     return (
@@ -67,8 +67,8 @@ export default function Navbar() {
                         <>
                             <NavItem href="/" label="Home" pathname={pathname} />
                             <NavItem href="/learn-more" label="Learn More" pathname={pathname} />
-                            <NavItem href="/signup" label="Sign Up" pathname={pathname} />
-                            <NavItem href="/auth" label="Login" pathname={pathname} />
+                            <NavItem href="/key-functions/signup" label="Sign Up" pathname={pathname} />
+                            <NavItem href="/key-functions/auth" label="Login" pathname={pathname} />
                         </>
                     )}
                 </ul>
@@ -124,8 +124,8 @@ export default function Navbar() {
                         <>
                             <NavItem href="/" label="Home" pathname={pathname} isMobile />
                             <NavItem href="/learn-more" label="Learn More" pathname={pathname} isMobile />
-                            <NavItem href="/signup" label="Sign Up" pathname={pathname} isMobile />
-                            <NavItem href="/auth" label="Login" pathname={pathname} isMobile />
+                            <NavItem href="/key-functions/signup" label="Sign Up" pathname={pathname} isMobile />
+                            <NavItem href="/key-functions/auth" label="Login" pathname={pathname} isMobile />
                         </>
                     )}
                 </div>
