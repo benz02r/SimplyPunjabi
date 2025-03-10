@@ -39,14 +39,14 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="bg-[#F5B169] shadow-md py-2 fixed top-0 left-0 right-0 z-50">
+        <nav className="bg-[#2563EB] shadow-md py-2 fixed top-0 left-0 right-0 z-50">
             <div className="container mx-auto flex justify-between items-center px-4">
 
                 {/* Logo (Larger but Fits in Compact Navbar) */}
 
                     <div className="flex items-center cursor-pointer">
                         <Image
-                            src="/images/HD files/Simply Punjabi-2-Main Title - pic.png" // ✅ Updated Image Path
+                            src="/images/logo.png" // ✅ Updated Image Path
                             alt="Simply Punjabi Logo"
                             width={120} // ✅ Larger Logo
                             height={120}
@@ -77,7 +77,7 @@ export default function Navbar() {
                 {user && (
                     <button
                         onClick={handleLogout}
-                        className="hidden md:block bg-white text-[#F5B169] px-4 py-2 rounded-full font-semibold shadow-md hover:bg-gray-200 transition transform hover:scale-105"
+                        className="hidden md:block bg-white text-[#2563EB] px-4 py-2 rounded-full font-semibold shadow-md hover:bg-gray-200 transition transform hover:scale-105"
                     >
                         Logout
                     </button>
@@ -96,7 +96,7 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             <div
-                className={`fixed top-0 right-0 h-full w-64 bg-[#F5B169] shadow-2xl transform ${
+                className={`fixed top-0 right-0 h-full w-64 bg-[#2563EB] shadow-2xl transform ${
                     isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
                 } transition-transform duration-300 ease-in-out md:hidden`}
             >
@@ -115,7 +115,7 @@ export default function Navbar() {
                             <NavItem href="/profile" label="Profile" pathname={pathname} isMobile />
                             <button
                                 onClick={handleLogout}
-                                className="bg-white text-[#F5B169] px-5 py-2 rounded-full font-semibold shadow-md hover:bg-gray-200 transition-transform transform hover:scale-105"
+                                className="bg-white text-[#2563EB] px-5 py-2 rounded-full font-semibold shadow-md hover:bg-gray-200 transition-transform transform hover:scale-105"
                             >
                                 Logout
                             </button>
@@ -142,7 +142,7 @@ function NavItem({ href, label, pathname, isMobile = false }) {
                 href={href}
                 className={`block px-4 py-2 rounded-full font-semibold transition-transform duration-200 ${
                     pathname === href
-                        ? "bg-white text-[#F5B169] scale-105 shadow-md"
+                        ? "bg-white text-[#2563EB] scale-105 shadow-md"
                         : "text-white hover:text-gray-200 hover:scale-105"
                 } ${isMobile ? "text-lg py-3 w-full text-center" : ""}`}
             >

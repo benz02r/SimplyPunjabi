@@ -30,7 +30,7 @@ export default function SignIn() {
             return;
         }
 
-        router.push("/key-functions/dashboard");
+        router.push("/learning");
     };
 
     return (

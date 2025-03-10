@@ -4,9 +4,9 @@
 
 /* Custom Theme Colors */
 :root {
-  --primary: #1E3A8A; /* Deep Blue */
+  --primary: #2563EB; /* Deep Blue */
   --accent: #FFC107;  /* Punjabi Yellow */
-  --secondary: #FF6F00; /* Vibrant Orange */
+  --secondary: #EB6E42; /* Vibrant Orange */
   --background: #F8FAFC; /* Off White */
   --text-color: #1E293B; /* Dark Slate */
 }

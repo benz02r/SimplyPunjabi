@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-
+import Image from "next/image";
 
 export default function Home() {
     const videoRef = useRef(null);
@@ -31,14 +31,13 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-40 md:pt-48 pb-40 space-y-16">
 
-            {/* Animated Logo Section */}
+            {/* Logo Section (Replaced Video with Image) */}
             <div className="border-[4px] border-[var(--primary)] rounded-lg transition-all duration-300 hover:border-[var(--secondary)] inline-block overflow-hidden shadow-lg hover:shadow-xl">
-                <video
-                    ref={videoRef}
-                    src="/images/HD files/Simply Punjabi-1-Main Title - animated.mp4"
-                    autoPlay
-                    muted
-                    playsInline
+                <Image
+                    src="/images/logo.png"
+                    alt="Simply Punjabi Logo"
+                    width={350}
+                    height={350}
                     className="w-[350px] h-auto"
                 />
             </div>
@@ -53,12 +52,12 @@ export default function Home() {
                 </p>
                 <div className="mt-6 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
                     <Link href="/key-functions/signup" className="w-full md:w-auto">
-                        <button className="w-full md:w-auto bg-[var(--primary)] text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-orange-400 transition transform hover:scale-110 hover:shadow-lg">
+                        <button className="w-full md:w-auto bg-[var(--primary)] text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-orange-600 transition transform hover:scale-110 hover:shadow-lg">
                             Get Started 🚀
                         </button>
                     </Link>
                     <Link href="/learn-more" className="w-full md:w-auto">
-                        <button className="w-full md:w-auto bg-orange-400 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-800 transition transform hover:scale-110 hover:shadow-lg">
+                        <button className="w-full md:w-auto bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-800 transition transform hover:scale-110 hover:shadow-lg">
                             Learn More 📖
                         </button>
                     </Link>
@@ -105,7 +104,7 @@ export default function Home() {
 function CourseSectionCard({ title, description, link, icon, emoji }) {
     return (
         <Link href={link} className="w-full">
-            <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-orange-400 hover:shadow-xl transform hover:scale-105 cursor-pointer min-h-[220px] flex flex-col justify-between text-center">
+            <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-orange-600 hover:shadow-xl transform hover:scale-105 cursor-pointer min-h-[220px] flex flex-col justify-between text-center">
                 <div>
                     <div className="text-5xl">{emoji}</div>
                     <h3 className="text-xl font-bold text-[var(--primary)] mt-4">{icon} {title}</h3>

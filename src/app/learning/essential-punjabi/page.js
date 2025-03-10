@@ -9,7 +9,7 @@ export default function EssentialPunjabi() {
     const [user, setUser] = useState(null);
     const router = useRouter();
 
-    // Updated Lessons for Essential Punjabi
+    // Updated Lessons for Essential Punjabi (Reduced to 6)
     const lessons = [
         { title: "Lesson 1: How to Greet Like a Native!", link: "/lessons/lesson1", locked: false },
         { title: "Lesson 2: Crack the Punjabi Code – Gurmukhi Alphabet", link: "/lessons/lesson2", locked: false },
@@ -17,10 +17,6 @@ export default function EssentialPunjabi() {
         { title: "Lesson 4: Ordering Food & Restaurant Conversations", link: "/lesson/ordering-food", locked: true },
         { title: "Lesson 5: Asking for Directions in Punjabi", link: "/lesson/asking-directions", locked: true },
         { title: "Lesson 6: Must-Know Verbs for Everyday Speaking", link: "/lesson/everyday-verbs", locked: true },
-        { title: "Lesson 7: Talking About Family & Making Connections", link: "/lesson/talking-about-family", locked: true },
-        { title: "Lesson 8: Emergency Punjabi – Asking for Help", link: "/lesson/emergency-punjabi", locked: true },
-        { title: "Lesson 9: Casual Chat & Punjabi Slang", link: "/lesson/punjabi-slang", locked: true },
-        { title: "Lesson 10: Mastering Pronunciation & Sounding Fluent", link: "/lesson/speak-with-confidence-fluency", locked: true },
     ];
 
     useEffect(() => {
@@ -42,7 +38,7 @@ export default function EssentialPunjabi() {
             <div className="w-full max-w-5xl mb-10 flex justify-start">
                 <button
                     onClick={() => router.push(user ? "/learning" : "/")}
-                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition"
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition"
                 >
                     ← Back to {user ? "Learning" : "Home"}
                 </button>
@@ -51,7 +47,7 @@ export default function EssentialPunjabi() {
             {/* Title & Description */}
             <div className="text-center max-w-3xl mb-12">
                 <h1 className="text-4xl font-extrabold text-[var(--primary)] leading-tight">
-                    Essential Punjabi for Real Conversations 🗣️
+                    Essential Punjabi for Real Conversations 💙
                 </h1>
                 <p className="text-lg mt-3 text-gray-700">
                     Master the basics and start speaking Punjabi confidently from Day 1!

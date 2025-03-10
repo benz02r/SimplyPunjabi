@@ -9,7 +9,7 @@ export default function SpeakWithConfidence() {
     const [user, setUser] = useState(null);
     const router = useRouter();
 
-    // Updated Lessons for Speak with Confidence
+    // Updated Lessons for Speak with Confidence (Reduced to 6)
     const lessons = [
         { title: "Lesson 1: How to Start & Keep a Conversation Going", link: "/gamified/lessons/conversation-flow", locked: false },
         { title: "Lesson 2: Expressing Likes, Dislikes & Opinions", link: "/gamified/lessons/expressing-feelings", locked: false },
@@ -17,10 +17,6 @@ export default function SpeakWithConfidence() {
         { title: "Lesson 4: Making Plans & Inviting Friends", link: "/lesson/making-plans", locked: true },
         { title: "Lesson 5: Describing People, Places & Things", link: "/lesson/describing-things", locked: true },
         { title: "Lesson 6: Handling Real-Life Situations (Doctor, Taxi, Hotel)", link: "/lesson/real-life-situations", locked: true },
-        { title: "Lesson 7: Punjabi Culture & Social Etiquette", link: "/lesson/punjabi-culture-etiquette", locked: true },
-        { title: "Lesson 8: Storytelling – How to Share Past Experiences", link: "/lesson/storytelling", locked: true },
-        { title: "Lesson 9: Fast Punjabi – Understanding Native Speakers", link: "/lesson/understanding-native", locked: true },
-        { title: "Lesson 10: Final Challenge – Survive a Full Day in Punjabi!", link: "/lesson/final-speaking-challenge", locked: true },
     ];
 
     useEffect(() => {
@@ -51,7 +47,7 @@ export default function SpeakWithConfidence() {
             {/* Title & Description */}
             <div className="text-center max-w-3xl mb-12">
                 <h1 className="text-4xl font-extrabold text-[var(--primary)] leading-tight">
-                    Speak with Confidence – Beyond the Basics 🎙️
+                    Speak with Confidence – Beyond the Basics 🎧
                 </h1>
                 <p className="text-lg mt-3 text-gray-700">
                     Take your Punjabi speaking skills to the next level with real conversations!

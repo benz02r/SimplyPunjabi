@@ -9,7 +9,7 @@ export default function MasterPunjabiConversations() {
     const [user, setUser] = useState(null);
     const router = useRouter();
 
-    // Updated Lessons for Master Punjabi Conversations
+    // Updated Lessons for Master Punjabi Conversations (Reduced to 6)
     const lessons = [
         { title: "Lesson 1: Fix the Top 3 Mistakes English Speakers Make", link: "/gamified/lessons/common-mistakes", locked: false },
         { title: "Lesson 2: The Secret to Thinking in Punjabi", link: "/gamified/lessons/think-in-punjabi", locked: false },
@@ -17,10 +17,6 @@ export default function MasterPunjabiConversations() {
         { title: "Lesson 4: Deep Conversations – Express Your Thoughts & Emotions", link: "/lesson/deep-conversations", locked: true },
         { title: "Lesson 5: Mastering Punjabi Idioms & Sounding Like a Local", link: "/lesson/punjabi-idioms", locked: true },
         { title: "Lesson 6: Handling Arguments & Disagreements in Punjabi", link: "/lesson/arguing-politely", locked: true },
-        { title: "Lesson 7: Punjabi Humor – Understanding Jokes & Slang", link: "/lesson/punjabi-humor", locked: true },
-        { title: "Lesson 8: Mastering Fast Punjabi – Understanding Native Speakers", link: "/lesson/fast-punjabi", locked: true },
-        { title: "Lesson 9: Perfecting Your Accent – Sound Like a Native Speaker", link: "/lesson/perfecting-accent", locked: true },
-        { title: "Lesson 10: Final Fluency Challenge – Speak Punjabi for 5 Minutes!", link: "/lesson/final-speaking-test", locked: true },
     ];
 
     useEffect(() => {
