@@ -45,13 +45,7 @@ export default function Navbar() {
                 {/* Logo (Larger but Fits in Compact Navbar) */}
 
                     <div className="flex items-center cursor-pointer">
-                        <Image
-                            src="/images/logo.png" // ✅ Updated Image Path
-                            alt="Simply Punjabi Logo"
-                            width={120} // ✅ Larger Logo
-                            height={120}
-                            className="w-[120px] h-auto transition transform hover:scale-105"
-                        />
+
                     </div>
 
 

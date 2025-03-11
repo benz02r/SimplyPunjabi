@@ -31,16 +31,7 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-40 md:pt-48 pb-40 space-y-16">
 
-            {/* Logo Section (Replaced Video with Image) */}
-            <div className="border-[4px] border-[var(--primary)] rounded-lg transition-all duration-300 hover:border-[var(--secondary)] inline-block overflow-hidden shadow-lg hover:shadow-xl">
-                <Image
-                    src="/images/logo.png"
-                    alt="Simply Punjabi Logo"
-                    width={350}
-                    height={350}
-                    className="w-[350px] h-auto"
-                />
-            </div>
+
 
             {/* CTA Section */}
             <div className="flex flex-col items-center space-y-6 py-10">
