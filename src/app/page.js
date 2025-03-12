@@ -30,16 +30,13 @@ export default function Home() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-40 md:pt-48 pb-40 space-y-16">
-
-
-
-            {/* CTA Section */}
-            <div className="flex flex-col items-center space-y-6 py-10">
-                <h2 className="text-3xl font-bold text-[var(--primary)] text-center">
-                    The Simple Way To Learn Punjabi!
-                </h2>
-                <p className="text-lg text-gray-700 text-center max-w-xl">
-                    Explore interactive lessons, pronunciation guides, and speaking practice.
+            {/* Hero Section */}
+            <div className="text-center max-w-3xl">
+                <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                    <span className="text-orange-400">Simply Punjabi</span> <span className="text-blue-500">The Fun & Easy Way! 🚀</span>
+                </h1>
+                <p className="text-lg text-gray-700 mt-4">
+                    Interactive lessons, pronunciation guides, and real-life conversations to help you master Punjabi quickly!
                 </p>
                 <div className="mt-6 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
                     <Link href="/key-functions/signup" className="w-full md:w-auto">
@@ -48,7 +45,7 @@ export default function Home() {
                         </button>
                     </Link>
                     <Link href="/learn-more" className="w-full md:w-auto">
-                        <button className="w-full md:w-auto bg-orange-400 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-800 transition transform hover:scale-110 hover:shadow-lg">
+                        <button className="w-full md:w-auto bg-orange-400 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-500 transition transform hover:scale-110 hover:shadow-lg">
                             Learn More 📖
                         </button>
                     </Link>
@@ -57,32 +54,29 @@ export default function Home() {
 
             {/* Course Sections */}
             <div className="text-center w-full max-w-4xl mt-16">
-                <h2 className="text-2xl md:text-3xl font-bold text-[var(--primary)] mb-6">
-                    📚 Course Sections
+                <h2 className="text-3xl font-bold text-[var(--primary)] mb-6">
+                    🎯 Choose Your Learning Path
                 </h2>
                 <p className="text-lg text-gray-700">
-                    Learn at your own pace and master Punjabi step by step!
+                    Start your journey with structured lessons designed to help you speak confidently.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
                     <CourseSectionCard
                         title="Essential Punjabi for Real Conversations"
-                        description="Start speaking from Day 1 with must-know words & phrases!"
+                        description="Master everyday greetings, introductions, and polite expressions."
                         link="/learning/essential-punjabi"
-
                         emoji="🗣️"
                     />
                     <CourseSectionCard
                         title="Speak with Confidence – Beyond the Basics"
-                        description="Expand your vocabulary and engage in longer conversations!"
+                        description="Expand your vocabulary and improve sentence-building skills."
                         link="/learning/speak-with-confidence"
-
                         emoji="🎙️"
                     />
                     <CourseSectionCard
                         title="Master Punjabi Conversations with Ease"
                         description="Achieve fluency, understand native speakers, and sound natural!"
                         link="/learning/master-punjabi"
-
                         emoji="🏆"
                     />
                 </div>
@@ -92,17 +86,17 @@ export default function Home() {
 }
 
 // ✅ Course Section Card Component with Icons
-function CourseSectionCard({ title, description, link, icon, emoji }) {
+function CourseSectionCard({ title, description, link, emoji }) {
     return (
         <Link href={link} className="w-full">
             <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-orange-400 hover:shadow-xl transform hover:scale-105 cursor-pointer min-h-[220px] flex flex-col justify-between text-center">
                 <div>
                     <div className="text-5xl">{emoji}</div>
-                    <h3 className="text-xl font-bold text-[var(--primary)] mt-4">{icon} {title}</h3>
+                    <h3 className="text-xl font-bold text-[var(--primary)] mt-4">{title}</h3>
                     <p className="text-base text-gray-600 mt-2">{description}</p>
                 </div>
                 <button className="mt-6 bg-[var(--primary)] text-white px-6 py-3 rounded-lg hover:bg-[var(--secondary)] transition w-full hover:scale-105">
-                    Explore
+                    Start Learning →
                 </button>
             </div>
         </Link>
