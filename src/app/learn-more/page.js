@@ -24,7 +24,7 @@ export default function LearnMore() {
                 />
                 <InfoCard
                     title="💰 Subscription Details"
-                    text='Simply Punjabi is a <strong>paid platform</strong> at <span class="text-orange-400 font-bold">£3 per month</span>. We are currently in beta, but new content is added <strong>monthly</strong>.'
+                    text='Simply Punjabi is a <strong>paid platform</strong> at <span class="text-orange-400 font-bold">£2.99 per month</span>. We are currently in beta, but new content is added <strong>monthly</strong>.'
                 />
                 <InfoCard
                     title="🚀 Why Subscribe?"

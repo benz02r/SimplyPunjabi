@@ -68,21 +68,21 @@ export default function Home() {
                         title="Essential Punjabi for Real Conversations"
                         description="Start speaking from Day 1 with must-know words & phrases!"
                         link="/learning/essential-punjabi"
-                        icon="🟢"
+
                         emoji="🗣️"
                     />
                     <CourseSectionCard
                         title="Speak with Confidence – Beyond the Basics"
                         description="Expand your vocabulary and engage in longer conversations!"
                         link="/learning/speak-with-confidence"
-                        icon="🟡"
+
                         emoji="🎙️"
                     />
                     <CourseSectionCard
                         title="Master Punjabi Conversations with Ease"
                         description="Achieve fluency, understand native speakers, and sound natural!"
                         link="/learning/master-punjabi"
-                        icon="🔴"
+
                         emoji="🏆"
                     />
                 </div>

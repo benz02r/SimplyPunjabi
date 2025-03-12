@@ -33,7 +33,6 @@ export default function EssentialPunjabi() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-40 pb-16">
-
             {/* Back Button - More Space Below Navbar */}
             <div className="w-full max-w-5xl mb-10 flex justify-start">
                 <button
@@ -42,6 +41,16 @@ export default function EssentialPunjabi() {
                 >
                     ← Back to {user ? "Learning" : "Home"}
                 </button>
+            </div>
+
+            {/* Resources Box */}
+            <div className="w-full max-w-5xl mb-12">
+                <Link href="/learning/resources">
+                    <div className="p-6 bg-yellow-100 rounded-lg shadow-md border-2 border-yellow-300 transition-all hover:border-yellow-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center">
+                        <h2 className="text-2xl font-bold text-yellow-800">📚 Learning Resources</h2>
+                        <p className="text-lg text-yellow-700 mt-2">Click here to access essential Punjabi learning materials.</p>
+                    </div>
+                </Link>
             </div>
 
             {/* Title & Description */}
