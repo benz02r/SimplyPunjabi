@@ -12,7 +12,7 @@ export default function EssentialPunjabi() {
     // Updated Lessons for Essential Punjabi (Reduced to 6)
     const lessons = [
         { title: "Lesson 1: How to Greet Like a Native!", link: "/lessons/lesson1", locked: false },
-        { title: "Lesson 2: Crack the Punjabi Code – Gurmukhi Alphabet", link: "/lessons/lesson2", locked: false },
+        { title: "Lesson 2: Basic Conversations and Introductions", link: "/lessons/lesson2", locked: false },
         { title: "Lesson 3: Numbers 1-10", link: "/lessons/lesson3", locked: true },
         { title: "Lesson 4: Ordering Food & Restaurant Conversations", link: "/lesson/ordering-food", locked: true },
         { title: "Lesson 5: Asking for Directions in Punjabi", link: "/lesson/asking-directions", locked: true },

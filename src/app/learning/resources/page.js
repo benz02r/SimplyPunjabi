@@ -7,8 +7,8 @@ export default function LearningResources() {
     const router = useRouter();
 
     const resources = [
-        { title: "Gurmukhi Alphabet", link: "/resources/gurmukhi-alphabet" },
-        { title: "Numbers in Punjabi", link: "/resources/numbers" }
+        { title: "Gurmukhi Alphabet", link: "/learning/resources/alphabet" },
+        { title: "Numbers in Punjabi", link: "/learning/resources/numbers" }
     ];
 
     return (

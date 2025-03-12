@@ -44,19 +44,19 @@ export default function LearningHub() {
             {/* Learning Paths */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl w-full">
                 <LearningCard
-                    title="🟢 Essential Punjabi for Real Conversations"
+                    title="Essential Punjabi for Real Conversations"
                     description="Start speaking Punjabi from Day 1 with must-know words & phrases!"
                     link="/learning/essential-punjabi"
                     bgColor="bg-green-500"
                 />
                 <LearningCard
-                    title="🟡 Speak with Confidence – Beyond the Basics"
+                    title="Speak with Confidence – Beyond the Basics"
                     description="Expand your vocabulary and engage in real-life conversations!"
                     link="/learning/speak-with-confidence"
                     bgColor="bg-blue-500"
                 />
                 <LearningCard
-                    title="🔴 Master Punjabi Conversations with Ease"
+                    title="Master Punjabi Conversations with Ease"
                     description="Achieve fluency, understand native speakers, and sound natural!"
                     link="/learning/master-punjabi"
                     bgColor="bg-purple-500"
