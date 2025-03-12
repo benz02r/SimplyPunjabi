@@ -44,6 +44,16 @@ export default function SpeakWithConfidence() {
                 </button>
             </div>
 
+            {/* Resources Box */}
+            <div className="w-full max-w-5xl mb-12">
+                <Link href="/learning/resources">
+                    <div className="p-6 bg-yellow-100 rounded-lg shadow-md border-2 border-yellow-300 transition-all hover:border-yellow-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center">
+                        <h2 className="text-2xl font-bold text-yellow-800">📚 Learning Resources</h2>
+                        <p className="text-lg text-yellow-700 mt-2">Click here to access essential Punjabi learning materials.</p>
+                    </div>
+                </Link>
+            </div>
+
             {/* Title & Description */}
             <div className="text-center max-w-3xl mb-12">
                 <h1 className="text-4xl font-extrabold text-[var(--primary)] leading-tight">
