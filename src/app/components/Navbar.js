@@ -32,6 +32,11 @@ export default function Navbar() {
         };
     }, []);
 
+    // Close the mobile menu when navigating to a new page
+    useEffect(() => {
+        setMobileMenuOpen(false);
+    }, [pathname]);
+
     const handleLogout = async () => {
         await supabase.auth.signOut(); // ✅ Log out from Supabase
         setUser(null); // ✅ Remove user from state immediately
@@ -41,13 +46,8 @@ export default function Navbar() {
     return (
         <nav className="bg-[#2563EB] shadow-md py-2 fixed top-0 left-0 right-0 z-50">
             <div className="container mx-auto flex justify-between items-center px-4">
-
                 {/* Logo (Larger but Fits in Compact Navbar) */}
-
-                    <div className="flex items-center cursor-pointer">
-
-                    </div>
-
+                <div className="flex items-center cursor-pointer"></div>
 
                 {/* Desktop Navigation */}
                 <ul className="hidden md:flex space-x-5 text-lg font-semibold text-white">

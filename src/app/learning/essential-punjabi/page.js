@@ -47,18 +47,18 @@ export default function EssentialPunjabi() {
             <div className="w-full max-w-5xl mb-12">
                 <Link href="/learning/resources">
                     <div className="p-6 bg-yellow-100 rounded-lg shadow-md border-2 border-yellow-300 transition-all hover:border-yellow-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center">
-                        <h2 className="text-2xl font-bold text-yellow-800">📚 Learning Resources</h2>
-                        <p className="text-lg text-yellow-700 mt-2">Click here to access essential Punjabi learning materials.</p>
+                        <h2 className="text-3xl font-bold text-yellow-800">📚 Learning Resources</h2>
+                        <p className="text-xl text-yellow-700 mt-2">Click here to access essential Punjabi learning materials.</p>
                     </div>
                 </Link>
             </div>
 
             {/* Title & Description */}
             <div className="text-center max-w-3xl mb-12">
-                <h1 className="text-4xl font-extrabold text-[var(--primary)] leading-tight">
-                    Essential Punjabi for Real Conversations 💙
+                <h1 className="text-5xl font-extrabold text-[var(--primary)] leading-tight">
+                    Essential Punjabi for Real Conversations
                 </h1>
-                <p className="text-lg mt-3 text-gray-700">
+                <p className="text-xl mt-3 text-gray-700">
                     Master the basics and start speaking Punjabi confidently from Day 1!
                 </p>
             </div>
@@ -73,9 +73,9 @@ export default function EssentialPunjabi() {
             {/* Subscription Prompt */}
             {!user && (
                 <div className="mt-12 text-center">
-                    <p className="text-lg font-semibold text-gray-700">🔒 Want full access to all lessons?</p>
+                    <p className="text-xl font-semibold text-gray-700">🔒 Want full access to all lessons?</p>
                     <Link href="/signup">
-                        <button className="mt-4 bg-[var(--primary)] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[var(--secondary)] transition transform hover:scale-105">
+                        <button className="mt-4 bg-[var(--primary)] text-white px-6 py-3 rounded-lg text-xl font-semibold hover:bg-[var(--secondary)] transition transform hover:scale-105">
                             Subscribe to Unlock 🚀
                         </button>
                     </Link>
@@ -85,19 +85,19 @@ export default function EssentialPunjabi() {
     );
 }
 
-// ✅ Lesson Card Component (Uniform Size & Styling)
+// ✅ Lesson Card Component (Updated for Better Styling & Centered Text)
 function LessonCard({ lesson, user }) {
     return (
-        <div className={`p-6 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] ${lesson.locked && !user ? "hover:border-red-500" : "hover:border-green-500"} hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[200px] flex flex-col justify-between`}>
+        <div className={`p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] ${lesson.locked && !user ? "hover:border-red-500" : "hover:border-green-500"} hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[250px] flex flex-col justify-center items-center`}>
             {lesson.locked && !user ? (
                 <>
-                    <div className="text-4xl">🔒</div>
-                    <h3 className="text-lg md:text-xl font-bold text-gray-700 mt-2">{lesson.title}</h3>
-                    <p className="text-sm text-gray-500">Subscribe to unlock</p>
+                    <div className="text-5xl">🔒</div>
+                    <h3 className="text-2xl font-bold text-gray-700 mt-4">{lesson.title}</h3>
+                    <p className="text-lg text-gray-500">Subscribe to unlock</p>
                 </>
             ) : (
-                <Link href={lesson.link}>
-                    <h3 className="text-lg md:text-xl font-bold text-[var(--primary)] mt-2">{lesson.title}</h3>
+                <Link href={lesson.link} className="w-full h-full flex flex-col justify-center items-center">
+                    <h3 className="text-2xl font-bold text-[var(--primary)] text-center">{lesson.title}</h3>
                 </Link>
             )}
         </div>
