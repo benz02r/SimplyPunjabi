@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import { FaBookOpen } from "react-icons/fa";
 
 export default function LearningHub() {
     const [user, setUser] = useState(null);
@@ -26,7 +27,10 @@ export default function LearningHub() {
 
             {/* Back to Dashboard Button */}
             <div className="absolute top-4 left-4 md:top-6 md:left-6">
-                <button onClick={() => router.push("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-600 transition">
+                <button
+                    onClick={() => router.push("/dashboard")}
+                    className="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-600 transition"
+                >
                     ← Back to Dashboard
                 </button>
             </div>
@@ -62,6 +66,21 @@ export default function LearningHub() {
                     bgColor="bg-purple-500"
                 />
             </div>
+
+            {/* Dictionary Section */}
+            <section className="w-full max-w-4xl mt-12">
+                <Link href="/learning/dictionary" className="w-full">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center justify-center space-y-2 transition transform hover:scale-105 hover:shadow-2xl cursor-pointer">
+                        <FaBookOpen className="text-4xl" />
+                        <h2 className="text-2xl font-semibold">📚 English to Punjabi Dictionary</h2>
+                        <p className="text-lg">Find the Punjabi word for words in English.</p>
+                        <button className="mt-4 bg-white text-blue-600 px-6 py-3 rounded-full font-semibold shadow-md hover:bg-gray-200 transition">
+                            Explore the Dictionary →
+                        </button>
+                    </div>
+                </Link>
+            </section>
+
         </div>
     );
 }
