@@ -8,10 +8,11 @@ export default function DictionaryPage() {
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [fetchingSuggestions, setFetchingSuggestions] = useState(false);
 
-    // Fetch dictionary suggestions for autocomplete
+    // Fetch dictionary suggestions for autocomplete (after 2+ letters)
     useEffect(() => {
-        if (searchTerm.length >= 4) {
+        if (searchTerm.length >= 2) {
             fetchSuggestions(searchTerm);
         } else {
             setSuggestions([]);
@@ -20,6 +21,10 @@ export default function DictionaryPage() {
 
     // Function to fetch dictionary words for autocomplete
     const fetchSuggestions = async (query) => {
+        if (fetchingSuggestions) return; // Prevent duplicate fetches
+
+        setFetchingSuggestions(true);
+
         try {
             const res = await fetch(`/api/dictionary?search=${query}`);
             const data = await res.json();
@@ -30,6 +35,8 @@ export default function DictionaryPage() {
         } catch (err) {
             console.error("Error fetching suggestions:", err);
         }
+
+        setFetchingSuggestions(false);
     };
 
     // Function to fetch dictionary word details
@@ -59,6 +66,7 @@ export default function DictionaryPage() {
     // Handle "Enter" key press to trigger search
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
+            e.preventDefault(); // Prevent form submission behavior
             handleSearch();
         }
     };
