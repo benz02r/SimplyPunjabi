@@ -69,7 +69,7 @@ export default function LearningHub() {
 
             {/* Dictionary Section */}
             <section className="w-full max-w-4xl mt-12">
-                <Link href="/learning/dictionary" className="w-full">
+                <Link href="/dictionary" className="w-full">
                     <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center justify-center space-y-2 transition transform hover:scale-105 hover:shadow-2xl cursor-pointer">
                         <FaBookOpen className="text-4xl" />
                         <h2 className="text-2xl font-semibold">📚 English to Punjabi Dictionary</h2>
