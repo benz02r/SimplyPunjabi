@@ -10,18 +10,22 @@ export default function DictionaryPage() {
     const [error, setError] = useState(null);
     const [fetchingSuggestions, setFetchingSuggestions] = useState(false);
 
-    // Fetch dictionary suggestions for autocomplete (after 2+ letters)
+    // Fetch dictionary suggestions for autocomplete (debounced)
     useEffect(() => {
-        if (searchTerm.length >= 2) {
-            fetchSuggestions(searchTerm);
-        } else {
-            setSuggestions([]);
-        }
+        const delayDebounceFn = setTimeout(() => {
+            if (searchTerm.length >= 2) {
+                fetchSuggestions(searchTerm);
+            } else {
+                setSuggestions([]);
+            }
+        }, 300); // Delayed execution
+
+        return () => clearTimeout(delayDebounceFn);
     }, [searchTerm]);
 
     // Function to fetch dictionary words for autocomplete
     const fetchSuggestions = async (query) => {
-        if (fetchingSuggestions) return; // Prevent duplicate fetches
+        if (fetchingSuggestions) return;
 
         setFetchingSuggestions(true);
 
@@ -30,7 +34,7 @@ export default function DictionaryPage() {
             const data = await res.json();
 
             if (res.ok) {
-                setSuggestions(data.map(word => word.english_word)); // Store only English words
+                setSuggestions(data.map(word => word.english_word));
             }
         } catch (err) {
             console.error("Error fetching suggestions:", err);
@@ -41,32 +45,33 @@ export default function DictionaryPage() {
 
     // Function to fetch dictionary word details
     const handleSearch = async () => {
-        if (!searchTerm) return;
+        if (!searchTerm.trim()) return; // Prevent empty searches
 
         setLoading(true);
         setError(null);
 
         try {
-            const res = await fetch(`/api/dictionary?search=${searchTerm}`);
+            const res = await fetch(`/api/dictionary?search=${searchTerm.trim()}`);
             const data = await res.json();
 
             if (res.ok) {
                 setResults(data);
             } else {
-                setError("Error fetching results.");
+                setError("No results found.");
             }
         } catch (err) {
             setError("Network error. Try again.");
         }
 
         setLoading(false);
-        setSuggestions([]); // Hide suggestions after search
+        setSuggestions([]);
+        setSearchTerm("");
     };
 
-    // Handle "Enter" key press to trigger search
+    // Handle "Enter" key press
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
-            e.preventDefault(); // Prevent form submission behavior
+            e.preventDefault();
             handleSearch();
         }
     };
@@ -75,7 +80,8 @@ export default function DictionaryPage() {
     const handleSelectSuggestion = (word) => {
         setSearchTerm(word);
         setSuggestions([]);
-        handleSearch();
+
+        setTimeout(() => handleSearch(), 0); // Delayed execution
     };
 
     return (
@@ -95,9 +101,12 @@ export default function DictionaryPage() {
                 />
                 <button
                     onClick={handleSearch}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-400 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition"
+                    disabled={loading}
+                    className={`absolute right-2 top-1/2 transform -translate-y-1/2 
+                                ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-orange-400 hover:bg-blue-600"} 
+                                text-white px-4 py-1 rounded-md transition`}
                 >
-                    Search
+                    {loading ? "Searching..." : "Search"}
                 </button>
 
                 {/* Autocomplete Suggestions */}
