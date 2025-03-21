@@ -7,33 +7,52 @@ import { supabase } from "@/lib/supabaseClient";
 
 export default function SpeakWithConfidence() {
     const [user, setUser] = useState(null);
+    const [completedLessons, setCompletedLessons] = useState([]);
     const router = useRouter();
 
-    // Updated Lessons for Speak with Confidence (Reduced to 6)
     const lessons = [
-        { title: "Lesson 1: How to Start & Keep a Conversation Going", link: "/gamified/lessons/conversation-flow", locked: false },
-        { title: "Lesson 2: Expressing Likes, Dislikes & Opinions", link: "/gamified/lessons/expressing-feelings", locked: false },
-        { title: "Lesson 3: Punjabi Question Words – Never Run Out of Things to Say", link: "/lesson/question-words", locked: true },
-        { title: "Lesson 4: Making Plans & Inviting Friends", link: "/lesson/making-plans", locked: true },
-        { title: "Lesson 5: Describing People, Places & Things", link: "/lesson/describing-things", locked: true },
-        { title: "Lesson 6: Handling Real-Life Situations (Doctor, Taxi, Hotel)", link: "/lesson/real-life-situations", locked: true },
+        { id: "lesson1", title: "Lesson 1: How to Start & Keep a Conversation Going", link: "/gamified/lessons/conversation-flow", locked: false },
+        { id: "lesson2", title: "Lesson 2: Expressing Likes, Dislikes & Opinions", link: "/gamified/lessons/expressing-feelings", locked: false },
+        { id: "lesson3", title: "Lesson 3: Punjabi Question Words – Never Run Out of Things to Say", link: "/lesson/question-words", locked: true },
+        { id: "lesson4", title: "Lesson 4: Making Plans & Inviting Friends", link: "/lesson/making-plans", locked: true },
+        { id: "lesson5", title: "Lesson 5: Describing People, Places & Things", link: "/lesson/describing-things", locked: true },
+        { id: "lesson6", title: "Lesson 6: Handling Real-Life Situations (Doctor, Taxi, Hotel)", link: "/lesson/real-life-situations", locked: true },
     ];
 
     useEffect(() => {
-        async function checkUser() {
+        async function checkUserAndProgress() {
             const { data: sessionData, error } = await supabase.auth.getSession();
             if (error) {
                 console.error("Supabase Auth Error:", error);
-            } else {
-                setUser(sessionData?.session?.user || null);
+                return;
+            }
+
+            const sessionUser = sessionData?.session?.user || null;
+            setUser(sessionUser);
+
+            if (sessionUser) {
+                const { data: userData } = await supabase
+                    .from("users")
+                    .select("id")
+                    .eq("email", sessionUser.email)
+                    .single();
+
+                const { data: progressData } = await supabase
+                    .from("lesson_progress")
+                    .select("lesson_id")
+                    .eq("user_id", userData.id)
+                    .eq("completed", true);
+
+                const completed = progressData?.map(entry => entry.lesson_id) || [];
+                setCompletedLessons(completed);
             }
         }
-        checkUser();
+
+        checkUserAndProgress();
     }, []);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-40 pb-16">
-            {/* Back Button - More Space Below Navbar */}
             <div className="w-full max-w-5xl mb-10 flex justify-start">
                 <button
                     onClick={() => router.push(user ? "/learning" : "/")}
@@ -43,7 +62,6 @@ export default function SpeakWithConfidence() {
                 </button>
             </div>
 
-            {/* Resources Box */}
             <div className="w-full max-w-5xl mb-12">
                 <Link href="/learning/resources">
                     <div className="p-6 bg-yellow-100 rounded-lg shadow-md border-2 border-yellow-300 transition-all hover:border-yellow-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center">
@@ -53,7 +71,6 @@ export default function SpeakWithConfidence() {
                 </Link>
             </div>
 
-            {/* Title & Description */}
             <div className="text-center max-w-3xl mb-12">
                 <h1 className="text-5xl font-extrabold text-[var(--primary)] leading-tight">
                     Speak with Confidence – Beyond the Basics
@@ -63,14 +80,16 @@ export default function SpeakWithConfidence() {
                 </p>
             </div>
 
-            {/* Lesson Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-5xl w-full">
                 {lessons.map((lesson, index) => (
-                    <LessonCard key={index} lesson={lesson} user={user} />
+                    <LessonCard
+                        key={index}
+                        lesson={{ ...lesson, completed: completedLessons.includes(lesson.id) }}
+                        user={user}
+                    />
                 ))}
             </div>
 
-            {/* Subscription Prompt */}
             {!user && (
                 <div className="mt-12 text-center">
                     <p className="text-xl font-semibold text-gray-700">🔒 Want full access to all lessons?</p>
@@ -85,10 +104,14 @@ export default function SpeakWithConfidence() {
     );
 }
 
-// ✅ Lesson Card Component (Updated for Better Styling & Centered Text)
+// ✅ Updated Lesson Card with Completion Tick
 function LessonCard({ lesson, user }) {
     return (
-        <div className={`p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] ${lesson.locked && !user ? "hover:border-red-500" : "hover:border-green-500"} hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[250px] flex flex-col justify-center items-center`}>
+        <div className="relative p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-green-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[250px] flex flex-col justify-center items-center">
+            {lesson.completed && (
+                <div className="absolute top-4 right-4 text-green-600 text-2xl">✅</div>
+            )}
+
             {lesson.locked && !user ? (
                 <>
                     <div className="text-5xl">🔒</div>

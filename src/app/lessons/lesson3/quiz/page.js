@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export default function Lesson2Quiz() {
+export default function Lesson3Quiz() {
     const router = useRouter();
     const [step, setStep] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -16,30 +16,31 @@ export default function Lesson2Quiz() {
     const questions = [
         {
             id: 1,
-            question: "How do you introduce yourself in Punjabi?",
-            options: ["Sat Sri Akaal", "Mera Naam ... Hai", "Ki Haal Aa?", "Tusi Kithon Ho?"],
-            correct: "Mera Naam ... Hai"
+            question: "What is the Punjabi word for 'book'?",
+            options: ["Paani", "Ghar", "Kitaab", "Kutta"],
+            correct: "Kitaab"
         },
         {
             id: 2,
-            question: "How do you ask someone’s name in Punjabi?",
-            options: ["Tuhada Naam Ki Hai?", "Mera Naam ... Hai", "Sat Sri Akaal", "Tuhanu Mil Ke Khushi Hui"],
-            correct: "Tuhada Naam Ki Hai?"
+            question: "Which Punjabi word means 'water'?",
+            options: ["Kutta", "Paani", "Kitaab", "Ghar"],
+            correct: "Paani"
         },
         {
             id: 3,
-            question: "What phrase means 'Nice to meet you'?",
-            options: ["Tuhada Naam Ki Hai?", "Tuhanu Mil Ke Khushi Hui", "Mera Naam ... Hai", "Ki Haal Aa?"],
-            correct: "Tuhanu Mil Ke Khushi Hui"
+            question: "'Kutta' refers to which noun?",
+            options: ["House", "Book", "Dog", "Water"],
+            correct: "Dog"
         },
         {
             id: 4,
-            question: "Which phrase means 'Where are you from?'?",
-            options: ["Tusi Kithon Ho?", "Tuhada Naam Ki Hai?", "Ki Haal Aa?", "Sat Sri Akaal"],
-            correct: "Tusi Kithon Ho?"
+            question: "How do you say 'This is my house' in Punjabi (transliterated)?",
+            options: ["Eh mera kitaab hai", "Eh mera ghar hai", "Eh mera kutta hai", "Eh mera paani hai"],
+            correct: "Eh mera ghar hai"
         }
     ];
 
+    // Fetch user from Supabase
     useEffect(() => {
         const fetchUser = async () => {
             const { data: authData } = await supabase.auth.getUser();
@@ -56,6 +57,7 @@ export default function Lesson2Quiz() {
         fetchUser();
     }, []);
 
+    // Save lesson progress + points (only if not already completed)
     useEffect(() => {
         const saveProgressAndPoints = async () => {
             if (quizCompleted && score === questions.length && user) {
@@ -63,16 +65,17 @@ export default function Lesson2Quiz() {
                     .from("lesson_progress")
                     .select("id")
                     .eq("user_id", user.id)
-                    .eq("lesson_id", "lesson2")
+                    .eq("lesson_id", "lesson3")
                     .maybeSingle();
 
                 if (!existing) {
                     await supabase.from("lesson_progress").upsert({
                         user_id: user.id,
-                        lesson_id: "lesson2",
+                        lesson_id: "lesson3",
                         completed: true
                     });
 
+                    // Increment user points by 10
                     await supabase.rpc("increment_points", { add_points: 10 });
                 }
             }
@@ -103,11 +106,14 @@ export default function Lesson2Quiz() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 sm:px-10 pt-16 pb-10">
             <div className="w-full max-w-2xl text-center">
-                <button onClick={() => router.push("/lessons/lesson2")} className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
-                    ← Back to Lesson 2
+                <button
+                    onClick={() => router.push("/lessons/lesson3")}
+                    className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition"
+                >
+                    ← Back to Lesson 3
                 </button>
-                <h1 className="text-3xl font-bold mt-6 text-gray-800">Lesson 2 Quiz</h1>
-                <p className="text-lg text-gray-700 mt-2">Test your knowledge on Punjabi introductions.</p>
+                <h1 className="text-3xl font-bold mt-6 text-gray-800">Lesson 3 Quiz</h1>
+                <p className="text-lg text-gray-700 mt-2">Test your knowledge of basic Punjabi nouns.</p>
             </div>
 
             {!quizCompleted ? (
@@ -143,7 +149,9 @@ export default function Lesson2Quiz() {
             ) : (
                 <div className="max-w-2xl bg-white p-6 rounded-lg shadow-lg mt-6 text-center">
                     <h2 className="text-2xl font-bold">Quiz Completed!</h2>
-                    <p className="text-lg mt-2">You scored <span className="font-bold text-green-600">{score}</span> out of {questions.length}!</p>
+                    <p className="text-lg mt-2">
+                        You scored <span className="font-bold text-green-600">{score}</span> out of {questions.length}!
+                    </p>
                     {score === questions.length ? (
                         <p className="mt-2 text-xl font-semibold text-green-600">🎉 Excellent! You mastered this lesson!</p>
                     ) : score >= questions.length / 2 ? (
@@ -151,7 +159,10 @@ export default function Lesson2Quiz() {
                     ) : (
                         <p className="mt-2 text-xl font-semibold text-red-600">❌ Keep trying! Review the lesson and try again.</p>
                     )}
-                    <button onClick={() => router.push("/lessons/lesson2")} className="mt-6 bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                    <button
+                        onClick={() => router.push("/lessons/lesson3")}
+                        className="mt-6 bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition"
+                    >
                         🔄 Retry Lesson
                     </button>
                 </div>

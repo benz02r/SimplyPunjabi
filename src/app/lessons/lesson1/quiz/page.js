@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Lesson1Quiz() {
     const router = useRouter();
@@ -10,6 +11,7 @@ export default function Lesson1Quiz() {
     const [score, setScore] = useState(0);
     const [feedback, setFeedback] = useState("");
     const [quizCompleted, setQuizCompleted] = useState(false);
+    const [user, setUser] = useState(null);
 
     const questions = [
         {
@@ -58,6 +60,46 @@ export default function Lesson1Quiz() {
         }
     ];
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: authData } = await supabase.auth.getUser();
+            if (authData?.user) {
+                const { data: userData } = await supabase
+                    .from("users")
+                    .select("id")
+                    .eq("email", authData.user.email)
+                    .single();
+
+                setUser(userData);
+            }
+        };
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
+        const saveProgressAndPoints = async () => {
+            if (quizCompleted && score === questions.length && user) {
+                const { data: existing } = await supabase
+                    .from("lesson_progress")
+                    .select("id")
+                    .eq("user_id", user.id)
+                    .eq("lesson_id", "lesson1")
+                    .maybeSingle();
+
+                if (!existing) {
+                    await supabase.from("lesson_progress").upsert({
+                        user_id: user.id,
+                        lesson_id: "lesson1",
+                        completed: true
+                    });
+
+                    await supabase.rpc("increment_points", { add_points: 10 });
+                }
+            }
+        };
+        saveProgressAndPoints();
+    }, [quizCompleted, score, user]);
+
     const handleAnswerSelection = (option) => {
         setSelectedAnswer(option);
         if (option === questions[step].correct) {
@@ -95,7 +137,13 @@ export default function Lesson1Quiz() {
                         {questions[step].options.map((option, index) => (
                             <button
                                 key={index}
-                                className={`p-4 rounded-lg shadow-md border transition-all text-lg ${selectedAnswer === option ? (option === questions[step].correct ? 'bg-green-200' : 'bg-red-200') : 'bg-gray-100 hover:bg-gray-200'}`}
+                                className={`p-4 rounded-lg shadow-md border transition-all text-lg ${
+                                    selectedAnswer === option
+                                        ? option === questions[step].correct
+                                            ? "bg-green-200"
+                                            : "bg-red-200"
+                                        : "bg-gray-100 hover:bg-gray-200"
+                                }`}
                                 onClick={() => handleAnswerSelection(option)}
                                 disabled={selectedAnswer !== null}
                             >

@@ -22,7 +22,14 @@ export default function Profile() {
     const [newPassword, setNewPassword] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [points, setPoints] = useState(0);
+    const [level, setLevel] = useState(0);
+    const [previousLevel, setPreviousLevel] = useState(0);
+    const [levelUp, setLevelUp] = useState(false);
     const router = useRouter();
+
+    const totalLessons = 18;
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -38,10 +45,9 @@ export default function Profile() {
             setEmail(user.email);
             setUserId(user.id);
 
-            // Fetch user name from database using user ID
-            const { data, error } = await supabase
+            const { data: userData, error } = await supabase
                 .from("users")
-                .select("name")
+                .select("name, points")
                 .eq("id", user.id)
                 .single();
 
@@ -50,8 +56,28 @@ export default function Profile() {
                 return;
             }
 
-            setName(data?.name || "User");
-            setNewName(data?.name || "");
+            const userPoints = userData?.points || 0;
+            setName(userData?.name || "User");
+            setNewName(userData?.name || "");
+            setPoints(userPoints);
+
+            const newLevel = Math.floor(userPoints / 30);
+            if (newLevel > previousLevel) {
+                setLevelUp(true);
+                setTimeout(() => setLevelUp(false), 4000);
+            }
+            setPreviousLevel(newLevel);
+            setLevel(newLevel);
+
+            const { data: progressData } = await supabase
+                .from("lesson_progress")
+                .select("lesson_id")
+                .eq("user_id", user.id)
+                .eq("completed", true);
+
+            const completedCount = progressData?.length || 0;
+            const percent = Math.round((completedCount / totalLessons) * 100);
+            setProgress(percent);
         };
 
         fetchUser();
@@ -104,11 +130,18 @@ export default function Profile() {
         setLoading(false);
     };
 
+    const unlockedAvatars = avatars.slice(0, level + 1);
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center px-6 pt-32 md:pt-24 pb-16 bg-gradient-to-b from-blue-50 to-white">
             <div className="p-8 rounded-xl shadow-lg w-full max-w-4xl text-center border border-gray-300 bg-white">
 
-                {/* Back to Dashboard Button with More Space */}
+                {levelUp && (
+                    <div className="fixed top-24 sm:top-32 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-white px-6 py-3 rounded-full shadow-lg text-xl font-bold animate-pulse z-50">
+                        🎉 LEVEL UP! You're now Level {level} 🎯
+                    </div>
+                )}
+
                 <div className="w-full flex justify-start mb-10 mt-4">
                     <button
                         onClick={() => router.push("/dashboard")}
@@ -130,28 +163,65 @@ export default function Profile() {
                     <p className="text-gray-500">Customize your learning experience!</p>
                 </div>
 
-                {/* Avatar Selection */}
-                <div className="mt-6">
-                    <h2 className="text-lg font-semibold">Choose Your Avatar:</h2>
-                    <div className="grid grid-cols-4 gap-4 justify-center mt-3">
-                        {avatars.map((avatar, index) => (
-                            <Image
-                                key={index}
-                                src={avatar}
-                                alt={`Avatar ${index + 1}`}
-                                width={64}
-                                height={64}
-                                className={`rounded-full cursor-pointer border-2 ${selectedAvatar === avatar ? "border-blue-500 shadow-lg" : "border-gray-300"} hover:scale-105 transition`}
-                                onClick={() => setSelectedAvatar(avatar)}
-                            />
-                        ))}
+                <div className="mt-6 w-full">
+                    <h2 className="text-lg font-semibold text-gray-700 mb-2">Your Lesson Progress</h2>
+                    <div className="w-full bg-gray-200 rounded-full h-5 overflow-hidden shadow-inner">
+                        <div
+                            className="bg-green-500 h-full text-right pr-2 text-white text-sm font-bold transition-all duration-500"
+                            style={{ width: `${progress}%` }}
+                        >
+                            {progress}%
+                        </div>
                     </div>
                 </div>
 
-                {/* Display Error or Success Messages */}
+                <div className="mt-4 text-center text-sm text-gray-700 font-medium space-y-2">
+                    <div>🏆 Total Points: <span className="font-bold text-green-700">{points}</span></div>
+                    <div>🎯 Level: <span className="font-bold text-blue-700">Level {level}</span></div>
+                    <div className="w-full bg-gray-200 rounded-full h-4 shadow-inner">
+                        <div
+                            className="bg-blue-400 h-full transition-all duration-500 text-xs text-white text-right pr-2 font-semibold"
+                            style={{ width: `${(points % 30) / 30 * 100}%` }}
+                        >
+                            {points % 30}/30
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-6">
+                    <h2 className="text-lg font-semibold">Choose Your Avatar:</h2>
+                    <div className="grid grid-cols-4 gap-4 justify-center mt-3">
+                        {avatars.map((avatar, index) => {
+                            const isUnlocked = index <= level;
+                            return (
+                                <div key={index} className="relative">
+                                    <Image
+                                        src={avatar}
+                                        alt={`Avatar ${index + 1}`}
+                                        width={64}
+                                        height={64}
+                                        className={`rounded-full cursor-pointer border-2 ${
+                                            selectedAvatar === avatar
+                                                ? "border-blue-500 shadow-lg"
+                                                : "border-gray-300"
+                                        } ${!isUnlocked ? "opacity-40 grayscale" : "hover:scale-105 transition"}`}
+                                        onClick={() => {
+                                            if (isUnlocked) setSelectedAvatar(avatar);
+                                        }}
+                                    />
+                                    {!isUnlocked && (
+                                        <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white bg-black bg-opacity-50 rounded-full">
+                                            🔒 Level {index}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
                 {message && <p className="text-center text-red-500 mt-4">{message}</p>}
 
-                {/* Update Name Section */}
                 <div className="mt-6">
                     <label className="block font-semibold">Name</label>
                     <input
@@ -168,7 +238,6 @@ export default function Profile() {
                     </button>
                 </div>
 
-                {/* Reset Password Section */}
                 <div className="mt-6">
                     <label className="block font-semibold">Change Password</label>
                     <input
@@ -193,7 +262,6 @@ export default function Profile() {
                     </button>
                 </div>
 
-                {/* Logout Button */}
                 <button
                     onClick={async () => {
                         await supabase.auth.signOut();

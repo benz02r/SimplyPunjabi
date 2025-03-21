@@ -1,55 +1,108 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { FaComments, FaMicrophone, FaAward, FaBullseye, FaRocketbook } from "react-icons/fa";
 
-export default function ComingSoon() {
-    const [timeLeft, setTimeLeft] = useState(null); // Start as null to avoid hydration error
-
-    function calculateTimeLeft() {
-        const targetDate = new Date("2025-04-30T00:00:00Z").getTime(); // April 30, 2025 (UTC)
-        const now = new Date().getTime();
-        const difference = targetDate - now;
-
-        if (difference <= 0) {
-            return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-        }
-
-        return {
-            days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-            hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-            minutes: Math.floor((difference / (1000 * 60)) % 60),
-            seconds: Math.floor((difference / 1000) % 60),
-        };
-    }
+export default function Home() {
+    const videoRef = useRef(null);
 
     useEffect(() => {
-        setTimeLeft(calculateTimeLeft()); // Set initial value only on the client
+        const video = videoRef.current;
 
-        const timer = setInterval(() => {
-            setTimeLeft(calculateTimeLeft());
-        }, 1000);
+        if (video) {
+            const playVideo = () => {
+                video.play().catch(error => console.error("Autoplay failed:", error));
+            };
 
-        return () => clearInterval(timer);
+            playVideo();
+            document.addEventListener("click", playVideo);
+            document.addEventListener("touchstart", playVideo);
+            document.addEventListener("scroll", playVideo);
+
+            return () => {
+                document.removeEventListener("click", playVideo);
+                document.removeEventListener("touchstart", playVideo);
+                document.removeEventListener("scroll", playVideo);
+            };
+        }
     }, []);
 
-    if (!timeLeft) {
-        return null; // Avoid rendering mismatched content until state is initialized
-    }
-
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 text-center">
-            <h1 className="text-5xl font-extrabold text-orange-400">Simply Punjabi</h1>
-            <h2 className="text-3xl font-extrabold text-blue-600 mt-2">Coming Soon!</h2>
-            <p className="text-lg text-gray-700 mt-4">We are launching on April 30, 2025!</p>
-
-            {/* Countdown Timer */}
-            <div className="bg-white px-6 py-3 rounded-lg text-2xl font-semibold shadow-md mt-6">
-                ⏳ {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-40 md:pt-48 pb-40 space-y-16">
+            {/* Hero Section */}
+            <div className="text-center max-w-3xl">
+                <h1 className="text-5xl md:text-6xl font-extrabold leading-tight">
+                    <span className="text-orange-400">Simply Punjabi</span>
+                </h1>
+                <h2 className="text-3xl md:text-4xl font-extrabold leading-tight text-blue-600 mt-2">
+                    The Simple Way to Learn Punjabi
+                </h2>
+                <p className="text-lg text-gray-700 mt-4">
+                    Interactive lessons, pronunciation guides, and real-life conversations to help you master Punjabi quickly!
+                </p>
+                <div className="mt-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 w-full">
+                    <Link href="/key-functions/signup" className="w-full md:w-auto">
+                        <button className="w-full md:w-auto bg-[var(--primary)] text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-orange-400 transition transform hover:scale-110 hover:shadow-lg">
+                            Get Started
+                        </button>
+                    </Link>
+                    <Link href="/learn-more" className="w-full md:w-auto">
+                        <button className="w-full md:w-auto bg-orange-400 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-600 transition transform hover:scale-110 hover:shadow-lg">
+                            Learn More
+                        </button>
+                    </Link>
+                </div>
             </div>
 
-            {/* Email Form */}
-
+            {/* Course Sections */}
+            <div className="text-center w-full max-w-4xl mt-16">
+                <h2 className="text-3xl font-bold text-[var(--primary)] mb-6 flex justify-center items-center gap-2">
+                    <FaBullseye className="text-4xl" /> Choose Your Learning Path
+                </h2>
+                <p className="text-lg text-gray-700">
+                    Start your journey with structured lessons designed to help you speak confidently.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
+                    <CourseSectionCard
+                        title="Essential Punjabi for Real Conversations"
+                        description="Master everyday greetings, introductions, and polite expressions."
+                        link="/learning/essential-punjabi"
+                        icon={<FaComments className="text-5xl text-[var(--primary)] mx-auto" />}
+                    />
+                    <CourseSectionCard
+                        title="Speak with Confidence – Beyond the Basics"
+                        description="Expand your vocabulary and improve sentence-building skills."
+                        link="/learning/speak-with-confidence"
+                        icon={<FaMicrophone className="text-5xl text-[var(--primary)] mx-auto" />}
+                    />
+                    <CourseSectionCard
+                        title="Master Punjabi Conversations with Ease"
+                        description="Achieve fluency, understand native speakers, and sound natural!"
+                        link="/learning/master-punjabi"
+                        icon={<FaAward className="text-5xl text-[var(--primary)] mx-auto" />}
+                    />
+                </div>
+            </div>
         </div>
     );
 }
 
+// ✅ Course Section Card Component with Icons
+function CourseSectionCard({ title, description, link, icon }) {
+    return (
+        <Link href={link} className="w-full">
+            <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-orange-400 hover:shadow-xl transform hover:scale-105 cursor-pointer min-h-[220px] flex flex-col justify-between text-center">
+                <div>
+                    <div className="mb-4 flex justify-center">{icon}</div>
+                    <h3 className="text-xl font-bold text-[var(--primary)] mt-4">{title}</h3>
+                    <p className="text-base text-gray-600 mt-2">{description}</p>
+                </div>
+                <button className="mt-6 bg-[var(--primary)] text-white px-6 py-3 rounded-lg hover:bg-[var(--secondary)] transition w-full hover:scale-105">
+                    Start Learning →
+                </button>
+            </div>
+        </Link>
+    );
+}
