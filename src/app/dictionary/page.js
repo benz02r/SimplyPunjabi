@@ -86,7 +86,7 @@ export default function DictionaryPage() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6">
-            <h1 className="text-4xl font-extrabold text-[var(--primary)]">📖 English to Punjabi Dictionary</h1>
+            <h1 className="text-4xl font-extrabold text-[var(--primary)]">English to Punjabi Dictionary</h1>
             <p className="text-lg text-gray-700 mt-2">Search for an English word to find its Punjabi meaning.</p>
 
             {/* Search Input */}
