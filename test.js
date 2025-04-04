@@ -1,0 +1,19 @@
+import http from 'k6/http';
+import { sleep, check } from 'k6';
+
+export const options = {
+    vus: 10,
+    duration: '30s',
+};
+
+export default function () {
+    const res = http.get('https://yourdomain.com/lessons/lesson1/quiz');
+
+    check(res, {
+        'is status 200': (r) => r.status === 200,
+        'responds in < 1s': (r) => r.timings.duration < 1000,
+    });
+
+    // Simulate a user pausing to read/interact
+    sleep(Math.random() * 2 + 1); // 1–3s pause
+}

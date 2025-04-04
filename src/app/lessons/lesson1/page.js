@@ -19,7 +19,7 @@ export default function Lesson1Dashboard() {
 
             <div className="text-center max-w-3xl mb-10 px-4 sm:px-0">
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--primary)] leading-tight">
-                    Lesson 1: Greetings in Punjabi
+                    Lesson 2: Greetings in Punjabi
                 </h1>
                 <p className="text-base sm:text-lg mt-3 text-gray-700">
                     Master common greetings and polite expressions.

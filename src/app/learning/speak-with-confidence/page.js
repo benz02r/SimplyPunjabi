@@ -11,12 +11,12 @@ export default function SpeakWithConfidence() {
     const router = useRouter();
 
     const lessons = [
-        { id: "lesson1", title: "Lesson 1: How to Start & Keep a Conversation Going", link: "/gamified/lessons/conversation-flow", locked: false },
-        { id: "lesson2", title: "Lesson 2: Expressing Likes, Dislikes & Opinions", link: "/gamified/lessons/expressing-feelings", locked: false },
-        { id: "lesson3", title: "Lesson 3: Punjabi Question Words – Never Run Out of Things to Say", link: "/lesson/question-words", locked: true },
-        { id: "lesson4", title: "Lesson 4: Making Plans & Inviting Friends", link: "/lesson/making-plans", locked: true },
-        { id: "lesson5", title: "Lesson 5: Describing People, Places & Things", link: "/lesson/describing-things", locked: true },
-        { id: "lesson6", title: "Lesson 6: Handling Real-Life Situations (Doctor, Taxi, Hotel)", link: "/lesson/real-life-situations", locked: true },
+        { id: "lesson7", title: "Lesson 1: Common questions", link: "/gamified/lessons/conversation-flow", locked: false },
+        { id: "lesson8", title: "Lesson 2: Expressing Likes, Dislikes & Opinions", link: "/gamified/lessons/expressing-feelings", locked: false },
+        { id: "lesson9", title: "Lesson 3: Tell the time", link: "/lesson/question-words", locked: true },
+        { id: "lesson4", title: "Lesson 4: Daily routine", link: "/lesson/making-plans", locked: true },
+        { id: "lesson5", title: "Lesson 5: Ordering food", link: "/lesson/describing-things", locked: true },
+        { id: "lesson6", title: "Lesson 6: A bit more about me ", link: "/lesson/real-life-situations", locked: true },
     ];
 
     useEffect(() => {

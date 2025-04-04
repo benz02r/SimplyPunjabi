@@ -11,12 +11,12 @@ export default function EssentialPunjabi() {
     const router = useRouter();
 
     const lessons = [
-        { id: "lesson1", title: "Lesson 1: How to Greet Like a Native!", link: "/lessons/lesson1", locked: false },
-        { id: "lesson2", title: "Lesson 2: Basic Conversations and Introductions", link: "/lessons/lesson2", locked: false },
-        { id: "lesson3", title: "Lesson 3: Basic Punjabi Nouns", link: "/lessons/lesson3", locked: true },
-        { id: "lesson4", title: "Lesson 4: Ordering Food & Restaurant Conversations", link: "/lesson/ordering-food", locked: true },
-        { id: "lesson5", title: "Lesson 5: Asking for Directions in Punjabi", link: "/lesson/asking-directions", locked: true },
-        { id: "lesson6", title: "Lesson 6: Must-Know Verbs for Everyday Speaking", link: "/lesson/everyday-verbs", locked: true },
+        { id: "lesson1", title: "Lesson 1: Brief history of Gurmukhi", link: "/lessons/lesson2/information", locked: false },
+        { id: "lesson2", title: "Lesson 2: Punjabi Greetings", link: "/lessons/lesson1/information", locked: false },
+        { id: "lesson3", title: "Lesson 3: A bit about me", link: "/lessons/lesson3", locked: true },
+        { id: "lesson4", title: "Lesson 4: Common prases", link: "/lesson/ordering-food", locked: true },
+        { id: "lesson5", title: "Lesson 5: Family and Friends", link: "/lesson/asking-directions", locked: true },
+        { id: "lesson6", title: "Lesson 6: Common words and top tips!", link: "/lesson/everyday-verbs", locked: true },
     ];
 
     useEffect(() => {
