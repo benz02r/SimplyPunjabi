@@ -3,78 +3,132 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Lesson1MemoryGame() {
+export default function Lesson1GurmukhiInfo() {
     const router = useRouter();
-    const [cards, setCards] = useState(shuffleCards());
-    const [flipped, setFlipped] = useState([]);
-    const [matched, setMatched] = useState([]);
+    const [answers, setAnswers] = useState(Array(5).fill(""));
+    const [submitted, setSubmitted] = useState(false);
+    const [score, setScore] = useState(0);
 
-    const pairColors = {
-        1: "bg-yellow-200",
-        2: "bg-blue-200",
-        3: "bg-purple-200",
-        4: "bg-pink-200"
+    const trivia = [
+        {
+            question: "The Gurmukhi script was standardized by _____.",
+            options: ["Guru Angad Dev Ji", "Guru Gobind Singh Ji", "Kabir Das"],
+            correctAnswer: "Guru Angad Dev Ji"
+        },
+        {
+            question: "Gurmukhi is derived from _____.",
+            options: ["Brahmi", "Laṁḍā", "Pali"],
+            correctAnswer: "Laṁḍā"
+        },
+        {
+            question: "A key difference between Gurmukhi and Devanagari is _____.",
+            options: ["Gurmukhi has fewer vowels", "Gurmukhi uses a horizontal line", "Gurmukhi is used for Sanskrit"],
+            correctAnswer: "Gurmukhi uses a horizontal line"
+        },
+        {
+            question: "Gurmukhi primarily serves the _____ language.",
+            options: ["Punjabi", "Hindi", "Bengali"],
+            correctAnswer: "Punjabi"
+        },
+        {
+            question: "Gurmukhi is culturally important because _____.",
+            options: ["It was used in South India", "It preserves Sikh teachings", "It influenced Persian script"],
+            correctAnswer: "It preserves Sikh teachings"
+        }
+    ];
+
+    const handleChange = (index, value) => {
+        const updated = [...answers];
+        updated[index] = value;
+        setAnswers(updated);
     };
 
-    function shuffleCards() {
-        const greetings = [
-            { id: 1, text: "Sat Sri Akaal (ਸਤ ਸ੍ਰੀ ਅਕਾਲ)", pairId: 101 },
-            { id: 2, text: "Ki Haal Aa? (ਕੀ ਹਾਲ ਆ?)", pairId: 102 },
-            { id: 3, text: "Kidan? (ਕਿੱਧਾਂ?)", pairId: 103 },
-            { id: 4, text: "Tusi Kidan Teekya? (ਤੁਸੀਂ ਕਿਵੇਂ ਟਿਕਿਆ?)", pairId: 104 },
-            { id: 101, text: "A respectful greeting meaning 'God is the truth'.", pairId: 1 },
-            { id: 102, text: "Used casually among friends to ask 'What's going on?'.", pairId: 2 },
-            { id: 103, text: "Another informal way to ask how someone is doing.", pairId: 3 },
-            { id: 104, text: "A respectful way to ask about someone's well-being.", pairId: 4 }
-        ];
-        return greetings.sort(() => Math.random() - 0.5);
-    }
-
-    const handleCardClick = (id) => {
-        if (flipped.length === 2 || matched.includes(id)) return;
-        setFlipped([...flipped, id]);
+    const handleSubmit = () => {
+        const correct = answers.reduce((count, answer, index) => {
+            return count + (answer === trivia[index].correctAnswer ? 1 : 0);
+        }, 0);
+        setScore(correct);
+        setSubmitted(true);
     };
-
-    if (flipped.length === 2) {
-        setTimeout(() => {
-            const [first, second] = flipped;
-            const firstCard = cards.find(card => card.id === first);
-            const secondCard = cards.find(card => card.id === second);
-            if (firstCard.pairId === secondCard.id) {
-                setMatched([...matched, first, second]);
-            }
-            setFlipped([]);
-        }, 800);
-    }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 sm:px-10 pt-16 pb-10">
-            <div className="w-full max-w-2xl mb-6 text-center">
-                <button onClick={() => router.push("/lessons/lesson1")} className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
-                    ← Back to Lesson 1
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 sm:px-10 pt-40 pb-16">
+            {/* Back Button */}
+            <div className="w-full max-w-4xl mb-12 sm:mb-14 px-4 sm:px-0">
+                <button
+                    onClick={() => router.push("/learning/essential-punjabi")}
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition w-full sm:w-auto"
+                >
+                    ← Back to Lessons
                 </button>
-                <h1 className="text-3xl font-bold mt-6 text-gray-800">Greeting Memory Challenge</h1>
-                <p className="text-lg text-gray-700 mt-2">Flip two cards at a time to find matching pairs.</p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
-                {cards.map((card) => (
-                    <button
-                        key={card.id}
-                        className={`p-4 w-32 h-36 sm:w-40 sm:h-44 rounded-xl shadow-lg border border-gray-300 flex items-center justify-center text-center text-sm sm:text-base font-semibold transition-all transform hover:scale-105 overflow-hidden 
-            ${flipped.includes(card.id) || matched.includes(card.id) ? pairColors[card.pairId % 4 + 1] : 'bg-gray-200'}`}
-                        onClick={() => handleCardClick(card.id)}
-                    >
-            <span className="px-2 break-words leading-tight">
-              {flipped.includes(card.id) || matched.includes(card.id) ? card.text : "❓"}
-            </span>
-                    </button>
+            {/* Title */}
+            <div className="text-center max-w-3xl mb-10 px-4 sm:px-0">
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--primary)] leading-tight">
+                    Gurmukhi Fill the Gaps challenge
+                </h1>
+                <p className="text-base sm:text-lg mt-3 text-gray-700">
+                    Select the correct answer to each statement.
+                </p>
+            </div>
+
+            {/* Multiple Choice Trivia */}
+            <div className="space-y-6 max-w-4xl w-full">
+                {trivia.map((item, index) => (
+                    <div key={index} className="p-6 bg-white rounded-lg shadow-md border border-gray-200">
+                        <p className="text-lg font-medium text-gray-800 mb-4">{item.question}</p>
+                        <div className="space-y-2">
+                            {item.options.map((option, i) => (
+                                <label key={i} className="block">
+                                    <input
+                                        type="radio"
+                                        name={`question-${index}`}
+                                        value={option}
+                                        checked={answers[index] === option}
+                                        onChange={(e) => handleChange(index, e.target.value)}
+                                        disabled={submitted}
+                                        className="mr-2"
+                                    />
+                                    {option}
+                                </label>
+                            ))}
+                        </div>
+                        {submitted && (
+                            <p className={`mt-2 text-sm font-medium ${answers[index] === item.correctAnswer ? 'text-green-600' : 'text-red-500'}`}>
+                                {answers[index] === item.correctAnswer ? '✅ Correct!' : `❌ Correct answer: ${item.correctAnswer}`}
+                            </p>
+                        )}
+                    </div>
                 ))}
             </div>
 
-            <div className="w-full max-w-2xl text-center mt-8">
-                <button onClick={() => router.push("/lessons/lesson1/scenario")} className="bg-green-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-green-600 transition">
-                    Continue to "Real-World Scenario" →
+            {/* Submit Button */}
+            {!submitted && (
+                <div className="mt-8">
+                    <button
+                        onClick={handleSubmit}
+                        className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-green-600 transition"
+                    >
+                        Submit Answers
+                    </button>
+                </div>
+            )}
+
+            {/* Score */}
+            {submitted && (
+                <div className="mt-8 text-xl text-center text-gray-800">
+                    You got <strong>{score}</strong> out of <strong>{trivia.length}</strong> correct!
+                </div>
+            )}
+
+            {/* Next Button */}
+            <div className="w-full max-w-4xl px-4 sm:px-0 text-center mt-10">
+                <button
+                    onClick={() => router.push("/lessons/lesson1/quiz")}
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition"
+                >
+                    Continue to "Quiz" →
                 </button>
             </div>
         </div>

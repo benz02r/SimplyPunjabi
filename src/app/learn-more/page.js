@@ -19,15 +19,15 @@ export default function LearnMore() {
             {/* Info Sections */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl">
                 <InfoCard
-                    title="🎓 What is Simply Punjabi?"
+                    title="What is Simply Punjabi?"
                     text="Simply Punjabi is an interactive language-learning platform designed for English speakers who want to master Punjabi. Whether you're a beginner or improving your fluency, we have lessons for all levels."
                 />
                 <InfoCard
-                    title="💰 Subscription Details"
+                    title="Subscription Details"
                     text='Simply Punjabi is a <strong>paid platform</strong> at <span class="text-orange-400 font-bold">£2.99 per month</span>. We are currently in beta, but new content is added <strong>monthly</strong>.'
                 />
                 <InfoCard
-                    title="🚀 Why Subscribe?"
+                    title="Why Subscribe?"
                     list={[
                         "Unlimited access to lessons",
                         "Personalized learning paths",
@@ -37,14 +37,14 @@ export default function LearnMore() {
                     ]}
                 />
                 <InfoCard
-                    title="🎮 Try It Before You Buy"
+                    title="Try It Before You Buy"
                     text='Explore our <a href="/" class="text-[var(--primary)] font-semibold hover:underline">Featured Lessons</a> to test a limited version before subscribing!'
                 />
             </div>
 
             {/* FAQ Section */}
             <div className="mt-12 bg-white rounded-lg shadow-lg p-8 max-w-4xl w-full border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-400 hover:shadow-xl">
-                <h2 className="text-2xl md:text-3xl font-bold text-[var(--primary)]">❓ Frequently Asked Questions</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-[var(--primary)]"> Frequently Asked Questions</h2>
                 <div className="mt-4 space-y-4">
                     {[
                         { question: "Is there a free version?", answer: "Yes! You can try our featured lessons before subscribing." },
@@ -75,7 +75,7 @@ export default function LearnMore() {
                 {/* CTA Button */}
                 <Link href="/key-functions/signup">
                     <button className="w-full bg-[var(--primary)] text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-[var(--secondary)] transition transform hover:scale-105">
-                        Sign Up Now 🚀
+                        Sign Up Now
                     </button>
                 </Link>
             </div>

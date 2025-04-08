@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Lesson1GreetingsInfo() {
+export default function Lesson2GreetingsInfo() {
     const router = useRouter();
     const [revealed, setRevealed] = useState([false, false, false, false]);
 
@@ -12,10 +12,22 @@ export default function Lesson1GreetingsInfo() {
     };
 
     const greetings = [
-        { title: "Mera Naam ... Hai (ਮੇਰਾ ਨਾਮ ... ਹੈ)", meaning: "Saying 'My name is ...'." },
-        { title: "Tuhada Naam Ki Hai? (ਤੁਹਾਡਾ ਨਾਮ ਕੀ ਹੈ?)", meaning: "Asking 'What is your name?'." },
-        { title: "Tuhanu Mil Ke Khushi Hui (ਤੁਹਾਨੂੰ ਮਿਲ ਕੇ ਖੁਸ਼ੀ ਹੋਈ)", meaning: "Saying 'Nice to meet you'." },
-        { title: "Tusi Kithon Ho? (ਤੁਸੀਂ ਕਿੱਥੋਂ ਹੋ?)", meaning: "Asking 'Where are you from?'." }
+        {
+            title: "Sat Sri Akaal (ਸਤ ਸ੍ਰੀ ਅਕਾਲ)",
+            meaning: "A respectful and spiritual greeting meaning 'God is the Eternal Truth'. Commonly used among Sikhs and Punjabi speakers."
+        },
+        {
+            title: "Ki Haal Aa? (ਕੀ ਹਾਲ ਆ?)",
+            meaning: "A casual way of asking 'How are you?' typically used among friends or people of the same age."
+        },
+        {
+            title: "Kidan? (ਕਿੱਧਾਂ?)",
+            meaning: "An informal and brief way of asking 'How are you?' similar to 'What's up?'."
+        },
+        {
+            title: "Tusi Kidan Teekya? (ਤੁਸੀਂ ਕਿਵੇਂ ਟਿਕਿਆ?)",
+            meaning: "A more formal or respectful way to ask someone how they are doing, often used when addressing elders or strangers."
+        }
     ];
 
     return (
@@ -23,20 +35,20 @@ export default function Lesson1GreetingsInfo() {
             {/* Back Button */}
             <div className="w-full max-w-4xl mb-12 sm:mb-14 px-4 sm:px-0">
                 <button
-                    onClick={() => router.push("/lessons/lesson1")}
+                    onClick={() => router.push("/lessons/lesson2")}
                     className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition w-full sm:w-auto"
                 >
-                    ← Back to Lesson 1
+                    ← Back to Lesson 2
                 </button>
             </div>
 
             {/* Title & Instructions */}
             <div className="text-center max-w-3xl mb-10 px-4 sm:px-0">
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--primary)] leading-tight">
-                    When to Use Each Greeting
+                    Common Punjabi Greetings
                 </h1>
                 <p className="text-base sm:text-lg mt-3 text-gray-700">
-                    Tap a card to reveal its meaning & context.
+                    Tap a card to reveal the meaning and context behind each greeting.
                 </p>
             </div>
 
@@ -45,7 +57,7 @@ export default function Lesson1GreetingsInfo() {
                 {greetings.map((greeting, index) => (
                     <div
                         key={index}
-                        className="p-6 bg-white rounded-lg shadow-md border border-gray-200 transition-all hover:border-green-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[180px] flex flex-col justify-center"
+                        className="p-6 bg-white rounded-lg shadow-md border border-gray-200 transition-all hover:border-green-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[200px] flex flex-col justify-center"
                         onClick={() => toggleReveal(index)}
                     >
                         <h3 className="text-lg sm:text-xl font-bold text-[var(--primary)]">

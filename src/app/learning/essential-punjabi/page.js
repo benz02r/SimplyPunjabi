@@ -11,7 +11,7 @@ export default function EssentialPunjabi() {
     const router = useRouter();
 
     const lessons = [
-        { id: "lesson1", title: "Lesson 1: History of Gurmukhi", link: "/lessons/lesson1", locked: false },
+        { id: "lesson1", title: "Lesson 1: History of Gurmukhi", link: "/lessons/lesson1/information", locked: false },
         { id: "lesson2", title: "Lesson 2: Punjabi Greetings", link: "/lessons/lesson2", locked: false },
         { id: "lesson3", title: "Lesson 3: A Bit About Me", link: "/lessons/lesson3", locked: true },
         { id: "lesson4", title: "Lesson 4: Common Phrases", link: "/lessons/lesson4", locked: true },

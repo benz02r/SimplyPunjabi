@@ -16,47 +16,58 @@ export default function Lesson1Quiz() {
     const questions = [
         {
             id: 1,
-            question: "What does 'Sat Sri Akaal' mean?",
+            question: "The Gurmukhi script was standardized by _____.",
             options: [
-                "Hello, friend!",
-                "A respectful greeting meaning 'God is the truth'.",
-                "How are you?",
-                "Goodbye!"
+                "Guru Angad Dev Ji",
+                "Guru Gobind Singh Ji",
+                "Kabir Das",
+                "Guru Nanak Dev Ji"
             ],
-            correct: "A respectful greeting meaning 'God is the truth'."
+            correct: "Guru Angad Dev Ji"
         },
         {
             id: 2,
-            question: "Which greeting would you use casually among friends?",
+            question: "Gurmukhi is derived from _____.",
             options: [
-                "Sat Sri Akaal",
-                "Ki Haal Aa?",
-                "Tusi Kidan Teekya?",
-                "Namaste"
+                "Brahmi",
+                "Laṁḍā",
+                "Pali",
+                "Sharada"
             ],
-            correct: "Ki Haal Aa?"
+            correct: "Laṁḍā"
         },
         {
             id: 3,
-            question: "What does 'Kidan?' mean?",
+            question: "What makes Gurmukhi different from Devanagari?",
             options: [
-                "A respectful farewell",
-                "Another informal way to ask how someone is doing",
-                "A way to ask about someone's job",
-                "A phrase used in business meetings"
+                "It is used in Sanskrit",
+                "It has no vowels",
+                "It uses the horizontal line",
+                "It uses Roman characters"
             ],
-            correct: "Another informal way to ask how someone is doing"
+            correct: "It uses the horizontal line"
         },
         {
             id: 4,
-            question: "Which greeting is the most formal?",
+            question: "Which language is primarily written in Gurmukhi?",
             options: [
-                "Ki Haal Aa?",
-                "Sat Sri Akaal",
-                "Kidan?",
-                "Tusi Kidan Teekya?"
+                "Hindi",
+                "Punjabi",
+                "Marathi",
+                "Gujarati"
             ],
-            correct: "Tusi Kidan Teekya?"
+            correct: "Punjabi"
+        },
+        {
+            id: 5,
+            question: "Why is Gurmukhi culturally important?",
+            options: [
+                "It’s used in South India",
+                "It preserves Sikh teachings",
+                "It was invented in the 1900s",
+                "It’s similar to Urdu"
+            ],
+            correct: "It preserves Sikh teachings"
         }
     ];
 
@@ -123,11 +134,11 @@ export default function Lesson1Quiz() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 sm:px-10 pt-16 pb-10">
             <div className="w-full max-w-2xl text-center">
-                <button onClick={() => router.push("/lessons/lesson1")} className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
-                    ← Back to Lesson 1
+                <button onClick={() => router.push("/learning/essential-punjabi")} className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                    ← Back to Lessons
                 </button>
                 <h1 className="text-3xl font-bold mt-6 text-gray-800">Lesson Quiz</h1>
-                <p className="text-lg text-gray-700 mt-2">Test your knowledge on Punjabi greetings.</p>
+                <p className="text-lg text-gray-700 mt-2">Test your knowledge on the history of Gurmukhi.</p>
             </div>
 
             {!quizCompleted ? (
@@ -171,7 +182,7 @@ export default function Lesson1Quiz() {
                     ) : (
                         <p className="mt-2 text-xl font-semibold text-red-600">❌ Keep trying! Review the lesson and try again.</p>
                     )}
-                    <button onClick={() => router.push("/lessons/lesson1")} className="mt-6 bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                    <button onClick={() => router.push("/lessons/lesson1/information")} className="mt-6 bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
                         🔄 Retry Lesson
                     </button>
                 </div>

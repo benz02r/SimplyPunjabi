@@ -12,39 +12,39 @@ export default function Lesson2Scenario() {
     const scenarios = [
         {
             id: 1,
-            context: "You meet someone new and want to introduce yourself. What do you say?",
+            context: "You walk into a gathering and want to greet everyone respectfully. What do you say?",
             options: [
-                "Sat Sri Akaal (ਸਤ ਸ੍ਰੀ ਅਕਾਲ)",
-                "Mera Naam ... Hai (ਮੇਰਾ ਨਾਮ ... ਹੈ)",
                 "Ki Haal Aa? (ਕੀ ਹਾਲ ਆ?)",
-                "Tusi Kithon Ho? (ਤੁਸੀਂ ਕਿੱਥੋਂ ਹੋ?)"
+                "Sat Sri Akaal (ਸਤ ਸ੍ਰੀ ਅਕਾਲ)",
+                "Tuhanu Mil Ke Khushi Hui (ਤੁਹਾਨੂੰ ਮਿਲ ਕੇ ਖੁਸ਼ੀ ਹੋਈ)",
+                "Kidan? (ਕਿੱਧਾਂ?)"
             ],
-            correct: "Mera Naam ... Hai (ਮੇਰਾ ਨਾਮ ... ਹੈ)",
-            explanation: "'Mera Naam ... Hai' means 'My name is ...', which is the correct way to introduce yourself."
+            correct: "Sat Sri Akaal (ਸਤ ਸ੍ਰੀ ਅਕਾਲ)",
+            explanation: "'Sat Sri Akaal' is a respectful and common greeting used in Punjabi culture."
         },
         {
             id: 2,
-            context: "You want to ask someone’s name. What do you say?",
+            context: "You’re catching up with a friend and want to ask how they are doing. What do you say?",
             options: [
+                "Tusi Kidan Teekya? (ਤੁਸੀਂ ਕਿਵੇਂ ਟਿਕਿਆ?)",
                 "Tuhada Naam Ki Hai? (ਤੁਹਾਡਾ ਨਾਮ ਕੀ ਹੈ?)",
                 "Sat Sri Akaal (ਸਤ ਸ੍ਰੀ ਅਕਾਲ)",
-                "Tusi Kidan Teekya? (ਤੁਸੀਂ ਕਿਵੇਂ ਟਿਕਿਆ?)",
-                "Mera Naam ... Hai (ਮੇਰਾ ਨਾਮ ... ਹੈ)"
+                "Tusi Kithon Ho? (ਤੁਸੀਂ ਕਿੱਥੋਂ ਹੋ?)"
             ],
-            correct: "Tuhada Naam Ki Hai? (ਤੁਹਾਡਾ ਨਾਮ ਕੀ ਹੈ?)",
-            explanation: "'Tuhada Naam Ki Hai?' means 'What is your name?'. This is the polite way to ask for someone’s name."
+            correct: "Tusi Kidan Teekya? (ਤੁਸੀਂ ਕਿਵੇਂ ਟਿਕਿਆ?)",
+            explanation: "This phrase is a polite and formal way of asking how someone is doing."
         },
         {
             id: 3,
-            context: "You just met someone and want to say 'Nice to meet you.' What do you say?",
+            context: "You meet someone casually and want to greet them informally. What’s appropriate?",
             options: [
-                "Tuhanu Mil Ke Khushi Hui (ਤੁਹਾਨੂੰ ਮਿਲ ਕੇ ਖੁਸ਼ੀ ਹੋਈ)",
                 "Ki Haal Aa? (ਕੀ ਹਾਲ ਆ?)",
-                "Tusi Kithon Ho? (ਤੁਸੀਂ ਕਿੱਥੋਂ ਹੋ?)",
-                "Tuhada Naam Ki Hai? (ਤੁਹਾਡਾ ਨਾਮ ਕੀ ਹੈ?)"
+                "Tuhanu Mil Ke Khushi Hui (ਤੁਹਾਨੂੰ ਮਿਲ ਕੇ ਖੁਸ਼ੀ ਹੋਈ)",
+                "Tusi Kidan Teekya? (ਤੁਸੀਂ ਕਿਵੇਂ ਟਿਕਿਆ?)",
+                "Sat Sri Akaal (ਸਤ ਸ੍ਰੀ ਅਕਾਲ)"
             ],
-            correct: "Tuhanu Mil Ke Khushi Hui (ਤੁਹਾਨੂੰ ਮਿਲ ਕੇ ਖੁਸ਼ੀ ਹੋਈ)",
-            explanation: "'Tuhanu Mil Ke Khushi Hui' means 'Nice to meet you'. It's a polite way to respond when meeting someone new."
+            correct: "Ki Haal Aa? (ਕੀ ਹਾਲ ਆ?)",
+            explanation: "'Ki Haal Aa?' is an informal, friendly way to ask 'How are you?'"
         }
     ];
 

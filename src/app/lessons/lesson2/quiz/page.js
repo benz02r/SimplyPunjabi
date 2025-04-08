@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export default function Lesson2Quiz() {
+export default function Lesson1Quiz() {
     const router = useRouter();
     const [step, setStep] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -16,34 +16,54 @@ export default function Lesson2Quiz() {
     const questions = [
         {
             id: 1,
-            question: "How do you introduce yourself in Punjabi?",
-            options: ["Sat Sri Akaal", "Mera Naam ... Hai", "Ki Haal Aa?", "Tusi Kithon Ho?"],
-            correct: "Mera Naam ... Hai"
+            question: "What does 'Sat Sri Akaal' mean?",
+            options: [
+                "Hello, friend!",
+                "A respectful greeting meaning 'God is the truth'.",
+                "How are you?",
+                "Goodbye!"
+            ],
+            correct: "A respectful greeting meaning 'God is the truth'."
         },
         {
             id: 2,
-            question: "How do you ask someone’s name in Punjabi?",
-            options: ["Tuhada Naam Ki Hai?", "Mera Naam ... Hai", "Sat Sri Akaal", "Tuhanu Mil Ke Khushi Hui"],
-            correct: "Tuhada Naam Ki Hai?"
+            question: "Which greeting would you use casually among friends?",
+            options: [
+                "Sat Sri Akaal",
+                "Ki Haal Aa?",
+                "Tusi Kidan Teekya?",
+                "Namaste"
+            ],
+            correct: "Ki Haal Aa?"
         },
         {
             id: 3,
-            question: "What phrase means 'Nice to meet you'?",
-            options: ["Tuhada Naam Ki Hai?", "Tuhanu Mil Ke Khushi Hui", "Mera Naam ... Hai", "Ki Haal Aa?"],
-            correct: "Tuhanu Mil Ke Khushi Hui"
+            question: "What does 'Kidan?' mean?",
+            options: [
+                "A respectful farewell",
+                "Another informal way to ask how someone is doing",
+                "A way to ask about someone's job",
+                "A phrase used in business meetings"
+            ],
+            correct: "Another informal way to ask how someone is doing"
         },
         {
             id: 4,
-            question: "Which phrase means 'Where are you from?'?",
-            options: ["Tusi Kithon Ho?", "Tuhada Naam Ki Hai?", "Ki Haal Aa?", "Sat Sri Akaal"],
-            correct: "Tusi Kithon Ho?"
+            question: "Which greeting is the most formal?",
+            options: [
+                "Ki Haal Aa?",
+                "Sat Sri Akaal",
+                "Kidan?",
+                "Tusi Kidan Teekya?"
+            ],
+            correct: "Tusi Kidan Teekya?"
         }
     ];
 
     useEffect(() => {
         const fetchUser = async () => {
             const { data: authData } = await supabase.auth.getUser();
-            if (authData?.user?.email) {
+            if (authData?.user) {
                 const { data: userData } = await supabase
                     .from("users")
                     .select("id")
@@ -63,13 +83,13 @@ export default function Lesson2Quiz() {
                     .from("lesson_progress")
                     .select("id")
                     .eq("user_id", user.id)
-                    .eq("lesson_id", "lesson2")
+                    .eq("lesson_id", "lesson1")
                     .maybeSingle();
 
                 if (!existing) {
                     await supabase.from("lesson_progress").upsert({
                         user_id: user.id,
-                        lesson_id: "lesson2",
+                        lesson_id: "lesson1",
                         completed: true
                     });
 
@@ -103,11 +123,11 @@ export default function Lesson2Quiz() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 sm:px-10 pt-16 pb-10">
             <div className="w-full max-w-2xl text-center">
-                <button onClick={() => router.push("/lessons/lesson2")} className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
-                    ← Back to Lesson 2
+                <button onClick={() => router.push("/learning/essential-punjabi")} className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                    ← Back to Lessons
                 </button>
-                <h1 className="text-3xl font-bold mt-6 text-gray-800">Lesson 2 Quiz</h1>
-                <p className="text-lg text-gray-700 mt-2">Test your knowledge on Punjabi introductions.</p>
+                <h1 className="text-3xl font-bold mt-6 text-gray-800">Lesson Quiz</h1>
+                <p className="text-lg text-gray-700 mt-2">Test your knowledge on common Punjabi greetings.</p>
             </div>
 
             {!quizCompleted ? (
@@ -151,7 +171,7 @@ export default function Lesson2Quiz() {
                     ) : (
                         <p className="mt-2 text-xl font-semibold text-red-600">❌ Keep trying! Review the lesson and try again.</p>
                     )}
-                    <button onClick={() => router.push("/lessons/lesson2")} className="mt-6 bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                    <button onClick={() => router.push("/lessons/lesson1")} className="mt-6 bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
                         🔄 Retry Lesson
                     </button>
                 </div>

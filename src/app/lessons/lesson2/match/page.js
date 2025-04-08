@@ -1,82 +1,91 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Lesson2MemoryGame() {
+export default function Lesson2MatchGame() {
     const router = useRouter();
-    const [cards, setCards] = useState(shuffleCards());
-    const [flipped, setFlipped] = useState([]);
-    const [matched, setMatched] = useState([]);
 
-    const pairColors = {
-        1: "bg-yellow-200",
-        2: "bg-blue-200",
-        3: "bg-purple-200",
-        4: "bg-pink-200"
+    const pairs = [
+        { id: 1, punjabi: "Sat Sri Akaal (ਸਤ ਸ੍ਰੀ ਅਕਾਲ)", english: "God is the Eternal Truth" },
+        { id: 2, punjabi: "Ki Haal Aa? (ਕੀ ਹਾਲ ਆ?)", english: "How are you?" },
+        { id: 3, punjabi: "Kidan? (ਕਿੱਧਾਂ?)", english: "What's up?" },
+        { id: 4, punjabi: "Tusi Kidan Teekya? (ਤੁਸੀਂ ਕਿਵੇਂ ਟਿਕਿਆ?)", english: "How have you been? (formal)" }
+    ];
+
+    const shuffledPunjabi = [...pairs].sort(() => 0.5 - Math.random());
+    const shuffledEnglish = [...pairs].sort(() => 0.5 - Math.random());
+
+    const [selectedPunjabi, setSelectedPunjabi] = useState(null);
+    const [matchedPairs, setMatchedPairs] = useState([]);
+
+    const handleMatch = (eng, punjabi) => {
+        if (eng.id === punjabi.id) {
+            setMatchedPairs([...matchedPairs, eng.id]);
+            setSelectedPunjabi(null);
+        } else {
+            setTimeout(() => setSelectedPunjabi(null), 500);
+        }
     };
-
-    function shuffleCards() {
-        const phrases = [
-            { id: 1, text: "Mera Naam ... Hai (ਮੇਰਾ ਨਾਮ ... ਹੈ)", pairId: 101 },
-            { id: 2, text: "Tuhada Naam Ki Hai? (ਤੁਹਾਡਾ ਨਾਮ ਕੀ ਹੈ?)", pairId: 102 },
-            { id: 3, text: "Tuhanu Mil Ke Khushi Hui (ਤੁਹਾਨੂੰ ਮਿਲ ਕੇ ਖੁਸ਼ੀ ਹੋਈ)", pairId: 103 },
-            { id: 4, text: "Tusi Kithon Ho? (ਤੁਸੀਂ ਕਿੱਥੋਂ ਹੋ?)", pairId: 104 },
-            { id: 101, text: "Saying 'My name is ...'", pairId: 1 },
-            { id: 102, text: "Asking 'What is your name?'", pairId: 2 },
-            { id: 103, text: "Saying 'Nice to meet you'", pairId: 3 },
-            { id: 104, text: "Asking 'Where are you from?'", pairId: 4 }
-        ];
-        return phrases.sort(() => Math.random() - 0.5);
-    }
-
-    const handleCardClick = (id) => {
-        if (flipped.length === 2 || matched.includes(id)) return;
-        setFlipped([...flipped, id]);
-    };
-
-    if (flipped.length === 2) {
-        setTimeout(() => {
-            const [first, second] = flipped;
-            const firstCard = cards.find(card => card.id === first);
-            const secondCard = cards.find(card => card.id === second);
-            if (firstCard.pairId === secondCard.id) {
-                setMatched([...matched, first, second]);
-            }
-            setFlipped([]);
-        }, 800);
-    }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 sm:px-10 pt-16 pb-10">
-            <div className="w-full max-w-2xl mb-6 text-center">
-                <button onClick={() => router.push("/lessons/lesson2")} className="bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
-                    ← Back to Lesson 2
-                </button>
-                <h1 className="text-3xl font-bold mt-6 text-gray-800">Introductions Memory Challenge</h1>
-                <p className="text-lg text-gray-700 mt-2">Flip two cards at a time to find matching pairs.</p>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 pt-40 pb-16">
+            <div className="w-full max-w-4xl mb-8 text-center">
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--primary)] mb-4">Match the Punjabi Greeting</h1>
+                <p className="text-lg text-gray-700">Click a Punjabi phrase and match it to its English meaning.</p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
-                {cards.map((card) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full max-w-4xl">
+                <div>
+                    <h2 className="text-xl font-bold mb-4">Punjabi</h2>
+                    {shuffledPunjabi.map((item) => (
+                        <button
+                            key={item.id}
+                            className={`block w-full text-left p-4 mb-3 rounded-lg shadow-md border ${
+                                matchedPairs.includes(item.id)
+                                    ? "bg-green-200 text-green-900"
+                                    : selectedPunjabi?.id === item.id
+                                        ? "bg-blue-200"
+                                        : "bg-white hover:bg-gray-100"
+                            }`}
+                            onClick={() => setSelectedPunjabi(item)}
+                            disabled={matchedPairs.includes(item.id)}
+                        >
+                            {item.punjabi}
+                        </button>
+                    ))}
+                </div>
+
+                <div>
+                    <h2 className="text-xl font-bold mb-4">English</h2>
+                    {shuffledEnglish.map((item) => (
+                        <button
+                            key={item.id}
+                            className={`block w-full text-left p-4 mb-3 rounded-lg shadow-md border ${
+                                matchedPairs.includes(item.id)
+                                    ? "bg-green-200 text-green-900"
+                                    : "bg-white hover:bg-gray-100"
+                            }`}
+                            onClick={() => selectedPunjabi && handleMatch(item, selectedPunjabi)}
+                            disabled={matchedPairs.includes(item.id)}
+                        >
+                            {item.english}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {matchedPairs.length === pairs.length && (
+                <div className="mt-10 text-center">
+                    <h3 className="text-2xl font-bold text-green-600 mb-4">Well done! You matched all greetings correctly.</h3>
                     <button
-                        key={card.id}
-                        className={`p-4 w-32 h-36 sm:w-40 sm:h-44 rounded-xl shadow-lg border border-gray-300 flex items-center justify-center text-center text-sm sm:text-base font-semibold transition-all transform hover:scale-105 overflow-hidden 
-            ${flipped.includes(card.id) || matched.includes(card.id) ? pairColors[card.pairId % 4 + 1] : 'bg-gray-200'}`}
-                        onClick={() => handleCardClick(card.id)}
+                        onClick={() => router.push("/lessons/lesson2/quiz")}
+                        className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-green-600 transition"
                     >
-            <span className="px-2 break-words leading-tight">
-              {flipped.includes(card.id) || matched.includes(card.id) ? card.text : "❓"}
-            </span>
+                        Continue to Quiz →
                     </button>
-                ))}
-            </div>
-
-            <div className="w-full max-w-2xl text-center mt-8">
-                <button onClick={() => router.push("/lessons/lesson2/scenario")} className="bg-green-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-green-600 transition">
-                    Continue to "Real-World Scenario" →
-                </button>
-            </div>
+                </div>
+            )}
         </div>
     );
 }
