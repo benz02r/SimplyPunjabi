@@ -11,12 +11,12 @@ export default function SpeakWithConfidence() {
     const router = useRouter();
 
     const lessons = [
-        { id: "lesson7", title: "Lesson 1: Common questions", link: "/gamified/lessons/conversation-flow", locked: false },
-        { id: "lesson8", title: "Lesson 2: Expressing Likes, Dislikes & Opinions", link: "/gamified/lessons/expressing-feelings", locked: false },
-        { id: "lesson9", title: "Lesson 3: Tell the time", link: "/lesson/question-words", locked: true },
-        { id: "lesson4", title: "Lesson 4: Daily routine", link: "/lesson/making-plans", locked: true },
-        { id: "lesson5", title: "Lesson 5: Ordering food", link: "/lesson/describing-things", locked: true },
-        { id: "lesson6", title: "Lesson 6: A bit more about me ", link: "/lesson/real-life-situations", locked: true },
+        { id: "lesson1", title: "Lesson 1: Ask a Question – Common Questions", link: "/gamified/lessons/conversation-flow", locked: false },
+        { id: "lesson2", title: "Lesson 2: A Bit About You (Advanced) – Expressing Likes and Dislikes", link: "/gamified/lessons/expressing-feelings", locked: false },
+        { id: "lesson3", title: "Lesson 3: Healthy Living", link: "/gamified/lessons/healthy-living", locked: true },
+        { id: "lesson4", title: "Lesson 4: Daily Routine", link: "/gamified/lessons/daily-routine", locked: true },
+        { id: "lesson5", title: "Lesson 5: Common Questions", link: "/gamified/lessons/common-questions", locked: true },
+        { id: "lesson6", title: "Lesson 6: Ask for Directions", link: "/gamified/lessons/ask-directions", locked: true },
     ];
 
     useEffect(() => {
