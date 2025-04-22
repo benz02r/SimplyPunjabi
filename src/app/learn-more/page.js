@@ -1,16 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LearnMore() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white text-gray-900 px-6 pt-36 pb-16 space-y-20">
             {/* Header Section */}
-            <div className="text-center max-w-3xl mb-8">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--primary)] leading-tight">
-                    Learn More About <span className="text-orange-400">Simply Punjabi</span>
-                </h1>
-                <p className="text-lg mt-3 text-gray-700">
+            <div className="flex flex-col items-center gap-4 text-center">
+                <h2 className="text-2xl sm:text-3xl font-bold text-blue-500/90 transition duration-300 hover:text-blue-600 hover:tracking-wide hover:scale-105">
+                    Learn More About
+                </h2>
+                <Image
+                    src="/Website Banner(shadowing)- Simply Punjabi, Ryan.png"
+                    alt="Simply Punjabi Banner"
+                    width={320}
+                    height={100}
+                    priority
+                    className="object-contain max-w-[300px] sm:max-w-[340px] drop-shadow-md"
+                    style={{ height: "auto" }}
+                />
+
+
+                <p className="text-lg mt-3 text-gray-700 max-w-2xl">
                     Master Punjabi in a fun, interactive, and personalized way!
                 </p>
             </div>

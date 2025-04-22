@@ -16,7 +16,7 @@ export default function Home() {
     ];
 
     const today = new Date();
-    const currentDayIndex = today.getDay(); // 0 = Sunday, 1 = Monday...
+    const currentDayIndex = today.getDay();
     const currentDay = punjabiDays[currentDayIndex];
 
     return (
@@ -34,18 +34,14 @@ export default function Home() {
                     />
                 </div>
 
-
-                <h2
-                    className="text-2xl sm:text-3xl font-bold text-blue-500/90 mt-6 transition duration-300 hover:text-blue-600 hover:tracking-wide hover:scale-105"
-                >
+                <h2 className="text-2xl sm:text-3xl font-bold text-blue-500/90 mt-6 transition duration-300 hover:text-blue-600 hover:tracking-wide hover:scale-105">
                     The Simple Way to Learn Punjabi
                 </h2>
 
-                {/* Today is ___ in Punjabi */}
                 <div className="text-center mt-4">
                     <p className="text-lg sm:text-xl text-gray-800">
-                        <span className="font-semibold text-blue-700">Today is</span>{" "}
-                        <span className="text-orange-600 font-bold">{currentDay.pa}</span>{" "}
+                        <span className="font-semibold text-blue-600">Today is</span>{" "}
+                        <span className="text-orange-400 font-bold">{currentDay.pa}</span>{" "}
                         <span className="text-gray-500 text-sm">({currentDay.pron})</span>
                     </p>
                 </div>
@@ -55,12 +51,12 @@ export default function Home() {
                 </p>
                 <div className="mt-6 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
                     <Link href="/key-functions/signup" className="w-full sm:w-auto">
-                        <button className="w-full sm:w-auto bg-[var(--primary)] text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-orange-500 transition transform hover:scale-105 hover:shadow-lg">
+                        <button className="w-full sm:w-auto bg-[var(--primary)] text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-orange-400 transition transform hover:scale-105 hover:shadow-lg">
                             Get Started
                         </button>
                     </Link>
                     <Link href="/learn-more" className="w-full sm:w-auto">
-                        <button className="w-full sm:w-auto bg-orange-400 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-500 transition transform hover:scale-105 hover:shadow-lg">
+                        <button className="w-full sm:w-auto bg-orange-400 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-600 transition transform hover:scale-105 hover:shadow-lg">
                             Learn More
                         </button>
                     </Link>
@@ -100,17 +96,22 @@ export default function Home() {
     );
 }
 
-// ✅ Course Card Component
+// ✅ Upgraded Course Card Component
 function CourseSectionCard({ title, description, link, icon }) {
     return (
-        <Link href={link} className="w-full">
-            <div className="p-8 bg-white rounded-xl shadow-md border-2 border-gray-200 transition-all hover:border-orange-400 hover:shadow-xl transform hover:scale-105 cursor-pointer min-h-[240px] flex flex-col justify-between text-center">
-                <div>
+        <Link href={link} className="w-full group">
+            <div className="relative p-8 bg-white rounded-xl border-2 border-gray-200 shadow-md transition-all duration-300 transform hover:scale-105 group-hover:shadow-2xl group-hover:border-transparent hover:bg-gradient-to-br from-orange-100 to-blue-100 min-h-[240px] flex flex-col justify-between text-center overflow-hidden">
+
+                {/* Glow Accent */}
+                <div className="absolute inset-0 z-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-br from-orange-300 via-transparent to-blue-300 blur-xl"></div>
+
+                <div className="relative z-10">
                     <div className="mb-4 flex justify-center">{icon}</div>
                     <h3 className="text-xl font-bold text-[var(--primary)] mt-2">{title}</h3>
-                    <p className="text-base text-gray-600 mt-3">{description}</p>
+                    <p className="text-base text-gray-700 mt-3">{description}</p>
                 </div>
-                <button className="mt-6 bg-[var(--primary)] text-white px-6 py-3 rounded-lg hover:bg-[var(--secondary)] transition w-full hover:scale-105">
+
+                <button className="relative z-10 mt-6 bg-[var(--primary)] text-white px-6 py-3 rounded-lg hover:bg-[var(--secondary)] transition w-full hover:scale-105 font-semibold">
                     Start Learning →
                 </button>
             </div>

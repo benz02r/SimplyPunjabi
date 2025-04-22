@@ -55,7 +55,7 @@ export default function GurmukhiAlphabet() {
                 ← Back to Resources
             </button>
 
-            <h1 className="text-5xl font-extrabold text-orange-400 "> Learn Gurmukhi! </h1>
+            <h1 className="text-5xl font-extrabold text-blue-600 "> Learn Gurmukhi! </h1>
             <p className="text-lg mt-3 text-gray-700 font-semibold">Hover over a letter to see it come alive! Click to hear its pronunciation.</p>
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-6 max-w-3xl w-full text-center mt-6">
                 {alphabet.map((char, index) => (
