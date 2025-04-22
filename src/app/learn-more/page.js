@@ -4,10 +4,9 @@ import Link from "next/link";
 
 export default function LearnMore() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white text-gray-900 px-6 pt-36 pb-12">
-
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white text-gray-900 px-6 pt-36 pb-16 space-y-20">
             {/* Header Section */}
-            <div className="text-center max-w-3xl mb-12">
+            <div className="text-center max-w-3xl mb-8">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-[var(--primary)] leading-tight">
                     Learn More About <span className="text-orange-400">Simply Punjabi</span>
                 </h1>
@@ -16,8 +15,8 @@ export default function LearnMore() {
                 </p>
             </div>
 
-            {/* Info Sections */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl">
+            {/* Info Cards Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
                 <InfoCard
                     title="What is Simply Punjabi?"
                     text="Simply Punjabi is an interactive language-learning platform designed for English speakers who want to master Punjabi. Whether you're a beginner or improving your fluency, we have lessons for all levels."
@@ -43,8 +42,10 @@ export default function LearnMore() {
             </div>
 
             {/* FAQ Section */}
-            <div className="mt-12 bg-white rounded-lg shadow-lg p-8 max-w-4xl w-full border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-400 hover:shadow-xl">
-                <h2 className="text-2xl md:text-3xl font-bold text-[var(--primary)]"> Frequently Asked Questions</h2>
+            <div className="bg-white rounded-lg shadow-lg p-8 max-w-4xl w-full border-2 border-gray-200 transition-all hover:border-orange-400 hover:shadow-xl">
+                <h2 className="text-2xl md:text-3xl font-bold text-[var(--primary)]">
+                    Frequently Asked Questions
+                </h2>
                 <div className="mt-4 space-y-4">
                     {[
                         { question: "Is there a free version?", answer: "Yes! You can try our featured lessons before subscribing." },
@@ -62,17 +63,14 @@ export default function LearnMore() {
                 </div>
             </div>
 
-            {/* Buttons Section */}
-            <div className="mt-12 w-full max-w-md flex flex-col space-y-4">
-                {/* Back to Home Button (Blue Button) */}
+            {/* CTA Buttons */}
+            <div className="w-full max-w-md flex flex-col space-y-4">
                 <button
                     onClick={() => window.location.href = "/"}
                     className="w-full bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-600 transition transform hover:scale-105"
                 >
                     ← Back to Home
                 </button>
-
-                {/* CTA Button */}
                 <Link href="/key-functions/signup">
                     <button className="w-full bg-[var(--primary)] text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-[var(--secondary)] transition transform hover:scale-105">
                         Sign Up Now
@@ -83,10 +81,10 @@ export default function LearnMore() {
     );
 }
 
-// ✅ Reusable Information Card Component
+// ✅ Reusable Info Card Component
 function InfoCard({ title, text, list }) {
     return (
-        <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-400 hover:shadow-xl">
+        <div className="p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-orange-400 hover:shadow-xl">
             <h3 className="text-2xl font-bold text-[var(--primary)]">{title}</h3>
             {text && <p className="text-gray-700 mt-3 text-lg" dangerouslySetInnerHTML={{ __html: text }} />}
             {list && (

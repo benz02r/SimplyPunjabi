@@ -47,7 +47,20 @@ export default function Navbar() {
         <nav className="bg-[#2563EB] shadow-md py-2 fixed top-0 left-0 right-0 z-50">
             <div className="container mx-auto flex justify-between items-center px-4">
                 {/* Logo (Larger but Fits in Compact Navbar) */}
-                <div className="flex items-center cursor-pointer"></div>
+                <Link href="/" className="flex items-center">
+                    <div className="bg-white rounded-md px-3 py-1 shadow-md">
+                        <Image
+                            src="/Website Logo- Simply Punjabi, Ryan.png"
+                            alt="Simply Punjabi Logo"
+                            width={140}
+                            height={50}
+                            priority
+                            className="object-contain max-h-12"
+                        />
+                    </div>
+                </Link>
+
+
 
                 {/* Desktop Navigation */}
                 <ul className="hidden md:flex space-x-5 text-lg font-semibold text-white">
