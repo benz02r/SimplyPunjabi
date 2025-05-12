@@ -16,3 +16,12 @@ body {
   color: var(--text-color);
   font-family: 'Inter', sans-serif;
 }
+/* Or in your component via className */
+.btn {
+  @apply bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded shadow;
+}
+
+/* Ensure pointer-events are disabled for SVG layer */
+.pointer-events-none {
+  pointer-events: none;
+}

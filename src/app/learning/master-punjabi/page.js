@@ -12,8 +12,8 @@ export default function MasterPunjabiConversations() {
 
     // Updated Lessons for Master Punjabi Conversations
     const lessons = [
-        { id: "lesson1", title: "Lesson 1: Fix the Top 3 Mistakes English Speakers Make", link: "/gamified/lessons/common-mistakes", locked: false },
-        { id: "lesson2", title: "Lesson 2: The Secret to Thinking in Punjabi", link: "/gamified/lessons/think-in-punjabi", locked: false },
+        { id: "lesson1", title: "Lesson 1: Fix the Top 3 Mistakes English Speakers Make", link: "/gamified/lessons/common-mistakes", locked: true },
+        { id: "lesson2", title: "Lesson 2: The Secret to Thinking in Punjabi", link: "/gamified/lessons/think-in-punjabi", locked: true },
         { id: "lesson3", title: "Lesson 3: How to Tell a Great Story in Punjabi", link: "/lesson/storytelling-in-punjabi", locked: true },
         { id: "lesson4", title: "Lesson 4: Deep Conversations – Express Your Thoughts & Emotions", link: "/lesson/deep-conversations", locked: true },
         { id: "lesson5", title: "Lesson 5: Mastering Punjabi Idioms & Sounding Like a Local", link: "/lesson/punjabi-idioms", locked: true },
