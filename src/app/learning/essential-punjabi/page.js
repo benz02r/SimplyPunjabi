@@ -13,7 +13,7 @@ export default function EssentialPunjabi() {
     const lessons = [
         { id: "lesson1", title: "Lesson 1: What Is Punjabi?", link: "/lessons/lesson1/information", locked: false },
         { id: "lesson2", title: "Lesson 2: Learn Punjabi Greetings", link: "/lessons/lesson2", locked: false },
-        { id: "lesson3", title: "Lesson 3: Lets Talk About You", link: "/lessons/lesson3", locked: false },
+        { id: "lesson3", title: "Lesson 3: Abit About Me", link: "/lessons/lesson3/information", locked: false },
         { id: "lesson4", title: "Lesson 4: Family And Friends", link: "/lessons/lesson4", locked: false },
         { id: "lesson5", title: "Lesson 5: Back To Basics", link: "/lessons/lesson5", locked: false },
         { id: "lesson6", title: "Lesson 6: Making It Easy & Top Tips", link: "/lessons/lesson6", locked: true },

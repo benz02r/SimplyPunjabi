@@ -1,82 +1,76 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Image from "next/image";
 
-export default function Lesson3NounsInfo() {
+export default function Lesson3Intro() {
     const router = useRouter();
-    const [revealed, setRevealed] = useState([false, false, false, false]);
 
-    const toggleReveal = (index) => {
-        setRevealed((prev) => prev.map((r, i) => (i === index ? !r : r)));
-    };
-
-    const nouns = [
+    const characters = [
         {
-            title: "ਕਿਤਾਬ (Kitaab) — Book",
-            meaning: "Main kitaab padhi → I read a book"
+            name: "Aman",
+            avatar: "/avatars/avatar6.png",
+            punjabi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੇਰਾ ਨਾਮ ਅਮਨ ਹੈ।",
+            roman: "Sat Sri Akaal! Mera naam Aman hai.",
+            english: "Hello! My name is Aman."
         },
         {
-            title: "ਘਰ (Ghar) — House",
-            meaning: "Eh mera ghar hai → This is my house"
-        },
-        {
-            title: "ਪਾਣੀ (Paani) — Water",
-            meaning: "Paani piyo → Drink water"
-        },
-        {
-            title: "ਕੁੱਤਾ (Kutta) — Dog",
-            meaning: "Kutta bhonk riha hai → The dog is barking"
+            name: "Priya",
+            avatar: "/avatars/avatar5.png",
+            punjabi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੇਰਾ ਨਾਮ ਪ੍ਰੀਆ ਹੈ।",
+            roman: "Sat Sri Akaal! Mera naam Priya hai.",
+            english: "Hello! My name is Priya."
         }
     ];
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 sm:px-10 pt-40 pb-16">
+        <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 pt-36 pb-16">
             {/* Back Button */}
-            <div className="w-full max-w-4xl mb-12 sm:mb-14 px-4 sm:px-0">
+            <div className="max-w-4xl mx-auto mb-12">
                 <button
                     onClick={() => router.push("/lessons/lesson3")}
-                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition w-full sm:w-auto"
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-600 transition"
                 >
                     ← Back to Lesson 3
                 </button>
             </div>
 
             {/* Title */}
-            <div className="text-center max-w-3xl mb-10 px-4 sm:px-0">
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--primary)] leading-tight">
-                    Learn Basic Punjabi Nouns
-                </h1>
-                <p className="text-base sm:text-lg mt-3 text-gray-700">
-                    Tap a card to reveal pronunciation and usage.
-                </p>
+            <div className="text-center max-w-3xl mx-auto mb-10">
+                <h1 className="text-4xl font-bold text-[var(--primary)]">Introduction</h1>
+                <p className="text-lg text-gray-700 mt-2">Meet Aman and Priya. Learn how to introduce yourself in Punjabi.</p>
             </div>
 
-            {/* Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10 max-w-4xl w-full px-4 sm:px-0">
-                {nouns.map((noun, index) => (
+            {/* Characters Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 max-w-5xl mx-auto">
+                {characters.map((person, index) => (
                     <div
                         key={index}
-                        className="p-6 bg-white rounded-lg shadow-md border border-gray-200 transition-all hover:border-green-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[180px] flex flex-col justify-center"
-                        onClick={() => toggleReveal(index)}
+                        className="group flex flex-col items-center text-center bg-white rounded-xl shadow-md border p-6 transition-all transform hover:scale-105 hover:shadow-2xl hover:border-blue-400 cursor-pointer"
                     >
-                        <h3 className="text-lg sm:text-xl font-bold text-[var(--primary)]">
-                            {noun.title}
-                        </h3>
-                        {revealed[index] && (
-                            <p className="text-sm text-gray-600 mt-2">{noun.meaning}</p>
-                        )}
+                        <div className="relative w-24 h-24 mb-4">
+                            <Image
+                                src={person.avatar}
+                                alt={person.name}
+                                fill
+                                className="rounded-full border-2 border-blue-500 object-cover"
+                            />
+                        </div>
+                        <h2 className="text-xl font-bold text-blue-600 group-hover:underline">{person.name}</h2>
+                        <p className="text-lg text-gray-800 mt-2">{person.punjabi}</p>
+                        <p className="text-sm italic text-gray-600">{person.roman}</p>
+                        <p className="text-sm text-gray-500">{person.english}</p>
                     </div>
                 ))}
             </div>
 
             {/* Next Button */}
-            <div className="w-full max-w-4xl px-4 sm:px-0 text-center mt-10">
+            <div className="text-center mt-12">
                 <button
                     onClick={() => router.push("/lessons/lesson3/match")}
-                    className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-green-600 transition"
+                    className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-green-600 transition"
                 >
-                    Continue to "Match the Definition" →
+                    Continue to "Introducing yourself" →
                 </button>
             </div>
         </div>
