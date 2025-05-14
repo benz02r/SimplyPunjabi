@@ -52,7 +52,7 @@ export default function Lesson1Quiz() {
             question: "Which greeting is the most formal?",
             options: [
                 "Ki Haal Aa?",
-                "Sat Sri Akaal",
+                "Hanji",
                 "Kidan?",
                 "Tusi Kidan Teekya?"
             ],
@@ -171,7 +171,7 @@ export default function Lesson1Quiz() {
                     ) : (
                         <p className="mt-2 text-xl font-semibold text-red-600">❌ Keep trying! Review the lesson and try again.</p>
                     )}
-                    <button onClick={() => router.push("/lessons/lesson1")} className="mt-6 bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
+                    <button onClick={() => router.push("/lessons/lesson2/1")} className="mt-6 bg-blue-500 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition">
                         🔄 Retry Lesson
                     </button>
                 </div>

@@ -125,7 +125,7 @@ export default function Lesson1GurmukhiInfo() {
             {/* Next Button */}
             <div className="w-full max-w-4xl px-4 sm:px-0 text-center mt-10">
                 <button
-                    onClick={() => router.push("/lessons/lesson1/quiz")}
+                    onClick={() => router.push("/lessons/lesson1/3")}
                     className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition"
                 >
                     Continue to "Quiz" →

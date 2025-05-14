@@ -79,7 +79,7 @@ export default function Lesson2MatchGame() {
                 <div className="mt-10 text-center">
                     <h3 className="text-2xl font-bold text-green-600 mb-4">Well done! You matched all greetings correctly.</h3>
                     <button
-                        onClick={() => router.push("/lessons/lesson2/quiz")}
+                        onClick={() => router.push("/lessons/lesson2/3")}
                         className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-green-600 transition"
                     >
                         Continue to Quiz →
