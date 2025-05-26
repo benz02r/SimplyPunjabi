@@ -1,143 +1,151 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const quizQuestions = [
-    {
-        question: "How do you say: My name is Ryan?",
-        options: [
-            "Main Ryan ton haan.",
-            "Main Ryan haan.",
-            "Mera naam Ryan hai.",
-            "Main London rehnda haan."
-        ],
-        answer: "Mera naam Ryan hai."
-    },
-    {
-        question: "Translate: I am from London.",
-        options: [
-            "Main London ton aaya haan.",
-            "Main London padhda haan.",
-            "Main London vich vasda haan.",
-            "Mera naam London hai."
-        ],
-        answer: "Main London ton aaya haan."
-    },
-    {
-        question: "Which means: I live in Birmingham?",
-        options: [
-            "Main Birmingham ton aaya haan.",
-            "Main Birmingham vich rehnda haan.",
-            "Main Birmingham padhda haan.",
-            "Main Birmingham da naam rakhya."
-        ],
-        answer: "Main Birmingham vich rehnda haan."
-    },
-    {
-        question: "How do you say: I am a student?",
-        options: [
-            "Main vidyarthi haan.",
-            "Main adhiapak haan.",
-            "Main likhari haan.",
-            "Main kheda haan."
-        ],
-        answer: "Main vidyarthi haan."
-    },
-    {
-        question: "Choose the sentence: I have two sisters.",
-        options: [
-            "Main do bhainaan haan.",
-            "Main do bhainaan rakhda haan.",
-            "Mainu do bhainaan han.",
-            "Main bhainaan padhda haan."
-        ],
-        answer: "Mainu do bhainaan han."
-    }
-];
-
-
-export default function AboutMeQuiz() {
+export default function StepWorkAndSiblings() {
     const router = useRouter();
     const [step, setStep] = useState(0);
-    const [selected, setSelected] = useState(null);
-    const [score, setScore] = useState(0);
-    const [feedback, setFeedback] = useState("");
-    const [completed, setCompleted] = useState(false);
 
-    const current = quizQuestions[step];
+    // State for study/work
+    const [mode, setMode] = useState("");
+    const [place, setPlace] = useState("");
+    const [gender, setGender] = useState("");
 
-    const checkAnswer = (option) => {
-        setSelected(option);
-        if (option === current.answer) {
-            setFeedback("✅ Correct!");
-            setScore(score + 1);
-        } else {
-            setFeedback(`❌ Incorrect. Correct answer: ${current.answer}`);
-        }
+    // State for siblings
+    const [olderBrothers, setOlderBrothers] = useState(0);
+    const [youngerSisters, setYoungerSisters] = useState(0);
+
+    const renderWorkOrStudy = () => {
+        const show = place && gender && mode;
+        const punjabi = mode === "study"
+            ? gender === "male"
+                ? `ਮੈਂ ${place} ਪੜ੍ਹਦਾ ਹਾਂ।`
+                : `ਮੈਂ ${place} ਪੜ੍ਹਦੀ ਹਾਂ।`
+            : gender === "male"
+                ? `ਮੈਂ ${place} ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ।`
+                : `ਮੈਂ ${place} ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ।`;
+        const translit = mode === "study"
+            ? gender === "male"
+                ? `Main ${place} paṛhdā hāṁ.`
+                : `Main ${place} paṛhdī hāṁ.`
+            : gender === "male"
+                ? `Main ${place} laī kam kardā hāṁ.`
+                : `Main ${place} laī kam kardī hāṁ.`;
+        const english = mode === "study"
+            ? `I study at ${place}.`
+            : `I work at ${place}.`;
+
+        return (
+            <div className="space-y-6 text-center">
+                <h2 className="text-2xl font-bold">Where do you study or work?</h2>
+                <div className="flex justify-center gap-4">
+                    <label><input type="radio" name="mode" value="study" onChange={() => setMode("study")} /> Study</label>
+                    <label><input type="radio" name="mode" value="work" onChange={() => setMode("work")} /> Work</label>
+                </div>
+                <input
+                    type="text"
+                    placeholder="e.g. Heathrow Airport"
+                    value={place}
+                    onChange={(e) => setPlace(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded"
+                />
+                <div className="flex justify-center gap-4">
+                    <label><input type="radio" name="gender" value="male" onChange={(e) => setGender(e.target.value)} /> Male</label>
+                    <label><input type="radio" name="gender" value="female" onChange={(e) => setGender(e.target.value)} /> Female</label>
+                </div>
+
+                {show && (
+                    <div className="bg-blue-50 p-4 rounded border text-left mt-4">
+                        <p className="text-lg font-bold">{punjabi}</p>
+                        <p className="italic text-sm">{translit}</p>
+                        <p className="text-sm text-gray-500">{english}</p>
+                    </div>
+                )}
+
+                {show && (
+                    <div className="bg-yellow-50 p-4 rounded text-left text-sm mt-4">
+                        <p><strong>Example:</strong></p>
+                        <p>Aman would say: <br /><em>ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ।</em></p>
+                        <p>Priya would say: <br /><em>ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ।</em></p>
+                    </div>
+                )}
+
+                {show && (
+                    <button
+                        onClick={() => setStep(1)}
+                        className="bg-green-500 text-white px-6 py-3 mt-4 rounded-lg"
+                    >
+                        Next →
+                    </button>
+                )}
+            </div>
+        );
     };
 
-    const nextQuestion = () => {
-        if (step < quizQuestions.length - 1) {
-            setStep(step + 1);
-            setSelected(null);
-            setFeedback("");
-        } else {
-            setCompleted(true);
-        }
+    const renderSiblings = () => {
+        const hasSiblings = olderBrothers > 0 || youngerSisters > 0;
+        const sentence = `ਮੇਰੇ ${olderBrothers} ਵੱਡੇ ਭਰਾ ਅਤੇ ${youngerSisters} ਛੋਟੀ ਭੈਣ ਹਨ।`;
+        const translit = `Main ${olderBrothers} vaḍḍe bhrā atē ${youngerSisters} chhoṭī bhaiṇ hāṁ.`;
+
+        return (
+            <div className="space-y-6 text-center">
+                <h2 className="text-2xl font-bold">Tell us about your siblings</h2>
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                    <input
+                        type="number"
+                        min="0"
+                        value={olderBrothers}
+                        onChange={(e) => setOlderBrothers(e.target.value)}
+                        placeholder="Older Brothers"
+                        className="px-4 py-2 border rounded"
+                    />
+                    <input
+                        type="number"
+                        min="0"
+                        value={youngerSisters}
+                        onChange={(e) => setYoungerSisters(e.target.value)}
+                        placeholder="Younger Sisters"
+                        className="px-4 py-2 border rounded"
+                    />
+                </div>
+
+                {hasSiblings && (
+                    <div className="bg-blue-50 p-4 rounded border text-left mt-4">
+                        <p className="text-lg font-bold">{sentence}</p>
+                        <p className="italic text-sm">{translit}</p>
+                        <p className="text-sm text-gray-500">
+                            I have {olderBrothers} older brother(s) and {youngerSisters} younger sister(s).
+                        </p>
+                    </div>
+                )}
+
+                <div className="bg-yellow-50 p-4 rounded border text-left text-sm mt-4">
+                    <p><strong>Vocabulary Breakdown:</strong></p>
+                    <ul className="list-disc ml-5 mt-2 space-y-1">
+                        <li>Brother - ਭਰਾ (bhrā)</li>
+                        <li>Sister - ਭੈਣ (bhaiṇ)</li>
+                        <li>Older/Bigger - ਵੱਡਾ (vaḍḍā)</li>
+                        <li>Younger/Little - ਛੋਟੀ (chhoṭī)</li>
+                        <li>My (plural) - ਮੇਰੇ (mere)</li>
+                    </ul>
+                </div>
+
+                <button
+                    onClick={() => router.push("/lessons/lesson3/6")}
+                    className="bg-green-500 text-white px-6 py-3 mt-6 rounded-lg"
+                >
+                    Continue to Quiz →
+                </button>
+            </div>
+        );
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 pt-36 pb-20 flex flex-col items-center">
-            <div className="max-w-xl w-full bg-white rounded-xl shadow-md p-8 text-center space-y-6 hover:shadow-xl transition duration-300">
-                {!completed ? (
-                    <>
-                        <h2 className="text-xl font-bold text-blue-600">Question {step + 1} of {quizQuestions.length}</h2>
-                        <h3 className="text-lg text-gray-800">{current.question}</h3>
-
-                        <div className="grid grid-cols-1 gap-4 mt-4">
-                            {current.options.map((option, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => checkAnswer(option)}
-                                    disabled={selected !== null}
-                                    className={`p-3 rounded border ${
-                                        selected === option
-                                            ? option === current.answer
-                                                ? "bg-green-200 border-green-500"
-                                                : "bg-red-200 border-red-500"
-                                            : "bg-gray-100 hover:bg-gray-200"
-                                    } transition`}
-                                >
-                                    {option}
-                                </button>
-                            ))}
-                        </div>
-
-                        {feedback && <p className="mt-4 font-semibold">{feedback}</p>}
-
-                        {selected && (
-                            <button
-                                onClick={nextQuestion}
-                                className="mt-4 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
-                            >
-                                {step < quizQuestions.length - 1 ? "Next →" : "See Results"}
-                            </button>
-                        )}
-                    </>
-                ) : (
-                    <div>
-                        <h2 className="text-2xl font-bold text-green-600">Quiz Completed!</h2>
-                        <p className="text-lg mt-2">You scored <strong>{score}</strong> out of <strong>{quizQuestions.length}</strong>.</p>
-
-                        <button
-                            onClick={() => router.push("/learning/essential-punjabi")}
-                            className="mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition"
-                        >
-                            ← Back to Lessons
-                        </button>
-                    </div>
-                )}
+        <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 px-6 pt-36 pb-20 flex justify-center items-start">
+            <div className="w-full max-w-xl bg-white rounded-xl shadow-md p-6 space-y-6">
+                {step === 0 ? renderWorkOrStudy() : renderSiblings()}
             </div>
         </div>
     );
