@@ -16,7 +16,7 @@ export default function EssentialPunjabi() {
         { id: "lesson3", title: "Lesson 3: Abit About Me", link: "/lessons/lesson3/1", locked: false },
         { id: "lesson4", title: "Lesson 4: Family And Friends", link: "/lessons/lesson4", locked: false },
         { id: "lesson5", title: "Lesson 5: Back To Basics", link: "/lessons/lesson5", locked: false },
-        { id: "lesson6", title: "Lesson 6: Making It Easy & Top Tips", link: "/lessons/lesson6", locked: true },
+        { id: "lesson6", title: "Lesson 6: Making It Easy & Top Tips", link: "/lessons/lesson14/1", locked: true },
     ];
 
 
