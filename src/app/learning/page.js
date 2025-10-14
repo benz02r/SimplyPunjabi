@@ -1,98 +1,255 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { FaBookOpen } from "react-icons/fa";
+import { FaBookOpen, FaComments, FaMicrophone, FaAward, FaArrowLeft, FaFire, FaStar, FaBook } from "react-icons/fa";
 
 export default function LearningHub() {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         async function fetchUser() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
-                router.push("/login"); // Redirect if not logged in
+                router.push("/key-functions/auth");
             } else {
                 setUser(user);
             }
+            setLoading(false);
         }
         fetchUser();
     }, [router]);
 
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-32 md:pt-24 pb-16">
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600 font-medium">Loading learning paths...</p>
+                </div>
+            </div>
+        );
+    }
 
-            {/* Back to Dashboard Button */}
-            <div className="absolute top-4 left-4 md:top-6 md:left-6">
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+            <div className="max-w-7xl mx-auto">
+                {/* Back Button */}
                 <button
                     onClick={() => router.push("/dashboard")}
-                    className="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-600 transition"
+                    className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors group"
                 >
-                    ← Back to Dashboard
+                    <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+                    <span>Back to Dashboard</span>
                 </button>
-            </div>
 
-            {/* Title & Subtitle */}
-            <div className="text-center max-w-3xl mb-12 md:mb-10">
-                <h1 className="text-3xl md:text-4xl font-extrabold text-[var(--primary)] leading-tight">
-                    Start Learning! 📚
-                </h1>
-                <p className="text-lg mt-3 text-gray-700">
-                    Choose a learning path and improve your Punjabi skills!
-                </p>
-            </div>
+                {/* Hero Section */}
+                <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl mb-12 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
 
-            {/* Learning Paths */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl w-full">
-                <LearningCard
-                    title="Essential Punjabi for Real Conversations"
-                    description="Start speaking Punjabi from Day 1 with must-know words & phrases!"
-                    link="/learning/essential-punjabi"
-                    bgColor="bg-green-500"
-                />
-                <LearningCard
-                    title="Speak with Confidence – Beyond the Basics"
-                    description="Expand your vocabulary and engage in real-life conversations!"
-                    link="/learning/speak-with-confidence"
-                    bgColor="bg-blue-500"
-                />
-                <LearningCard
-                    title="Master Punjabi Conversations with Ease"
-                    description="Achieve fluency, understand native speakers, and sound natural!"
-                    link="/learning/master-punjabi"
-                    bgColor="bg-purple-500"
-                />
-            </div>
-
-            {/* Dictionary Section */}
-            <section className="w-full max-w-4xl mt-12">
-                <Link href="/dictionary" className="w-full">
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center justify-center space-y-2 transition transform hover:scale-105 hover:shadow-2xl cursor-pointer">
-                        <FaBookOpen className="text-4xl" />
-                        <h2 className="text-2xl font-semibold">📚 English to Punjabi Dictionary</h2>
-                        <p className="text-lg">Find the Punjabi word for words in English.</p>
-                        <button className="mt-4 bg-white text-blue-600 px-6 py-3 rounded-full font-semibold shadow-md hover:bg-gray-200 transition">
-                            Explore the Dictionary →
-                        </button>
+                    <div className="relative z-10 text-center">
+                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
+                            <FaFire className="text-orange-300" />
+                            <span className="text-sm font-semibold">YOUR LEARNING JOURNEY</span>
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+                            Choose Your Path
+                        </h1>
+                        <p className="text-xl text-blue-50 max-w-2xl mx-auto">
+                            Select a learning path that matches your level and start building your Punjabi fluency today!
+                        </p>
                     </div>
-                </Link>
-            </section>
+                </div>
 
+                {/* Learning Paths Grid */}
+                <div className="mb-12">
+                    <div className="text-center mb-8">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-2">Learning Paths</h2>
+                        <p className="text-gray-600">Structured courses to take you from beginner to fluent</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <LearningPathCard
+                            icon={<FaComments className="text-5xl" />}
+                            level="Beginner"
+                            title="Essential Punjabi"
+                            subtitle="Real Conversations"
+                            description="Start speaking Punjabi from Day 1 with must-know words & phrases!"
+                            link="/learning/essential-punjabi"
+                            gradient="from-green-500 to-green-700"
+                            accentColor="green"
+                            stats={{ lessons: 25, time: "2-3 weeks" }}
+                        />
+                        <LearningPathCard
+                            icon={<FaMicrophone className="text-5xl" />}
+                            level="Intermediate"
+                            title="Speak with Confidence"
+                            subtitle="Beyond the Basics"
+                            description="Expand your vocabulary and engage in real-life conversations!"
+                            link="/learning/speak-with-confidence"
+                            gradient="from-blue-500 to-blue-700"
+                            accentColor="blue"
+                            stats={{ lessons: 30, time: "3-4 weeks" }}
+                        />
+                        <LearningPathCard
+                            icon={<FaAward className="text-5xl" />}
+                            level="Advanced"
+                            title="Master Punjabi"
+                            subtitle="Conversations with Ease"
+                            description="Achieve fluency, understand native speakers, and sound natural!"
+                            link="/learning/master-punjabi"
+                            gradient="from-purple-500 to-purple-700"
+                            accentColor="purple"
+                            stats={{ lessons: 35, time: "4-6 weeks" }}
+                        />
+                    </div>
+                </div>
+
+                {/* Dictionary Section */}
+                <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-100 overflow-hidden">
+                    <div className="grid grid-cols-1 lg:grid-cols-2">
+                        {/* Left Side - Info */}
+                        <div className="p-8 lg:p-12 flex flex-col justify-center">
+                            <div className="inline-flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-full mb-4 w-fit">
+                                <FaBook className="text-blue-600" />
+                                <span className="text-blue-800 font-semibold text-sm">LEARNING TOOL</span>
+                            </div>
+                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                                English to Punjabi Dictionary
+                            </h2>
+                            <p className="text-lg text-gray-600 mb-6">
+                                Look up any English word and discover its Punjabi translation instantly. Perfect for building vocabulary and understanding context.
+                            </p>
+                            <ul className="space-y-3 mb-8">
+                                <li className="flex items-center gap-3 text-gray-700">
+                                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span className="text-white text-sm">✓</span>
+                                    </div>
+                                    <span>Instant translations</span>
+                                </li>
+                                <li className="flex items-center gap-3 text-gray-700">
+                                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span className="text-white text-sm">✓</span>
+                                    </div>
+                                    <span>Pronunciation guides</span>
+                                </li>
+                                <li className="flex items-center gap-3 text-gray-700">
+                                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span className="text-white text-sm">✓</span>
+                                    </div>
+                                    <span>Example sentences</span>
+                                </li>
+                            </ul>
+                            <a href="/dictionary">
+                                <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-bold shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 w-fit">
+                                    <span>Explore Dictionary</span>
+                                    <span>→</span>
+                                </button>
+                            </a>
+                        </div>
+
+                        {/* Right Side - Visual */}
+                        <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-8 lg:p-12 flex items-center justify-center">
+                            <div className="text-center text-white">
+                                <FaBookOpen className="text-8xl mb-6 mx-auto opacity-90" />
+                                <p className="text-2xl font-bold mb-2">10,000+ Words</p>
+                                <p className="text-blue-100">Comprehensive vocabulary database</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Quick Tips Section */}
+                <div className="mt-12 bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-8 border-2 border-orange-200">
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
+                            <FaStar className="text-white text-xl" />
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                Pro Learning Tips
+                            </h3>
+                            <ul className="space-y-2 text-gray-700">
+                                <li className="flex items-start gap-2">
+                                    <span className="text-orange-500 font-bold">•</span>
+                                    <span>Practice for at least 10-15 minutes daily for best results</span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="text-orange-500 font-bold">•</span>
+                                    <span>Complete lessons in order to build a strong foundation</span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="text-orange-500 font-bold">•</span>
+                                    <span>Use the dictionary to look up unfamiliar words while learning</span>
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="text-orange-500 font-bold">•</span>
+                                    <span>Review previous lessons regularly to reinforce your knowledge</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
 
-// ✅ Reusable Learning Card Component (Uniform Size)
-function LearningCard({ title, description, link, bgColor }) {
+function LearningPathCard({ icon, level, title, subtitle, description, link, gradient, accentColor, stats }) {
+    const levelColors = {
+        green: 'bg-green-100 text-green-700',
+        blue: 'bg-blue-100 text-blue-700',
+        purple: 'bg-purple-100 text-purple-700'
+    };
+
+    const hoverColors = {
+        green: 'hover:border-green-400',
+        blue: 'hover:border-blue-400',
+        purple: 'hover:border-purple-400'
+    };
+
     return (
-        <Link href={link} className="w-full">
-            <div className={`p-6 ${bgColor} text-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl transform hover:scale-105 cursor-pointer min-h-[230px] flex flex-col justify-between items-center text-center`}>
-                <h3 className="text-lg md:text-xl font-bold">{title}</h3>
-                <p className="text-sm md:text-base mt-2">{description}</p>
+        <a href={link} className="block group">
+            <div className={`h-full bg-white rounded-2xl border-2 border-gray-200 ${hoverColors[accentColor]} shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden`}>
+                {/* Header with Gradient */}
+                <div className={`bg-gradient-to-br ${gradient} p-6 text-white text-center`}>
+                    <div className={`inline-block ${levelColors[accentColor]} px-3 py-1 rounded-full text-xs font-bold mb-4`}>
+                        {level}
+                    </div>
+                    <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                        {icon}
+                    </div>
+                    <h3 className="text-2xl font-bold mb-1">{title}</h3>
+                    <p className="text-sm text-white/90">{subtitle}</p>
+                </div>
+
+                {/* Body */}
+                <div className="p-6">
+                    <p className="text-gray-600 mb-4 min-h-[60px]">
+                        {description}
+                    </p>
+
+                    {/* Stats */}
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b border-gray-200">
+                        <div>
+                            <span className="font-semibold text-gray-700">{stats.lessons}</span> lessons
+                        </div>
+                        <div>
+                            <span className="font-semibold text-gray-700">{stats.time}</span>
+                        </div>
+                    </div>
+
+                    {/* CTA Button */}
+                    <button className={`w-full bg-gradient-to-r ${gradient} text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300 transform group-hover:scale-105 flex items-center justify-center gap-2`}>
+                        <span>Start Learning</span>
+                        <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                </div>
             </div>
-        </Link>
+        </a>
     );
 }

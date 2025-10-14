@@ -13,21 +13,19 @@ export default function AboutMeIntroPage() {
             avatar: "/avatars/avatar6.png",
             speaker: "Aman",
             heading: "Welcome to 'A Bit About Me'",
-            text: "In this section, we’ll walk you through how to introduce and talk a little about yourself in Punjabi. Don’t worry – we’ll keep it simple!",
-        },
-        {
-            avatar: "/avatars/avatar5.png",
-            speaker: "Priya",
-            heading: "Let’s Get Started!",
-            text: "We’ll show you how to say your name, where you’re from, what you do, and more. And we’ll be helping you every step of the way!",
-        },
-        {
-            avatar: "/avatars/avatar6.png",
-            speaker: "Aman",
-            heading: "Meet Your Helpers",
-            text: "To make it fun and easy, you’ll be learning with me (Aman) and my friend Priya!",
             showBoth: true,
-        }
+            text: "In this section, we will teach you how to introduce and talk a little about yourself in Punjabi. This\n" +
+                "includes stuff such as:\n             " +
+                "          How to say your name\n" +
+                " How to say how old you are\n" +
+                " How to say where you are from and what city you live in?\n" +
+                " How to tell someone where you study or where you work?\n" +
+                " How many siblings you have\n" +
+                "To make it easier for you, we will be using Aman and Priya as a few examples. At the end, you\n" +
+                "will be able to test your knowledge through a range of multiple-choice questions and more.",
+        },
+
+
     ];
 
     const current = steps[step];

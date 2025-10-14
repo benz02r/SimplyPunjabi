@@ -1,23 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import { FaArrowLeft, FaCheck, FaLock, FaBook, FaRocket, FaPlay, FaStar } from "react-icons/fa";
 
 export default function MasterPunjabiConversations() {
     const [user, setUser] = useState(null);
     const [completedLessons, setCompletedLessons] = useState([]);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    // Updated Lessons for Master Punjabi Conversations
     const lessons = [
-        { id: "lesson1", title: "Lesson 1: Fix the Top 3 Mistakes English Speakers Make", link: "/gamified/lessons/common-mistakes", locked: true },
-        { id: "lesson2", title: "Lesson 2: The Secret to Thinking in Punjabi", link: "/gamified/lessons/think-in-punjabi", locked: true },
-        { id: "lesson3", title: "Lesson 3: How to Tell a Great Story in Punjabi", link: "/lesson/storytelling-in-punjabi", locked: true },
-        { id: "lesson4", title: "Lesson 4: Deep Conversations – Express Your Thoughts & Emotions", link: "/lesson/deep-conversations", locked: true },
-        { id: "lesson5", title: "Lesson 5: Mastering Punjabi Idioms & Sounding Like a Local", link: "/lesson/punjabi-idioms", locked: true },
-        { id: "lesson6", title: "Lesson 6: Handling Arguments & Disagreements in Punjabi", link: "/lesson/arguing-politely", locked: true },
+        { id: "lesson1", title: "Fix the Top 3 Mistakes", description: "Common errors English speakers make", link: "/gamified/lessons/common-mistakes", locked: true, duration: "20 min" },
+        { id: "lesson2", title: "Think in Punjabi", description: "The secret to natural fluency", link: "/gamified/lessons/think-in-punjabi", locked: true, duration: "18 min" },
+        { id: "lesson3", title: "Tell Great Stories", description: "Master storytelling in Punjabi", link: "/lesson/storytelling-in-punjabi", locked: true, duration: "22 min" },
+        { id: "lesson4", title: "Deep Conversations", description: "Express complex thoughts and emotions", link: "/lesson/deep-conversations", locked: true, duration: "25 min" },
+        { id: "lesson5", title: "Idioms & Local Phrases", description: "Sound like a native speaker", link: "/lesson/punjabi-idioms", locked: true, duration: "20 min" },
+        { id: "lesson6", title: "Handle Disagreements", description: "Navigate arguments respectfully", link: "/lesson/arguing-politely", locked: true, duration: "18 min" },
     ];
 
     useEffect(() => {
@@ -25,6 +25,7 @@ export default function MasterPunjabiConversations() {
             const { data: sessionData, error } = await supabase.auth.getSession();
             if (error) {
                 console.error("Supabase Auth Error:", error);
+                setLoading(false);
                 return;
             }
 
@@ -47,85 +48,203 @@ export default function MasterPunjabiConversations() {
                 const completed = progressData?.map(entry => entry.lesson_id) || [];
                 setCompletedLessons(completed);
             }
+            setLoading(false);
         }
 
         checkUserAndProgress();
     }, []);
 
+    const completedCount = lessons.filter(l => completedLessons.includes(l.id)).length;
+    const progressPercent = Math.round((completedCount / lessons.length) * 100);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600 font-medium">Loading course...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-40 pb-16">
-            <div className="w-full max-w-5xl mb-10 flex justify-start">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+            <div className="max-w-7xl mx-auto">
+                {/* Back Button */}
                 <button
                     onClick={() => router.push(user ? "/learning" : "/")}
-                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition"
+                    className="mb-6 flex items-center gap-2 text-gray-600 hover:text-green-600 font-semibold transition-colors group"
                 >
-                    ← Back to {user ? "Learning" : "Home"}
+                    <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+                    <span>Back to {user ? "Learning" : "Home"}</span>
                 </button>
-            </div>
 
-            <div className="w-full max-w-5xl mb-12">
-                <Link href="/learning/resources">
-                    <div className="p-6 bg-yellow-100 rounded-lg shadow-md border-2 border-yellow-300 transition-all hover:border-yellow-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center">
-                        <h2 className="text-3xl font-bold text-yellow-800">📚 Learning Resources</h2>
-                        <p className="text-xl text-yellow-700 mt-2">Click here to access essential Punjabi learning materials.</p>
+                {/* Resources Banner */}
+                <a href="/learning/resources" className="block mb-8">
+                    <div className="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]">
+                        <div className="flex items-center gap-4">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                                <FaBook className="text-3xl text-orange-500" />
+                            </div>
+                            <div className="flex-1">
+                                <h2 className="text-2xl font-bold text-white mb-1"> Learning Resources</h2>
+                                <p className="text-yellow-50">Access essential Punjabi learning materials and study guides</p>
+                            </div>
+                            <div className="hidden sm:block">
+                                <span className="text-white text-2xl">→</span>
+                            </div>
+                        </div>
                     </div>
-                </Link>
-            </div>
+                </a>
 
-            <div className="text-center max-w-3xl mb-12">
-                <h1 className="text-5xl font-extrabold text-[var(--primary)] leading-tight">
-                    Master Punjabi Conversations with Ease
-                </h1>
-                <p className="text-xl mt-3 text-gray-700">
-                    Achieve fluency, understand native speakers, and sound like a local!
-                </p>
-            </div>
+                {/* Course Header */}
+                <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-3xl p-8 sm:p-12 text-white shadow-xl mb-12 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-5xl w-full">
-                {lessons.map((lesson, index) => (
-                    <LessonCard
-                        key={index}
-                        lesson={{ ...lesson, completed: completedLessons.includes(lesson.id) }}
-                        user={user}
-                    />
-                ))}
-            </div>
+                    <div className="relative z-10">
+                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
+                            <FaStar className="text-yellow-300" />
+                            <span className="text-sm font-semibold">ADVANCED COURSE</span>
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+                            Master Punjabi Conversations with Ease
+                        </h1>
+                        <p className="text-xl text-green-50 mb-6 max-w-3xl">
+                            Achieve fluency, understand native speakers, and sound like a local! Perfect for learners ready to reach mastery.
+                        </p>
 
-            {!user && (
-                <div className="mt-12 text-center">
-                    <p className="text-xl font-semibold text-gray-700">🔒 Want full access to all lessons?</p>
-                    <Link href="/key-functions/signup">
-                        <button className="mt-4 bg-[var(--primary)] text-white px-6 py-3 rounded-lg text-xl font-semibold hover:bg-[var(--secondary)] transition transform hover:scale-105">
-                            Subscribe to Unlock 🚀
-                        </button>
-                    </Link>
+                        {/* Course Stats */}
+                        {user && (
+                            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 inline-block">
+                                <div className="flex items-center gap-6">
+                                    <div>
+                                        <p className="text-sm text-green-100 mb-1">Your Progress</p>
+                                        <p className="text-2xl font-bold">{completedCount} / {lessons.length} Lessons</p>
+                                    </div>
+                                    <div className="w-32 h-2 bg-white/30 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-white transition-all duration-500"
+                                            style={{ width: `${progressPercent}%` }}
+                                        ></div>
+                                    </div>
+                                    <div>
+                                        <p className="text-3xl font-bold">{progressPercent}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Lessons Grid */}
+                <div className="mb-12">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-8">Course Lessons</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {lessons.map((lesson, index) => (
+                            <LessonCard
+                                key={index}
+                                lesson={{ ...lesson, completed: completedLessons.includes(lesson.id) }}
+                                user={user}
+                                lessonNumber={index + 1}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* CTA for Non-Users */}
+                {!user && (
+                    <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-3xl p-12 text-white text-center shadow-xl">
+                        <FaRocket className="text-6xl mx-auto mb-6" />
+                        <h2 className="text-3xl font-bold mb-4">
+                             Want Full Access to All Lessons?
+                        </h2>
+                        <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
+                            Subscribe to unlock premium content, track your progress, and accelerate your learning journey!
+                        </p>
+                        <a href="/key-functions/signup">
+                            <button className="bg-white text-green-600 px-10 py-4 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
+                                Subscribe Now
+                            </button>
+                        </a>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+function LessonCard({ lesson, user, lessonNumber }) {
+    const isLocked = lesson.locked && !user;
+    const isCompleted = lesson.completed;
+
+    return (
+        <div className={`relative bg-white rounded-2xl border-2 shadow-lg overflow-hidden transition-all duration-300 ${
+            isLocked
+                ? "border-gray-300 opacity-75"
+                : "border-gray-200 hover:border-green-400 hover:shadow-xl transform hover:-translate-y-1"
+        }`}>
+            {/* Completion Badge */}
+            {isCompleted && (
+                <div className="absolute top-4 right-4 z-10">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                        <FaCheck className="text-white text-lg" />
+                    </div>
                 </div>
             )}
-        </div>
-    );
-}
 
-// ✅ Updated Lesson Card with Completion Checkmark
-function LessonCard({ lesson, user }) {
-    return (
-        <div className="relative p-8 bg-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-green-500 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center h-[250px] flex flex-col justify-center items-center">
-            {/* ✅ Completion Tick */}
-            {lesson.completed && (
-                <div className="absolute top-4 right-4 text-green-600 text-2xl">✅</div>
+            {/* Lock Badge */}
+            {isLocked && (
+                <div className="absolute top-4 right-4 z-10">
+                    <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center shadow-lg">
+                        <FaLock className="text-white text-sm" />
+                    </div>
+                </div>
             )}
 
-            {lesson.locked && !user ? (
-                <>
-                    <div className="text-5xl">🔒</div>
-                    <h3 className="text-2xl font-bold text-gray-700 mt-4">{lesson.title}</h3>
-                    <p className="text-lg text-gray-500">Subscribe to unlock</p>
-                </>
+            {isLocked ? (
+                <div className="p-8 flex flex-col items-center justify-center min-h-[280px] text-center">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <FaLock className="text-4xl text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-700 mb-2">
+                        Lesson {lessonNumber}: {lesson.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 mb-4">{lesson.description}</p>
+                    <div className="bg-gray-100 px-4 py-2 rounded-full">
+                        <p className="text-sm font-semibold text-gray-600">Subscribe to unlock</p>
+                    </div>
+                </div>
             ) : (
-                <Link href={lesson.link} className="w-full h-full flex flex-col justify-center items-center">
-                    <h3 className="text-2xl font-bold text-[var(--primary)] text-center">{lesson.title}</h3>
-                </Link>
+                <a href={lesson.link} className="block">
+                    <div className="p-8 min-h-[280px] flex flex-col">
+                        <div className="flex items-start justify-between mb-4">
+                            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
+                                {lessonNumber}
+                            </div>
+                            <div className="text-sm text-gray-500 flex items-center gap-1">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                                </svg>
+                                <span>{lesson.duration}</span>
+                            </div>
+                        </div>
+
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
+                            {lesson.title}
+                        </h3>
+                        <p className="text-gray-600 mb-6 flex-grow">
+                            {lesson.description}
+                        </p>
+
+                        <button className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-md flex items-center justify-center gap-2 group">
+                            <FaPlay className="text-sm group-hover:scale-110 transition-transform" />
+                            <span>{isCompleted ? "Review Lesson" : "Start Lesson"}</span>
+                        </button>
+                    </div>
+                </a>
             )}
         </div>
     );
 }
-

@@ -1,24 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import { FaGraduationCap, FaUser, FaTrophy, FaFire, FaChartLine, FaBook, FaClock, FaStar } from "react-icons/fa";
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
     const [userName, setUserName] = useState("User");
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         async function fetchUser() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
-                router.push("/key-functions/auth"); // Redirect if not logged in
+                router.push("/key-functions/auth");
             } else {
                 setUser(user);
                 fetchUserName(user.id);
             }
+            setLoading(false);
         }
 
         async function fetchUserName(userId) {
@@ -36,44 +38,189 @@ export default function Dashboard() {
         fetchUser();
     }, [router]);
 
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 pt-24">
-            <div className="text-center max-w-3xl">
-                <h1 className="text-4xl font-extrabold text-[var(--primary)] leading-tight">
-                    Welcome, {userName}! 🎉
-                </h1>
-                <p className="text-lg mt-3 text-gray-700">
-                    Explore your profile or start learning today.
-                </p>
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600 font-medium">Loading your dashboard...</p>
+                </div>
             </div>
+        );
+    }
 
-            {/* Dashboard Options */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8 max-w-3xl w-full">
-                <DashboardCard
-                    title="📖 Learning Hub"
-                    description="Continue your lessons and improve your skills."
-                    link="/learning"
-                    bgColor="bg-green-500"
-                />
-                <DashboardCard
-                    title="👤 View Profile"
-                    description="Manage your account and track your progress."
-                    link="/profile"
-                    bgColor="bg-blue-500"
-                />
+    // Mock data - replace with real data from your database
+    const stats = {
+        streak: 7,
+        lessonsCompleted: 24,
+        hoursLearned: 12,
+        currentLevel: "Beginner"
+    };
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+            <div className="max-w-7xl mx-auto">
+                {/* Welcome Header */}
+                <div className="mb-12">
+                    <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+
+                        <div className="relative z-10">
+                            <h1 className="text-4xl sm:text-5xl font-bold mb-3">
+                                Welcome back, {userName}! 👋
+                            </h1>
+                            <p className="text-xl text-blue-50 mb-6">
+                                Ready to continue your Punjabi learning journey?
+                            </p>
+
+                            {/* Quick Stats Bar */}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                                <StatBadge icon={<FaFire />} value={stats.streak} label="Day Streak" />
+                                <StatBadge icon={<FaBook />} value={stats.lessonsCompleted} label="Lessons" />
+                                <StatBadge icon={<FaClock />} value={`${stats.hoursLearned}h`} label="Practice Time" />
+                                <StatBadge icon={<FaStar />} value={stats.currentLevel} label="Level" isText />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Dashboard Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    {/* Continue Learning - Takes 2 columns */}
+                    <div className="lg:col-span-2">
+                        <DashboardCard
+                            icon={<FaGraduationCap className="text-5xl" />}
+                            title="Continue Learning"
+                            description="Pick up where you left off and keep building your skills"
+                            link="/learning"
+                            gradient="from-green-500 to-green-700"
+                            featured
+                        />
+                    </div>
+
+                    {/* Profile Card */}
+                    <div>
+                        <DashboardCard
+                            icon={<FaUser className="text-4xl" />}
+                            title="Your Profile"
+                            description="Manage your account settings"
+                            link="/profile"
+                            gradient="from-blue-500 to-blue-700"
+                        />
+                    </div>
+                </div>
+
+                {/* Secondary Options Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <SmallCard
+                        icon={<FaTrophy className="text-3xl text-orange-500" />}
+                        title="Achievements"
+                        description="View your progress and badges"
+                        link="/achievements"
+                    />
+                    <SmallCard
+                        icon={<FaChartLine className="text-3xl text-blue-500" />}
+                        title="Progress Stats"
+                        description="Detailed learning analytics"
+                        link="/progress"
+                    />
+                    <SmallCard
+                        icon={<FaBook className="text-3xl text-green-500" />}
+                        title="Lesson Library"
+                        description="Browse all available lessons"
+                        link="/learning"
+                    />
+                </div>
+
+                {/* Daily Motivation Card */}
+                <div className="mt-8 bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-100">
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
+                            <FaFire className="text-white text-2xl" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                Keep Your Streak Going!
+                            </h3>
+                            <p className="text-gray-600">
+                                You're on a {stats.streak}-day streak! Complete today's lesson to maintain your momentum and reach new heights.
+                            </p>
+                            <button
+                                onClick={() => router.push("/learning")}
+                                className="mt-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-md"
+                            >
+                                Start Today's Lesson
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
 }
 
-// ✅ Reusable Dashboard Card Component
-function DashboardCard({ title, description, link, bgColor }) {
+function StatBadge({ icon, value, label, isText = false }) {
     return (
-        <Link href={link} className="w-full">
-            <div className={`p-6 ${bgColor} text-white rounded-lg shadow-md border-2 border-gray-200 transition-all hover:border-[3px] hover:border-orange-600 hover:shadow-xl transform hover:scale-105 cursor-pointer text-center`}>
-                <h3 className="text-lg md:text-xl font-bold">{title}</h3>
-                <p className="text-sm md:text-base">{description}</p>
+        <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
+            <div className="flex items-center justify-center gap-2 mb-1">
+                <span className="text-2xl">{icon}</span>
+                <span className={`font-bold ${isText ? 'text-lg' : 'text-2xl'}`}>{value}</span>
             </div>
-        </Link>
+            <p className="text-sm text-blue-100 font-medium">{label}</p>
+        </div>
+    );
+}
+
+function DashboardCard({ icon, title, description, link, gradient, featured = false }) {
+    return (
+        <a href={link} className="block h-full group">
+            <div className={`relative h-full bg-gradient-to-br ${gradient} rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] overflow-hidden ${
+                featured ? 'min-h-[240px]' : 'min-h-[200px]'
+            }`}>
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                <div className="relative z-10 p-8 h-full flex flex-col justify-between">
+                    <div>
+                        <div className="text-white mb-4">
+                            {icon}
+                        </div>
+                        <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+                            {title}
+                        </h3>
+                        <p className="text-white/90 text-lg">
+                            {description}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center text-white font-semibold group-hover:gap-3 gap-2 transition-all">
+                        <span>Get Started</span>
+                        <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                {/* Corner accent */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+            </div>
+        </a>
+    );
+}
+
+function SmallCard({ icon, title, description, link }) {
+    return (
+        <a href={link} className="block group">
+            <div className="bg-white rounded-2xl shadow-md hover:shadow-xl border-2 border-gray-100 hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-1 p-6 h-full">
+                <div className="mb-4">
+                    {icon}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                    {title}
+                </h3>
+                <p className="text-gray-600 text-sm">
+                    {description}
+                </p>
+            </div>
+        </a>
     );
 }
