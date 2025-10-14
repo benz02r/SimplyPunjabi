@@ -1,380 +1,268 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { FaArrowLeft, FaTrophy, FaFire, FaStar, FaLock, FaEdit, FaKey, FaSignOutAlt, FaChartLine } from "react-icons/fa";
+import { FaArrowLeft, FaCheck, FaLock, FaBook, FaRocket, FaPlay, FaStar } from "react-icons/fa";
 
-const avatars = [
-    "/avatars/avatar1.png",
-    "/avatars/avatar2.png",
-    "/avatars/avatar3.png",
-    "/avatars/avatar4.png",
-    "/avatars/avatar5.png",
-    "/avatars/avatar6.png",
-    "/avatars/avatar7.png",
-    "/avatars/avatar8.png",
-];
-
-export default function Profile() {
-    const [selectedAvatar, setSelectedAvatar] = useState(avatars[0]);
-    const [name, setName] = useState("");
-    const [newName, setNewName] = useState("");
-    const [email, setEmail] = useState("");
-    const [userId, setUserId] = useState(null);
-    const [oldPassword, setOldPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState(""); // 'success' or 'error'
-    const [loading, setLoading] = useState(false);
-    const [progress, setProgress] = useState(0);
-    const [points, setPoints] = useState(0);
-    const [level, setLevel] = useState(0);
-    const [previousLevel, setPreviousLevel] = useState(0);
-    const [levelUp, setLevelUp] = useState(false);
+export default function EssentialPunjabi() {
+    const [user, setUser] = useState(null);
+    const [completedLessons, setCompletedLessons] = useState([]);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    const totalLessons = 18;
+    const lessons = [
+        { id: "lesson1", title: "What Is Punjabi?", description: "Discover the language and its rich history", link: "/lessons/lesson1/1", locked: false, duration: "10 min" },
+        { id: "lesson2", title: "Learn Punjabi Greetings", description: "Essential phrases for everyday interactions", link: "/lessons/lesson2/1", locked: false, duration: "15 min" },
+        { id: "lesson3", title: "A Bit About Me", description: "Introduce yourself in Punjabi", link: "/lessons/lesson3/1", locked: false, duration: "12 min" },
+        { id: "lesson4", title: "Family And Friends", description: "Talk about your loved ones", link: "/lessons/lesson4", locked: false, duration: "18 min" },
+        { id: "lesson5", title: "Back To Basics", description: "Master fundamental concepts", link: "/lessons/lesson5", locked: false, duration: "20 min" },
+        { id: "lesson6", title: "Making It Easy & Top Tips", description: "Pro strategies for learning success", link: "/lessons/lesson14/1", locked: true, duration: "15 min" },
+    ];
 
     useEffect(() => {
-        const fetchUser = async () => {
-            setMessage("");
-            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        let isMounted = true;
 
-            if (sessionError || !sessionData?.session?.user) {
-                router.push("/key-functions/auth");
-                return;
+        async function checkUserAndProgress() {
+            try {
+                const { data: sessionData, error } = await supabase.auth.getSession();
+
+                if (!isMounted) return;
+
+                if (error) {
+                    console.error("Supabase Auth Error:", error);
+                    setLoading(false);
+                    return;
+                }
+
+                const sessionUser = sessionData?.session?.user || null;
+                setUser(sessionUser);
+
+                if (sessionUser) {
+                    // Optimized: Direct query using session user ID
+                    const { data: progressData, error: progressError } = await supabase
+                        .from("lesson_progress")
+                        .select("lesson_id")
+                        .eq("user_id", sessionUser.id)
+                        .eq("completed", true);
+
+                    if (!isMounted) return;
+
+                    if (progressError) {
+                        console.error("Progress fetch error:", progressError);
+                        setCompletedLessons([]);
+                    } else {
+                        const completed = progressData?.map(item => item.lesson_id) || [];
+                        setCompletedLessons(completed);
+                    }
+                }
+            } catch (err) {
+                console.error("Error in checkUserAndProgress:", err);
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
+        }
 
-            const user = sessionData.session.user;
-            setEmail(user.email);
-            setUserId(user.id);
+        checkUserAndProgress();
 
-            const { data: userData, error } = await supabase
-                .from("users")
-                .select("name, points")
-                .eq("id", user.id)
-                .limit(1)
-                .single();
-
-            if (error) {
-                console.error("Error fetching user data:", error);
-                showMessage(`Error fetching user data: ${error.message}`, "error");
-                return;
-            }
-
-            if (userData) {
-                const userPoints = userData.points || 0;
-                setName(userData.name || "User");
-                setNewName(userData.name || "");
-                setPoints(userPoints);
-            }
-
-            const userPoints = userData?.points || 0;
-            setName(userData?.name || "User");
-            setNewName(userData?.name || "");
-            setPoints(userPoints);
-
-            const newLevel = Math.floor(userPoints / 30);
-            if (newLevel > previousLevel) {
-                setLevelUp(true);
-                setTimeout(() => setLevelUp(false), 4000);
-            }
-            setPreviousLevel(newLevel);
-            setLevel(newLevel);
-
-            const { data: progressData } = await supabase
-                .from("lesson_progress")
-                .select("lesson_id")
-                .eq("user_id", user.id)
-                .eq("completed", true);
-
-            const completedCount = progressData?.length || 0;
-            const percent = Math.round((completedCount / totalLessons) * 100);
-            setProgress(percent);
+        return () => {
+            isMounted = false;
         };
+    }, []);
 
-        fetchUser();
-    }, [router]);
+    const completedCount = lessons.filter(l => completedLessons.includes(l.id)).length;
+    const progressPercent = Math.round((completedCount / lessons.length) * 100);
 
-    const showMessage = (text, type) => {
-        setMessage(text);
-        setMessageType(type);
-        setTimeout(() => setMessage(""), 5000);
-    };
-
-    const updateProfile = async () => {
-        setLoading(true);
-        setMessage("");
-
-        if (!newName.trim()) {
-            showMessage("Name cannot be empty.", "error");
-            setLoading(false);
-            return;
-        }
-
-        const { error } = await supabase
-            .from("users")
-            .update({ name: newName })
-            .eq("id", userId);
-
-        if (error) {
-            showMessage(`Error updating profile: ${error.message}`, "error");
-        } else {
-            setName(newName);
-            showMessage("Profile updated successfully!", "success");
-        }
-        setLoading(false);
-    };
-
-    const updatePassword = async () => {
-        setLoading(true);
-        setMessage("");
-
-        if (!oldPassword || !newPassword) {
-            showMessage("Please enter both old and new passwords.", "error");
-            setLoading(false);
-            return;
-        }
-
-        const { error } = await supabase.auth.updateUser({ password: newPassword });
-
-        if (error) {
-            showMessage(`Error updating password: ${error.message}`, "error");
-        } else {
-            showMessage("Password updated successfully!", "success");
-            setOldPassword("");
-            setNewPassword("");
-        }
-        setLoading(false);
-    };
-
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
-        router.push("/key-functions/auth");
-    };
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600 font-medium">Loading course...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-            <div className="max-w-6xl mx-auto">
-                {/* Level Up Notification */}
-                {levelUp && (
-                    <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-4 rounded-2xl shadow-2xl text-xl font-bold animate-bounce z-50">
-                        🎉 LEVEL UP! You're now Level {level} 🎯
-                    </div>
-                )}
-
+            <div className="max-w-7xl mx-auto">
                 {/* Back Button */}
                 <button
-                    onClick={() => router.push("/dashboard")}
+                    onClick={() => router.push(user ? "/learning" : "/")}
                     className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors group"
                 >
                     <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
-                    <span>Back to Dashboard</span>
+                    <span>Back to {user ? "Learning" : "Home"}</span>
                 </button>
 
-                {/* Profile Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl mb-8 relative overflow-hidden">
+                {/* Resources Banner */}
+                <a href="/learning/resources" className="block mb-8">
+                    <div className="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]">
+                        <div className="flex items-center gap-4">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                                <FaBook className="text-3xl text-orange-500" />
+                            </div>
+                            <div className="flex-1">
+                                <h2 className="text-2xl font-bold text-white mb-1">📚 Learning Resources</h2>
+                                <p className="text-yellow-50">Access essential Punjabi learning materials and study guides</p>
+                            </div>
+                            <div className="hidden sm:block">
+                                <span className="text-white text-2xl">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                {/* Course Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-8 sm:p-12 text-white shadow-xl mb-12 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
 
-                    <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6">
-                        <img
-                            src={selectedAvatar}
-                            alt="User Avatar"
-                            className="w-32 h-32 rounded-full border-4 border-white shadow-2xl"
-                        />
-                        <div className="text-center sm:text-left flex-1">
-                            <h1 className="text-4xl font-bold mb-2">{name}</h1>
-                            <p className="text-blue-100 text-lg mb-4">{email}</p>
-                            <div className="flex flex-wrap gap-4 justify-center sm:justify-start">
-                                <StatBadge icon={<FaTrophy />} value={points} label="Total Points" />
-                                <StatBadge icon={<FaStar />} value={`Level ${level}`} label="Current Level" />
-                                <StatBadge icon={<FaChartLine />} value={`${progress}%`} label="Progress" />
-                            </div>
+                    <div className="relative z-10">
+                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
+                            <FaStar className="text-yellow-300" />
+                            <span className="text-sm font-semibold">BEGINNER COURSE</span>
                         </div>
+                        <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+                            Essential Punjabi for Real Conversations
+                        </h1>
+                        <p className="text-xl text-blue-50 mb-6 max-w-3xl">
+                            Master the basics and start speaking Punjabi confidently from Day 1! Perfect for complete beginners.
+                        </p>
+
+                        {/* Course Stats */}
+                        {user && (
+                            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 inline-block">
+                                <div className="flex items-center gap-6">
+                                    <div>
+                                        <p className="text-sm text-green-100 mb-1">Your Progress</p>
+                                        <p className="text-2xl font-bold">{completedCount} / {lessons.length} Lessons</p>
+                                    </div>
+                                    <div className="w-32 h-2 bg-white/30 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-white transition-all duration-500"
+                                            style={{ width: `${progressPercent}%` }}
+                                        ></div>
+                                    </div>
+                                    <div>
+                                        <p className="text-3xl font-bold">{progressPercent}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                {/* Message Display */}
-                {message && (
-                    <div className={`mb-6 p-4 rounded-xl font-medium ${
-                        messageType === "success"
-                            ? "bg-green-100 text-green-800 border-2 border-green-300"
-                            : "bg-red-100 text-red-800 border-2 border-red-300"
-                    }`}>
-                        {message}
+                {/* Lessons Grid */}
+                <div className="mb-12">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-8">Course Lessons</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {lessons.map((lesson, index) => (
+                            <LessonCard
+                                key={index}
+                                lesson={{ ...lesson, completed: completedLessons.includes(lesson.id) }}
+                                user={user}
+                                lessonNumber={index + 1}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* CTA for Non-Users */}
+                {!user && (
+                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white text-center shadow-xl">
+                        <FaRocket className="text-6xl mx-auto mb-6" />
+                        <h2 className="text-3xl font-bold mb-4">
+                            🔒 Want Full Access to All Lessons?
+                        </h2>
+                        <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                            Subscribe to unlock premium content, track your progress, and accelerate your learning journey!
+                        </p>
+                        <a href="/key-functions/signup">
+                            <button className="bg-white text-blue-600 px-10 py-4 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
+                                Subscribe Now 🚀
+                            </button>
+                        </a>
                     </div>
                 )}
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Left Column - Stats & Progress */}
-                    <div className="lg:col-span-1 space-y-6">
-                        {/* Lesson Progress */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaChartLine className="text-blue-600" />
-                                Lesson Progress
-                            </h2>
-                            <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner mb-2">
-                                <div
-                                    className="bg-gradient-to-r from-green-500 to-green-600 h-full flex items-center justify-end pr-3 text-white text-sm font-bold transition-all duration-500"
-                                    style={{ width: `${progress}%` }}
-                                >
-                                    {progress}%
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-600 text-center">
-                                {Math.round((progress / 100) * totalLessons)} of {totalLessons} lessons completed
-                            </p>
-                        </div>
-
-                        {/* Level Progress */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaFire className="text-orange-500" />
-                                Level Progress
-                            </h2>
-                            <div className="text-center mb-4">
-                                <p className="text-3xl font-bold text-blue-600">Level {level}</p>
-                                <p className="text-sm text-gray-600">Next level at {(level + 1) * 30} points</p>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner">
-                                <div
-                                    className="bg-gradient-to-r from-blue-500 to-purple-600 h-full flex items-center justify-end pr-3 text-white text-sm font-bold transition-all duration-500"
-                                    style={{ width: `${((points % 30) / 30) * 100}%` }}
-                                >
-                                    {points % 30}/30
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Right Column - Settings */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Avatar Selection */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4">Choose Your Avatar</h2>
-                            <div className="grid grid-cols-4 sm:grid-cols-8 gap-4">
-                                {avatars.map((avatar, index) => {
-                                    const isUnlocked = index <= level;
-                                    return (
-                                        <div key={index} className="relative group">
-                                            <img
-                                                src={avatar}
-                                                alt={`Avatar ${index + 1}`}
-                                                className={`w-full aspect-square rounded-full cursor-pointer border-4 transition-all duration-300 ${
-                                                    selectedAvatar === avatar
-                                                        ? "border-blue-500 shadow-xl scale-110"
-                                                        : "border-gray-300"
-                                                } ${!isUnlocked ? "opacity-40 grayscale" : "hover:scale-110 hover:shadow-lg"}`}
-                                                onClick={() => {
-                                                    if (isUnlocked) setSelectedAvatar(avatar);
-                                                }}
-                                            />
-                                            {!isUnlocked && (
-                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-xs font-bold text-white bg-black/60 rounded-full">
-                                                    <FaLock className="mb-1" />
-                                                    <span>Lvl {index}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                            <p className="text-sm text-gray-500 mt-4 text-center">
-                                Unlock more avatars by leveling up! ({level + 1} / {avatars.length} unlocked)
-                            </p>
-                        </div>
-
-                        {/* Update Name */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaEdit className="text-blue-600" />
-                                Update Profile
-                            </h2>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
-                            <input
-                                type="text"
-                                value={newName}
-                                onChange={(e) => setNewName(e.target.value)}
-                                className="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors mb-4"
-                                placeholder="Enter your name"
-                            />
-                            <button
-                                onClick={updateProfile}
-                                disabled={loading}
-                                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {loading ? "Updating..." : "Update Name"}
-                            </button>
-                        </div>
-
-                        {/* Change Password */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaKey className="text-orange-600" />
-                                Change Password
-                            </h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Old Password</label>
-                                    <input
-                                        type="password"
-                                        placeholder="Enter old password"
-                                        value={oldPassword}
-                                        onChange={(e) => setOldPassword(e.target.value)}
-                                        className="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">New Password</label>
-                                    <input
-                                        type="password"
-                                        placeholder="Enter new password"
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
-                                        className="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
-                                    />
-                                </div>
-                                <button
-                                    onClick={updatePassword}
-                                    disabled={loading}
-                                    className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-3 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {loading ? "Updating..." : "Change Password"}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Logout */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaSignOutAlt className="text-red-600" />
-                                Account Actions
-                            </h2>
-                            <button
-                                onClick={handleLogout}
-                                className="w-full sm:w-auto bg-gradient-to-r from-red-500 to-red-600 text-white px-8 py-3 rounded-xl font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg"
-                            >
-                                Logout
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );
 }
 
-function StatBadge({ icon, value, label }) {
+function LessonCard({ lesson, user, lessonNumber }) {
+    const isLocked = lesson.locked && !user;
+    const isCompleted = lesson.completed;
+
     return (
-        <div className="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 flex items-center gap-2">
-            <span className="text-xl">{icon}</span>
-            <div>
-                <p className="text-lg font-bold">{value}</p>
-                <p className="text-xs text-blue-100">{label}</p>
-            </div>
+        <div className={`relative bg-white rounded-2xl border-2 shadow-lg overflow-hidden transition-all duration-300 ${
+            isLocked
+                ? "border-gray-300 opacity-75"
+                : "border-gray-200 hover:border-blue-400 hover:shadow-xl transform hover:-translate-y-1"
+        }`}>
+            {/* Completion Badge */}
+            {isCompleted && (
+                <div className="absolute top-4 right-4 z-10">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                        <FaCheck className="text-white text-lg" />
+                    </div>
+                </div>
+            )}
+
+            {/* Lock Badge */}
+            {isLocked && (
+                <div className="absolute top-4 right-4 z-10">
+                    <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center shadow-lg">
+                        <FaLock className="text-white text-sm" />
+                    </div>
+                </div>
+            )}
+
+            {isLocked ? (
+                <div className="p-8 flex flex-col items-center justify-center min-h-[280px] text-center">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <FaLock className="text-4xl text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-700 mb-2">
+                        Lesson {lessonNumber}: {lesson.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 mb-4">{lesson.description}</p>
+                    <div className="bg-gray-100 px-4 py-2 rounded-full">
+                        <p className="text-sm font-semibold text-gray-600">Subscribe to unlock</p>
+                    </div>
+                </div>
+            ) : (
+                <a href={lesson.link} className="block">
+                    <div className="p-8 min-h-[280px] flex flex-col">
+                        <div className="flex items-start justify-between mb-4">
+                            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
+                                {lessonNumber}
+                            </div>
+                            <div className="text-sm text-gray-500 flex items-center gap-1">
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                                </svg>
+                                <span>{lesson.duration}</span>
+                            </div>
+                        </div>
+
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                            {lesson.title}
+                        </h3>
+                        <p className="text-gray-600 mb-6 flex-grow">
+                            {lesson.description}
+                        </p>
+
+                        <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-xl font-bold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md flex items-center justify-center gap-2 group">
+                            <FaPlay className="text-sm group-hover:scale-110 transition-transform" />
+                            <span>{isCompleted ? "Review Lesson" : "Start Lesson"}</span>
+                        </button>
+                    </div>
+                </a>
+            )}
         </div>
     );
 }
