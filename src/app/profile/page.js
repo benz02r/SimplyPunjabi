@@ -54,11 +54,20 @@ export default function Profile() {
                 .from("users")
                 .select("name, points")
                 .eq("id", user.id)
+                .limit(1)
                 .single();
 
             if (error) {
+                console.error("Error fetching user data:", error);
                 showMessage(`Error fetching user data: ${error.message}`, "error");
                 return;
+            }
+
+            if (userData) {
+                const userPoints = userData.points || 0;
+                setName(userData.name || "User");
+                setNewName(userData.name || "");
+                setPoints(userPoints);
             }
 
             const userPoints = userData?.points || 0;
@@ -148,7 +157,12 @@ export default function Profile() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
             <div className="max-w-6xl mx-auto">
-
+                {/* Level Up Notification */}
+                {levelUp && (
+                    <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-4 rounded-2xl shadow-2xl text-xl font-bold animate-bounce z-50">
+                        🎉 LEVEL UP! You're now Level {level} 🎯
+                    </div>
+                )}
 
                 {/* Back Button */}
                 <button
