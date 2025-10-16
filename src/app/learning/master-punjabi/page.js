@@ -21,37 +21,55 @@ export default function MasterPunjabiConversations() {
     ];
 
     useEffect(() => {
+        let isMounted = true;
+
         async function checkUserAndProgress() {
-            const { data: sessionData, error } = await supabase.auth.getSession();
-            if (error) {
-                console.error("Supabase Auth Error:", error);
-                setLoading(false);
-                return;
+            try {
+                const { data: sessionData, error } = await supabase.auth.getSession();
+
+                if (!isMounted) return;
+
+                if (error) {
+                    console.error("Supabase Auth Error:", error);
+                    setLoading(false);
+                    return;
+                }
+
+                const sessionUser = sessionData?.session?.user || null;
+                setUser(sessionUser);
+
+                if (sessionUser) {
+                    // Optimized: Direct query using session user ID
+                    const { data: progressData, error: progressError } = await supabase
+                        .from("lesson_progress")
+                        .select("lesson_id")
+                        .eq("user_id", sessionUser.id)
+                        .eq("completed", true);
+
+                    if (!isMounted) return;
+
+                    if (progressError) {
+                        console.error("Progress fetch error:", progressError);
+                        setCompletedLessons([]);
+                    } else {
+                        const completed = progressData?.map(entry => entry.lesson_id) || [];
+                        setCompletedLessons(completed);
+                    }
+                }
+            } catch (err) {
+                console.error("Error in checkUserAndProgress:", err);
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
-
-            const sessionUser = sessionData?.session?.user || null;
-            setUser(sessionUser);
-
-            if (sessionUser) {
-                const { data: userData } = await supabase
-                    .from("users")
-                    .select("id")
-                    .eq("email", sessionUser.email)
-                    .single();
-
-                const { data: progressData } = await supabase
-                    .from("lesson_progress")
-                    .select("lesson_id")
-                    .eq("user_id", userData.id)
-                    .eq("completed", true);
-
-                const completed = progressData?.map(entry => entry.lesson_id) || [];
-                setCompletedLessons(completed);
-            }
-            setLoading(false);
         }
 
         checkUserAndProgress();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const completedCount = lessons.filter(l => completedLessons.includes(l.id)).length;
@@ -88,7 +106,7 @@ export default function MasterPunjabiConversations() {
                                 <FaBook className="text-3xl text-orange-500" />
                             </div>
                             <div className="flex-1">
-                                <h2 className="text-2xl font-bold text-white mb-1"> Learning Resources</h2>
+                                <h2 className="text-2xl font-bold text-white mb-1">📚 Learning Resources</h2>
                                 <p className="text-yellow-50">Access essential Punjabi learning materials and study guides</p>
                             </div>
                             <div className="hidden sm:block">
@@ -158,14 +176,14 @@ export default function MasterPunjabiConversations() {
                     <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-3xl p-12 text-white text-center shadow-xl">
                         <FaRocket className="text-6xl mx-auto mb-6" />
                         <h2 className="text-3xl font-bold mb-4">
-                             Want Full Access to All Lessons?
+                            🔒 Want Full Access to All Lessons?
                         </h2>
                         <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
                             Subscribe to unlock premium content, track your progress, and accelerate your learning journey!
                         </p>
                         <a href="/key-functions/signup">
                             <button className="bg-white text-green-600 px-10 py-4 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
-                                Subscribe Now
+                                Subscribe Now 🚀
                             </button>
                         </a>
                     </div>
