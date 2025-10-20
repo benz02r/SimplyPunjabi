@@ -54,7 +54,7 @@ export default function Home() {
 
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-                            <a href="/key-functions/signup" className="w-full sm:w-auto">
+                            <a href="/lessons/lesson2/1" className="w-full sm:w-auto">
                                 <button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-xl text-lg font-bold shadow-lg hover:shadow-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105">
                                     Get Started Free
                                 </button>
@@ -69,28 +69,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section className="px-4 sm:px-6 lg:px-8 py-16 bg-white">
-                <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <FeatureCard
-                            icon={<FaCheckCircle className="text-5xl text-green-500" />}
-                            title="Interactive Learning"
-                            description="Engaging lessons designed for real-world conversations"
-                        />
-                        <FeatureCard
-                            icon={<FaGlobe className="text-5xl text-blue-500" />}
-                            title="Cultural Context"
-                            description="Understand the rich heritage behind the language"
-                        />
-                        <FeatureCard
-                            icon={<FaUsers className="text-5xl text-orange-500" />}
-                            title="Community Support"
-                            description="Learn alongside others on the same journey"
-                        />
-                    </div>
-                </div>
-            </section>
+
 
             {/* Learning Paths Section */}
             <section className="px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-white to-blue-50">
@@ -139,6 +118,34 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+
+            {/* Features Section */}
+            <section className="px-4 sm:px-6 lg:px-8 py-16 bg-white">
+                <div className="max-w-6xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <FeatureCard
+                            icon={<FaCheckCircle className="text-5xl text-green-500" />}
+                            title="Interactive Learning"
+                            description="Engaging lessons designed for real-world conversations"
+                        />
+                        <FeatureCard
+                            icon={<FaGlobe className="text-5xl text-blue-500" />}
+                            title="Cultural Context"
+                            description="Understand the rich heritage behind the language"
+                        />
+                        <FeatureCard
+                            icon={<FaUsers className="text-5xl text-orange-500" />}
+                            title="Community Support"
+                            description="Learn alongside others on the same journey"
+                        />
+                    </div>
+                </div>
+            </section>
+
+
+
+
         </div>
     );
 }
