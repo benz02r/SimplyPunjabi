@@ -106,7 +106,7 @@ export default function MasterPunjabiConversations() {
                                 <FaBook className="text-3xl text-orange-500" />
                             </div>
                             <div className="flex-1">
-                                <h2 className="text-2xl font-bold text-white mb-1">📚 Learning Resources</h2>
+                                <h2 className="text-2xl font-bold text-white mb-1"> Learning Resources</h2>
                                 <p className="text-yellow-50">Access essential Punjabi learning materials and study guides</p>
                             </div>
                             <div className="hidden sm:block">
@@ -176,14 +176,14 @@ export default function MasterPunjabiConversations() {
                     <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-3xl p-12 text-white text-center shadow-xl">
                         <FaRocket className="text-6xl mx-auto mb-6" />
                         <h2 className="text-3xl font-bold mb-4">
-                            🔒 Want Full Access to All Lessons?
+                             Want Full Access to All Lessons?
                         </h2>
                         <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
                             Subscribe to unlock premium content, track your progress, and accelerate your learning journey!
                         </p>
                         <a href="/key-functions/signup">
                             <button className="bg-white text-green-600 px-10 py-4 rounded-xl text-xl font-bold shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
-                                Subscribe Now 🚀
+                                Subscribe Now
                             </button>
                         </a>
                     </div>

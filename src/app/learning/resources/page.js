@@ -109,22 +109,22 @@ export default function LearningResources() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
                             <TipCard
-                                icon="📖"
+                                icon=""
                                 title="Quick Reference"
                                 description="Look up words, phrases, and grammar rules on the go"
                             />
                             <TipCard
-                                icon="🔄"
+                                icon=""
                                 title="Review & Practice"
                                 description="Reinforce what you've learned in your lessons"
                             />
                             <TipCard
-                                icon="📝"
+                                icon=""
                                 title="Study Notes"
                                 description="Create your own notes using these as a foundation"
                             />
                             <TipCard
-                                icon="🎯"
+                                icon=""
                                 title="Targeted Learning"
                                 description="Focus on specific areas where you need more practice"
                             />
