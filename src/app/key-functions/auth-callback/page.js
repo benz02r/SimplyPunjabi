@@ -16,9 +16,10 @@ export default function AuthCallback() {
             try {
                 setIsAuthenticating(true);
 
-                // Get the code from URL params (for PKCE flow)
+                // Get the code and type from URL params
                 const urlParams = new URLSearchParams(window.location.search);
                 const code = urlParams.get('code');
+                const type = urlParams.get('type');
                 const errorParam = urlParams.get('error');
                 const errorDescription = urlParams.get('error_description');
 
@@ -33,10 +34,21 @@ export default function AuthCallback() {
                 if (!code) {
                     const hashParams = new URLSearchParams(window.location.hash.substring(1));
                     const accessToken = hashParams.get('access_token');
+                    const hashType = hashParams.get('type');
 
                     if (!accessToken) {
                         setError("No authentication code found. Please try logging in again.");
                         setIsAuthenticating(false);
+                        return;
+                    }
+
+                    // Check if this is a password recovery from hash
+                    if (hashType === 'recovery') {
+                        setAuthSuccess(true);
+                        setIsAuthenticating(false);
+                        setTimeout(() => {
+                            router.push("/reset-password");
+                        }, 1000);
                         return;
                     }
                 }
@@ -64,10 +76,18 @@ export default function AuthCallback() {
                 setAuthSuccess(true);
                 setIsAuthenticating(false);
 
-                // Redirect to dashboard after a short delay
-                setTimeout(() => {
-                    router.push("/key-functions/dashboard");
-                }, 1500);
+                // Check if this is a password recovery flow
+                if (type === 'recovery' || sessionData?.session?.user?.recovery_sent_at) {
+                    console.log("Password recovery detected, redirecting to reset password page");
+                    setTimeout(() => {
+                        router.push("/reset-password");
+                    }, 1000);
+                } else {
+                    // Regular login - redirect to dashboard
+                    setTimeout(() => {
+                        router.push("/key-functions/dashboard");
+                    }, 1500);
+                }
 
             } catch (err) {
                 console.error("Unexpected error during authentication:", err);
@@ -128,7 +148,7 @@ export default function AuthCallback() {
                             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                                 <p className="text-sm text-green-800 flex items-center justify-center gap-2">
                                     <LogIn className="w-4 h-4" />
-                                    Redirecting to your dashboard...
+                                    Redirecting...
                                 </p>
                             </div>
                         </div>

@@ -98,8 +98,8 @@ export default function ResetPassword() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen px-6 bg-gradient-to-b from-blue-50 to-white">
-            <div className="p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200 bg-white">
+        <div className="flex flex-col items-center justify-center min-h-screen px-6 py-24 md:py-32 bg-gradient-to-b from-blue-50 to-white">
+            <div className="p-8 rounded-xl shadow-lg w-full max-w-lg border border-gray-200 bg-white">
                 {/* Header with Icon */}
                 <div className="flex flex-col items-center mb-6">
                     <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">

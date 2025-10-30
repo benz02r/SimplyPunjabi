@@ -14,7 +14,7 @@ export const signUpWithEmail = async (email, password) => {
         email,
         password,
         options: {
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth-callback`, // ✅ Uses correct URL
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth-callback`,
         },
     });
 
@@ -35,7 +35,7 @@ export const signInWithMagicLink = async (email) => {
     const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth-callback`, // ✅ Uses correct URL
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth-callback`,
         },
     });
 
@@ -50,10 +50,12 @@ export const signInWithMagicLink = async (email) => {
 
 /**
  * ✅ Sends a password reset email
+ * Note: Users will be redirected to /auth-callback first to establish session,
+ * then can be redirected to /reset-password from there
  */
 export const sendPasswordResetEmail = async (email) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`, // ✅ Redirects to reset page
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth-callback`,
     });
 
     if (error) {
