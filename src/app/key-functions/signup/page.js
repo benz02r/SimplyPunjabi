@@ -1,77 +1,164 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { FaUser, FaEnvelope, FaLock, FaArrowRight, FaCheckCircle } from "react-icons/fa";
+import { User, Mail, Lock, ArrowRight, CheckCircle, Eye, EyeOff, Loader2, AlertCircle, Home, Sparkles } from "lucide-react";
 
 export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [passwordStrength, setPasswordStrength] = useState("");
     const router = useRouter();
+
+    // Check password strength
+    useEffect(() => {
+        if (!password) {
+            setPasswordStrength("");
+            return;
+        }
+
+        const strength = calculatePasswordStrength(password);
+        setPasswordStrength(strength);
+    }, [password]);
+
+    const calculatePasswordStrength = (password) => {
+        if (password.length < 6) return "weak";
+        if (password.length < 8) return "fair";
+
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        const strength = [hasUpperCase, hasLowerCase, hasNumbers, hasSpecialChar].filter(Boolean).length;
+
+        if (password.length >= 12 && strength >= 3) return "strong";
+        if (password.length >= 8 && strength >= 2) return "good";
+        return "fair";
+    };
+
+    const getStrengthColor = () => {
+        switch (passwordStrength) {
+            case "weak": return "bg-red-500";
+            case "fair": return "bg-orange-500";
+            case "good": return "bg-yellow-500";
+            case "strong": return "bg-green-500";
+            default: return "bg-gray-300";
+        }
+    };
+
+    const getStrengthWidth = () => {
+        switch (passwordStrength) {
+            case "weak": return "w-1/4";
+            case "fair": return "w-2/4";
+            case "good": return "w-3/4";
+            case "strong": return "w-full";
+            default: return "w-0";
+        }
+    };
 
     const handleSignup = async (e) => {
         e.preventDefault();
         setLoading(true);
         setErrorMessage("");
 
+        // Validation
         if (name.trim() === "") {
             setErrorMessage("Name is required.");
             setLoading(false);
             return;
         }
 
-        // Sign up the user with Supabase Auth
-        const { data, error } = await supabase.auth.signUp({ email, password });
-
-        if (error) {
-            console.error("❌ Supabase Auth Error:", error.message);
-            setErrorMessage(error.message);
+        if (password.length < 6) {
+            setErrorMessage("Password must be at least 6 characters long.");
             setLoading(false);
             return;
         }
 
-        if (data?.user) {
-            const userId = data.user.id;
-            console.log("✅ User created in Supabase Auth:", userId);
-
-            // Insert into "users" table
-            const { error: dbError } = await supabase
-                .from("users")
-                .insert([
-                    {
-                        id: userId,
-                        email,
-                        name,
-                        created_at: new Date().toISOString(),
-                    }
-                ]);
-
-            if (dbError) {
-                console.error("❌ Database Insert Error:", dbError);
-                setErrorMessage("User created in Auth but not saved in database.");
-            } else {
-                console.log("✅ User successfully inserted into users table!");
-                router.push("/key-functions/signup-success");
-            }
+        if (!email || !password) {
+            setErrorMessage("Please fill in all fields.");
+            setLoading(false);
+            return;
         }
 
-        setLoading(false);
+        try {
+            // Sign up the user with Supabase Auth
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        name: name
+                    }
+                }
+            });
+
+            if (error) {
+                console.error("❌ Supabase Auth Error:", error.message);
+                setErrorMessage(error.message);
+                setLoading(false);
+                return;
+            }
+
+            if (data?.user) {
+                const userId = data.user.id;
+                console.log("✅ User created in Supabase Auth:", userId);
+
+                // Insert into "users" table
+                const { error: dbError } = await supabase
+                    .from("users")
+                    .insert([
+                        {
+                            id: userId,
+                            email,
+                            name,
+                            created_at: new Date().toISOString(),
+                        }
+                    ]);
+
+                if (dbError) {
+                    console.error("❌ Database Insert Error:", dbError);
+                    setErrorMessage("User created in Auth but not saved in database.");
+                    setLoading(false);
+                } else {
+                    console.log("✅ User successfully inserted into users table!");
+                    router.push("/key-functions/signup-success");
+                }
+            }
+        } catch (err) {
+            console.error("Unexpected error:", err);
+            setErrorMessage("An unexpected error occurred. Please try again.");
+            setLoading(false);
+        }
     };
 
     const benefits = [
-        "Access to interactive lessons",
-        "Real-world conversation practice",
-        "Cultural insights and context",
-        "Track your learning progress"
+        {
+            text: "Access to interactive lessons",
+            description: "Learn at your own pace"
+        },
+        {
+            text: "Real-world conversation practice",
+            description: "Build confidence speaking"
+        },
+        {
+            text: "Cultural insights and context",
+            description: "Understand the culture"
+        },
+        {
+            text: "Track your learning progress",
+            description: "See your improvement"
+        }
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center px-4 py-20">
-            <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center px-4 py-24 md:py-32">
+            <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
                 {/* Left Side - Benefits & Branding */}
                 <div className="hidden lg:block space-y-8 px-8">
@@ -86,27 +173,32 @@ export default function Signup() {
 
                     <div className="space-y-4">
                         {benefits.map((benefit, index) => (
-                            <div key={index} className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-                                <FaCheckCircle className="text-green-500 text-2xl mt-1 flex-shrink-0" />
-                                <p className="text-gray-700 text-lg">{benefit}</p>
+                            <div key={index} className="flex items-start gap-4 p-5 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
+                                <CheckCircle className="text-green-500 w-6 h-6 mt-1 flex-shrink-0" />
+                                <div>
+                                    <p className="text-gray-800 text-lg font-semibold">{benefit.text}</p>
+                                    <p className="text-gray-500 text-sm mt-1">{benefit.description}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
 
-                    <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-2xl p-8 text-white">
-                        <p className="text-lg font-semibold mb-2"> Special Offer</p>
+                    <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-2xl p-8 text-white shadow-lg">
+                        <p className="text-lg font-semibold mb-2 flex items-center gap-2">
+                            <Sparkles className="w-5 h-5" /> Special Offer
+                        </p>
                         <p className="text-3xl font-bold mb-2">Get Started Free</p>
                         <p className="text-blue-100">No credit card required</p>
                     </div>
                 </div>
 
                 {/* Right Side - Signup Form */}
-                <div className="w-full max-w-md mx-auto">
+                <div className="w-full max-w-lg mx-auto">
                     <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
                         {/* Form Header */}
-                        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-8 text-center">
+                        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
                             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                <FaUser className="text-4xl text-blue-600" />
+                                <User className="w-12 h-12 text-blue-600" />
                             </div>
                             <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
                             <p className="text-blue-100">Start learning Punjabi today!</p>
@@ -116,25 +208,28 @@ export default function Signup() {
                         <div className="px-8 py-8">
                             {/* Error Message */}
                             {errorMessage && (
-                                <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+                                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                                     <p className="text-red-700 text-sm font-medium">{errorMessage}</p>
                                 </div>
                             )}
 
-                            <div className="space-y-5">
+                            <form onSubmit={handleSignup} className="space-y-5">
                                 {/* Name Input */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
                                         Full Name
                                     </label>
                                     <div className="relative">
-                                        <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                        <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                         <input
-                                            className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
+                                            id="name"
+                                            className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             type="text"
                                             placeholder="Enter your full name"
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
+                                            disabled={loading}
                                             required
                                         />
                                     </div>
@@ -142,17 +237,19 @@ export default function Signup() {
 
                                 {/* Email Input */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
                                         Email Address
                                     </label>
                                     <div className="relative">
-                                        <FaEnvelope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                        <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                         <input
-                                            className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
+                                            id="email"
+                                            className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             type="email"
                                             placeholder="Enter your email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
+                                            disabled={loading}
                                             required
                                         />
                                     </div>
@@ -160,39 +257,73 @@ export default function Signup() {
 
                                 {/* Password Input */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
                                         Password
                                     </label>
                                     <div className="relative">
-                                        <FaLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                        <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                         <input
-                                            className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
-                                            type="password"
+                                            id="password"
+                                            className="w-full pl-12 pr-12 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                            type={showPassword ? "text" : "password"}
                                             placeholder="Create a strong password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            disabled={loading}
                                             required
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                            disabled={loading}
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-2">Must be at least 8 characters</p>
+
+                                    {/* Password Strength Indicator */}
+                                    {password && (
+                                        <div className="mt-2">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-xs text-gray-600">Password strength:</span>
+                                                <span className={`text-xs font-medium capitalize ${
+                                                    passwordStrength === "weak" ? "text-red-600" :
+                                                        passwordStrength === "fair" ? "text-orange-600" :
+                                                            passwordStrength === "good" ? "text-yellow-600" :
+                                                                "text-green-600"
+                                                }`}>
+                                                    {passwordStrength}
+                                                </span>
+                                            </div>
+                                            <div className="w-full bg-gray-200 rounded-full h-2">
+                                                <div className={`${getStrengthColor()} ${getStrengthWidth()} h-2 rounded-full transition-all duration-300`}></div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <p className="text-xs text-gray-500 mt-2">Must be at least 6 characters</p>
                                 </div>
 
                                 {/* Signup Button */}
                                 <button
-                                    onClick={handleSignup}
-                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    type="submit"
+                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
                                     disabled={loading}
                                 >
                                     {loading ? (
-                                        <span>Creating Account...</span>
+                                        <>
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            <span>Creating Account...</span>
+                                        </>
                                     ) : (
                                         <>
                                             <span>Create Account</span>
-                                            <FaArrowRight />
+                                            <ArrowRight className="w-5 h-5" />
                                         </>
                                     )}
                                 </button>
-                            </div>
+                            </form>
 
                             {/* Divider */}
                             <div className="my-6 flex items-center gap-4">
@@ -204,15 +335,20 @@ export default function Signup() {
                             {/* Back to Home */}
                             <button
                                 onClick={() => router.push("/")}
-                                className="w-full bg-gray-100 text-gray-700 py-3.5 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300 border-2 border-gray-200"
+                                disabled={loading}
+                                className="w-full bg-gray-100 text-gray-700 py-3.5 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300 border-2 border-gray-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                ← Back to Home
+                                <Home className="w-5 h-5" />
+                                Back to Home
                             </button>
 
                             {/* Login Link */}
                             <p className="mt-6 text-center text-sm text-gray-600">
                                 Already have an account?{" "}
-                                <a href="/key-functions/auth" className="text-blue-600 font-bold hover:underline">
+                                <a
+                                    href="/key-functions/auth"
+                                    className="text-blue-600 font-bold hover:text-blue-700 hover:underline transition-colors"
+                                >
                                     Log In
                                 </a>
                             </p>
@@ -220,11 +356,14 @@ export default function Signup() {
                     </div>
 
                     {/* Mobile Benefits */}
-                    <div className="lg:hidden mt-8 space-y-3">
+                    <div className="lg:hidden mt-8 space-y-3 px-4">
                         {benefits.map((benefit, index) => (
-                            <div key={index} className="flex items-center gap-3 text-gray-700">
-                                <FaCheckCircle className="text-green-500 text-lg flex-shrink-0" />
-                                <p className="text-sm">{benefit}</p>
+                            <div key={index} className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
+                                <CheckCircle className="text-green-500 w-5 h-5 flex-shrink-0" />
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-800">{benefit.text}</p>
+                                    <p className="text-xs text-gray-500">{benefit.description}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
