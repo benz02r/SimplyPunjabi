@@ -151,7 +151,7 @@ export default function LearnMore() {
                                     We're currently in beta, which means you get to shape the future of Simply Punjabi with your feedback while enjoying special pricing!
                                 </p>
                                 <div className="bg-white/20 rounded-lg px-4 py-3">
-                                    <p className="text-sm font-semibold">🎉 Early adopter benefits included</p>
+                                    <p className="text-sm font-semibold"> Early adopter benefits included</p>
                                 </div>
                             </div>
                         </div>
