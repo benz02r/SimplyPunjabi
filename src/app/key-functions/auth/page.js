@@ -95,7 +95,7 @@ export default function SignIn() {
 
                     <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-2xl p-8 text-white shadow-lg">
                         <p className="text-lg font-semibold mb-2 flex items-center gap-2">
-                            <span className="text-2xl">💡</span> Pro Tip
+                            <span className="text-2xl"></span> Pro Tip
                         </p>
                         <p className="text-xl font-bold mb-2">Practice Daily for Best Results</p>
                         <p className="text-blue-100">Just 10 minutes a day makes a difference!</p>
