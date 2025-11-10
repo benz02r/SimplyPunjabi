@@ -2,781 +2,684 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowLeft, ArrowRight, User, CheckCircle, X, RotateCcw, Trophy, Award } from "lucide-react";
 import Image from "next/image";
-import { Sparkles, User, MapPin, Briefcase, Users, GraduationCap, ArrowRight, ArrowLeft, CheckCircle, XCircle } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from '@supabase/supabase-js';
 
-export default function AboutMeLessonComplete() {
-    const router = useRouter();
-    const [currentStep, setCurrentStep] = useState(0);
-    const [user, setUser] = useState(null);
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-    // Step 1: Name
-    const [name, setName] = useState("");
-
-    // Step 2: Age
-    const [age, setAge] = useState("");
-    const [gender, setGender] = useState("");
-
-    // Step 3: From City
-    const [fromCity, setFromCity] = useState("");
-
-    // Step 4: Live City
-    const [liveCity, setLiveCity] = useState("");
-
-    // Step 5: Work/Study
-    const [mode, setMode] = useState("");
-    const [place, setPlace] = useState("");
-
-    // Step 6: Siblings
-    const [olderBrothers, setOlderBrothers] = useState(0);
-    const [youngerSisters, setYoungerSisters] = useState(0);
-
-    // Step 7: Quiz
-    const [quizStep, setQuizStep] = useState(0);
-    const [selectedAnswer, setSelectedAnswer] = useState(null);
-    const [score, setScore] = useState(0);
-    const [feedback, setFeedback] = useState("");
-
-    const learningPoints = [
-        { icon: User, text: "How to say your name", color: "text-blue-500" },
-        { icon: Sparkles, text: "How to say how old you are", color: "text-purple-500" },
-        { icon: MapPin, text: "Where you are from and what city you live in", color: "text-green-500" },
-        { icon: Briefcase, text: "Where you study or where you work", color: "text-orange-500" },
-        { icon: Users, text: "How many siblings you have", color: "text-pink-500" },
-    ];
-
-    const questions = [
-        {
-            id: 1,
-            question: "How do you say 'My name is Priya' in Punjabi?",
-            options: ["Mera nām Priya hai.", "Main Priya haan.", "Tera nām Priya hai.", "Maiṁ Priya ton haan."],
-            correct: "Mera nām Priya hai."
-        },
-        {
-            id: 2,
-            question: "Which Punjabi sentence correctly means 'I am 25 years old' for a boy?",
-            options: ["Maiṁ pacchī sālāṁ dī hāṁ", "Maiṁ pacchī sālāṁ dā hāṁ", "Maiṁ 25 nām dā hāṁ", "Maiṁ pacchī kam kardā hāṁ"],
-            correct: "Maiṁ pacchī sālāṁ dā hāṁ"
-        },
-        {
-            id: 3,
-            question: "What does 'Tuhāḍī umar kinnī hai?' mean?",
-            options: ["Where are you from?", "How old are you?", "What is your name?", "Where do you live?"],
-            correct: "How old are you?"
-        },
-        {
-            id: 4,
-            question: "If Priya is 23 years old, what would she say?",
-            options: ["Maiṁ teī sālāṁ dī hāṁ", "Maiṁ teī sālāṁ dā hāṁ", "Maiṁ Priya teī hāṁ", "Maiṁ sālāṁ dī Priya hāṁ"],
-            correct: "Maiṁ teī sālāṁ dī hāṁ"
-        },
-        {
-            id: 5,
-            question: "How do you say 'I am from London' as a girl?",
-            options: ["Maiṁ London ton āī hāṁ", "Maiṁ London ton āiā hāṁ", "Maiṁ London vich rahindī hāṁ", "Maiṁ London kam kardī hāṁ"],
-            correct: "Maiṁ London ton āī hāṁ"
-        },
-        {
-            id: 6,
-            question: "Which Punjabi phrase means 'I live in Birmingham' for a girl?",
-            options: ["Maiṁ Birmingham vich rahindā hāṁ", "Maiṁ Birmingham vich rahindī hāṁ", "Maiṁ Birmingham ton āī hāṁ", "Maiṁ Birmingham paṛhdā hāṁ"],
-            correct: "Maiṁ Birmingham vich rahindī hāṁ"
-        },
-        {
-            id: 7,
-            question: "What does 'Maiṁ Heathrow Airport laī kam kardā hāṁ' mean?",
-            options: ["I live at Heathrow Airport.", "I study at Heathrow Airport.", "I work at Heathrow Airport.", "I go to Heathrow Airport."],
-            correct: "I work at Heathrow Airport."
-        },
-        {
-            id: 8,
-            question: "What is the difference between 'paṛhdā' and 'paṛhdī'?",
-            options: ["They mean different things.", "They are different tenses.", "One is for boys, one is for girls.", "One is for young people, one is for adults."],
-            correct: "One is for boys, one is for girls."
-        },
-        {
-            id: 9,
-            question: "Translate: 'I study at university' (boy).",
-            options: ["Maiṁ university paṛhdā hāṁ", "Maiṁ university ton āiā hāṁ", "Maiṁ university laī kam kardā hāṁ", "Maiṁ university rahindā hāṁ"],
-            correct: "Maiṁ university paṛhdā hāṁ"
-        },
-        {
-            id: 10,
-            question: "How would Priya say: 'I have two older brothers and one younger sister'?",
-            options: ["Maiṁ do vaḍḍe bhrā atē ikk chhoṭī bhaiṇ hāṁ", "Maiṁ do chhoṭe bhrā atē ikk vaḍḍī bhaiṇ hāṁ", "Maiṁ do bhrā ikk bhaiṇ hāṁ", "Maiṁ do bhrā chhoṭī bhaiṇ hāṁ"],
-            correct: "Maiṁ do vaḍḍe bhrā atē ikk chhoṭī bhaiṇ hāṁ"
+const lessonContent = [
+    {
+        type: "intro",
+        title: "A Bit About Me",
+        content: "In this lesson, you'll learn how to introduce yourself in Punjabi. We'll cover the essentials:",
+        points: [
+            "Saying your name",
+            "Telling your age",
+            "Saying where you're from and where you live",
+            "Talking about work or studies",
+            "Describing your family"
+        ]
+    },
+    {
+        type: "section",
+        title: "What's Your Name?",
+        avatar: "/avatars/avatar5.png",
+        avatarName: "Priya",
+        avatarColor: "pink",
+        content: "Let's start with the most basic introduction - telling someone your name.",
+        examples: [
+            {
+                punjabi: "ਮੇਰਾ ਨਾਮ ਪ੍ਰੀਆ ਹੈ।",
+                romanized: "Mera naam Priya hai.",
+                english: "My name is Priya."
+            },
+            {
+                punjabi: "ਮੇਰਾ ਨਾਮ ਅਮਨ ਹੈ।",
+                romanized: "Mera naam Aman hai.",
+                english: "My name is Aman."
+            }
+        ],
+        note: "Simply replace 'Priya' or 'Aman' with your own name to introduce yourself!"
+    },
+    {
+        type: "section",
+        title: "How Old Are You?",
+        avatar: "/avatars/avatar6.png",
+        avatarName: "Aman",
+        avatarColor: "blue",
+        content: "After your name, someone might ask: ਤੁਹਾਡੀ ਉਮਰ ਕਿੰਨੀ ਹੈ? (Tuhāḍī umar kinnī hai?) - How old are you?",
+        examples: [
+            {
+                punjabi: "ਮੈਂ 25 ਸਾਲਾਂ ਦਾ ਹਾਂ।",
+                romanized: "Maiṁ 25 salān dā hān.",
+                english: "I am 25 years old. (male)"
+            },
+            {
+                punjabi: "ਮੈਂ 23 ਸਾਲਾਂ ਦੀ ਹਾਂ।",
+                romanized: "Maiṁ 23 salān dī hān.",
+                english: "I am 23 years old. (female)"
+            }
+        ],
+        tip: {
+            title: "Important Gender Difference",
+            content: "Use 'ਦਾ' (dā) if you're male and 'ਦੀ' (dī) if you're female.",
+            reference: "Check out the 'Numbers Chart' in Learning Resources to learn Punjabi numbers!"
         }
-    ];
+    },
+    {
+        type: "quiz",
+        question: "How do you say 'My name is Priya' in Punjabi?",
+        options: [
+            { text: "Mera nām Priya hai.", correct: true },
+            { text: "Main Priya haan.", correct: false },
+            { text: "Tera nām Priya hai.", correct: false }
+        ]
+    },
+    {
+        type: "quiz",
+        question: "Which sentence correctly means 'I am 25 years old' for a boy?",
+        options: [
+            { text: "Maiṁ 25 salān dī hān", correct: false },
+            { text: "Maiṁ 25 salān dā hān", correct: true },
+            { text: "Maiṁ 25 nām dā hān", correct: false }
+        ]
+    },
+    {
+        type: "section",
+        title: "Where Are You From?",
+        avatar: "/avatars/avatar5.png",
+        avatarName: "Priya",
+        avatarColor: "pink",
+        content: "Now let's learn how to say where you're from and where you currently live.",
+        examples: [
+            {
+                punjabi: "ਮੈਂ London ਤੋਂ ਆਇਆ ਹਾਂ।",
+                romanized: "Maiṁ London ton āiā hān.",
+                english: "I am from London. (male)"
+            },
+            {
+                punjabi: "ਮੈਂ London ਤੋਂ ਆਈ ਹਾਂ।",
+                romanized: "Maiṁ London ton āī hān.",
+                english: "I am from London. (female)"
+            }
+        ],
+        note: "Notice the gender difference: 'ਆਇਆ' (āiā) for males and 'ਆਈ' (āī) for females."
+    },
+    {
+        type: "section",
+        title: "Where Do You Live?",
+        avatar: "/avatars/avatar6.png",
+        avatarName: "Aman",
+        avatarColor: "blue",
+        content: "Someone might also ask where you currently live.",
+        examples: [
+            {
+                punjabi: "ਮੈਂ Southall ਵਿੱਚ ਰਹਿੰਦਾ ਹਾਂ।",
+                romanized: "Maiṁ Southall vich rahindā hān.",
+                english: "I live in Southall. (male)"
+            },
+            {
+                punjabi: "ਮੈਂ Birmingham ਵਿੱਚ ਰਹਿੰਦੀ ਹਾਂ।",
+                romanized: "Maiṁ Birmingham vich rahindī hān.",
+                english: "I live in Birmingham. (female)"
+            }
+        ],
+        tip: {
+            title: "Pattern Recognition",
+            content: "Notice how 'ਰਹਿੰਦਾ' (rahindā) changes to 'ਰਹਿੰਦੀ' (rahindī) for females."
+        }
+    },
+    {
+        type: "quiz",
+        question: "How do you say 'I am from London' as a girl?",
+        options: [
+            { text: "Maiṁ London ton āī hān", correct: true },
+            { text: "Maiṁ London ton āiā hān", correct: false },
+            { text: "Maiṁ London vich rahindī hān", correct: false }
+        ]
+    },
+    {
+        type: "quiz",
+        question: "Which phrase means 'I live in Birmingham' for a girl?",
+        options: [
+            { text: "Maiṁ Birmingham vich rahindā hān", correct: false },
+            { text: "Maiṁ Birmingham vich rahindī hān", correct: true },
+            { text: "Maiṁ Birmingham ton āī hān", correct: false }
+        ]
+    },
+    {
+        type: "section",
+        title: "What Do You Do?",
+        avatar: "/avatars/avatar5.png",
+        avatarName: "Priya",
+        avatarColor: "pink",
+        content: "Let's learn how to talk about your work or studies.",
+        examples: [
+            {
+                punjabi: "ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ।",
+                romanized: "Maiṁ Heathrow Airport laī kam kardā hān.",
+                english: "I work at Heathrow Airport. (male)"
+            },
+            {
+                punjabi: "ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ।",
+                romanized: "Maiṁ Heathrow Airport laī kam kardī hān.",
+                english: "I work at Heathrow Airport. (female)"
+            },
+            {
+                punjabi: "ਮੈਂ university ਪੜ੍ਹਦਾ ਹਾਂ।",
+                romanized: "Maiṁ university paṛhdā hān.",
+                english: "I study at university. (male)"
+            },
+            {
+                punjabi: "ਮੈਂ university ਪੜ੍ਹਦੀ ਹਾਂ।",
+                romanized: "Maiṁ university paṛhdī hān.",
+                english: "I study at university. (female)"
+            }
+        ],
+        tip: {
+            title: "Key Verbs",
+            content: "ਕੰਮ ਕਰਨਾ (kam karnā) = to work | ਪੜ੍ਹਨਾ (paṛhnā) = to study"
+        }
+    },
+    {
+        type: "quiz",
+        question: "What does 'Maiṁ Heathrow Airport laī kam kardā hān' mean?",
+        options: [
+            { text: "I live at Heathrow Airport.", correct: false },
+            { text: "I study at Heathrow Airport.", correct: false },
+            { text: "I work at Heathrow Airport.", correct: true }
+        ]
+    },
+    {
+        type: "quiz",
+        question: "What is the difference between 'paṛhdā' and 'paṛhdī'?",
+        options: [
+            { text: "They mean different things.", correct: false },
+            { text: "One is for boys, one is for girls.", correct: true },
+            { text: "They are different tenses.", correct: false }
+        ]
+    },
+    {
+        type: "section",
+        title: "Your Family",
+        avatar: "/avatars/avatar6.png",
+        avatarName: "Aman",
+        avatarColor: "blue",
+        content: "Finally, let's learn how to talk about your siblings.",
+        examples: [
+            {
+                punjabi: "ਮੇਰੇ 2 ਵੱਡੇ ਭਰਾ ਅਤੇ 1 ਛੋਟੀ ਭੈਣ ਹਨ।",
+                romanized: "Mere 2 vaḍḍe bhrā atē 1 chhoṭī bhaiṇ han.",
+                english: "I have 2 older brothers and 1 younger sister."
+            },
+            {
+                punjabi: "ਮੇਰਾ 1 ਛੋਟਾ ਭਰਾ ਹੈ।",
+                romanized: "Merā 1 chhoṭā bhrā hai.",
+                english: "I have 1 younger brother."
+            }
+        ],
+        vocabulary: [
+            { punjabi: "ਭਰਾ", romanized: "bhrā", english: "Brother" },
+            { punjabi: "ਭੈਣ", romanized: "bhaiṇ", english: "Sister" },
+            { punjabi: "ਵੱਡਾ/ਵੱਡੀ", romanized: "vaḍḍā/vaḍḍī", english: "Older/Bigger" },
+            { punjabi: "ਛੋਟਾ/ਛੋਟੀ", romanized: "chhoṭā/chhoṭī", english: "Younger/Little" },
+            { punjabi: "ਮੇਰੇ", romanized: "mere", english: "My (plural)" }
+        ]
+    },
+    {
+        type: "quiz",
+        question: "How would you say: 'I have 2 older brothers and 1 younger sister'?",
+        options: [
+            { text: "Mere 2 vaḍḍe bhrā atē 1 chhoṭī bhaiṇ han", correct: true },
+            { text: "Mere 2 chhoṭe bhrā atē 1 vaḍḍī bhaiṇ han", correct: false },
+            { text: "Mere 2 bhrā 1 bhaiṇ han", correct: false }
+        ]
+    },
+    {
+        type: "quiz",
+        question: "What does 'vaḍḍā' mean?",
+        options: [
+            { text: "Younger", correct: false },
+            { text: "Older/Bigger", correct: true },
+            { text: "Brother", correct: false }
+        ]
+    }
+];
 
+export default function Lesson3AboutMe() {
+    const router = useRouter();
+    const [step, setStep] = useState(0);
+    const [quizAnswers, setQuizAnswers] = useState({});
+    const [showFeedback, setShowFeedback] = useState({});
+    const [lessonCompleted, setLessonCompleted] = useState(false);
+    const [userId, setUserId] = useState(null);
+    const current = lessonContent[step];
+
+    // Get user on mount
     useEffect(() => {
-        const fetchUser = async () => {
-            const { data: authData } = await supabase.auth.getUser();
-            if (authData?.user) {
-                const { data: userData } = await supabase
-                    .from("users")
-                    .select("id")
-                    .eq("email", authData.user.email)
-                    .single();
-                setUser(userData);
+        const getUser = async () => {
+            if (supabase) {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    setUserId(user.id);
+                }
             }
         };
-        fetchUser();
+        getUser();
     }, []);
 
-    useEffect(() => {
-        const saveProgress = async () => {
-            if (currentStep === 7 && quizStep === questions.length && score === questions.length && user) {
-                const { data: existing } = await supabase
-                    .from("lesson_progress")
-                    .select("id")
-                    .eq("user_id", user.id)
-                    .eq("lesson_id", "lesson3")
-                    .maybeSingle();
+    // Calculate quiz statistics
+    const quizSteps = lessonContent.reduce((acc, content, index) => {
+        if (content.type === 'quiz') acc.push(index);
+        return acc;
+    }, []);
 
-                if (!existing) {
-                    await supabase.from("lesson_progress").upsert({
-                        user_id: user.id,
-                        lesson_id: "lesson3",
-                        completed: true
-                    });
-                    await supabase.rpc("increment_points", { add_points: 10 });
-                }
-            }
-        };
-        saveProgress();
-    }, [currentStep, quizStep, score, user]);
+    const totalQuizzes = quizSteps.length;
+    const correctAnswers = quizSteps.filter(index => {
+        const answer = quizAnswers[index];
+        return answer !== undefined && lessonContent[index].options[answer]?.correct;
+    }).length;
+    const score = totalQuizzes > 0 ? Math.round((correctAnswers / totalQuizzes) * 100) : 0;
 
-    const handleAnswerSelection = (option) => {
-        setSelectedAnswer(option);
-        if (option === questions[quizStep].correct) {
-            setFeedback("✅ Correct!");
-            setScore(score + 1);
-        } else {
-            setFeedback("❌ Incorrect. The correct answer is: " + questions[quizStep].correct);
+    // Save progress to Supabase
+    const saveProgress = async () => {
+        if (!supabase || !userId) return;
+
+        try {
+            const { error } = await supabase
+                .from('lesson_progress')
+                .upsert({
+                    user_id: userId,
+                    lesson_id: 'lesson-3-about-me',
+                    lesson_name: 'A Bit About Me',
+                    completed: true,
+                    score: score,
+                    completed_at: new Date().toISOString()
+                });
+
+            if (error) throw error;
+        } catch (error) {
+            console.error('Error saving progress:', error);
         }
     };
 
-    const nextQuestion = () => {
-        if (quizStep < questions.length - 1) {
-            setQuizStep(quizStep + 1);
-            setSelectedAnswer(null);
-            setFeedback("");
+    const handleNext = () => {
+        if (step < lessonContent.length - 1) {
+            setStep(step + 1);
         }
     };
 
-    const canProceed = () => {
-        switch(currentStep) {
-            case 0: return true; // Introduction
-            case 1: return name.trim().length > 0; // Name
-            case 2: return age && gender; // Age
-            case 3: return fromCity && gender; // From
-            case 4: return liveCity && gender; // Live
-            case 5: return mode && place && gender; // Work/Study
-            case 6: return true; // Siblings (optional)
-            case 7: return true; // Quiz
-            default: return false;
+    const handlePrevious = () => {
+        if (step > 0) {
+            setStep(step - 1);
         }
     };
 
-    const renderStep = () => {
-        switch(currentStep) {
-            case 0:
-                return (
-                    <div className="animate-fade-in">
-                        {/* Avatars Section */}
-                        <div className="flex justify-center gap-8 mb-10">
-                            <div className="flex flex-col items-center group cursor-pointer transition-transform hover:scale-110">
-                                <div className="relative">
-                                    <Image src="/avatars/avatar6.png" alt="Aman" width={90} height={90} className="rounded-full border-4 border-blue-400 shadow-xl transition-all group-hover:border-blue-500" />
-                                    <div className="absolute -bottom-1 -right-1 bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center shadow-lg">
-                                        <span className="text-xs font-bold">A</span>
-                                    </div>
-                                </div>
-                                <p className="text-sm font-bold text-blue-600 mt-3">Aman</p>
+    const handleQuizAnswer = (optionIndex) => {
+        setQuizAnswers({ ...quizAnswers, [step]: optionIndex });
+        setShowFeedback({ ...showFeedback, [step]: true });
+    };
+
+    const handleComplete = async () => {
+        await saveProgress();
+        setLessonCompleted(true);
+    };
+
+    const renderContent = () => {
+        if (current.type === "intro") {
+            return (
+                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">{current.title}</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">{current.content}</p>
+                    <ul className="space-y-3">
+                        {current.points.map((point, idx) => (
+                            <li key={idx} className="flex items-start gap-3">
+                                <CheckCircle size={20} className="text-blue-600 mt-0.5 flex-shrink-0" />
+                                <span className="text-gray-700">{point}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        if (current.type === "section") {
+            return (
+                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+                    {/* Avatar Header */}
+                    {current.avatar && (
+                        <div className="flex flex-col items-center mb-6">
+                            <div className="relative w-20 h-20">
+                                <Image
+                                    src={current.avatar}
+                                    alt={current.avatarName}
+                                    fill
+                                    className={`rounded-full object-cover border-2 border-${current.avatarColor}-500`}
+                                />
                             </div>
-                            <div className="flex flex-col items-center group cursor-pointer transition-transform hover:scale-110">
-                                <div className="relative">
-                                    <Image src="/avatars/avatar5.png" alt="Priya" width={90} height={90} className="rounded-full border-4 border-pink-400 shadow-xl transition-all group-hover:border-pink-500" />
-                                    <div className="absolute -bottom-1 -right-1 bg-pink-500 text-white rounded-full w-7 h-7 flex items-center justify-center shadow-lg">
-                                        <span className="text-xs font-bold">P</span>
-                                    </div>
-                                </div>
-                                <p className="text-sm font-bold text-pink-600 mt-3">Priya</p>
-                            </div>
-                        </div>
-
-                        {/* Main Heading */}
-                        <div className="text-center mb-6">
-                            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-3">Welcome to 'A Bit About Me'</h1>
-                            <p className="text-lg text-gray-700 leading-relaxed max-w-2xl mx-auto">
-                                In this section, we will teach you how to introduce and talk a little about yourself in Punjabi.
-                            </p>
-                        </div>
-
-                        {/* Learning Points Grid */}
-                        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 sm:p-8 mb-8">
-                            <h3 className="text-xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
-                                <Sparkles className="w-6 h-6 text-yellow-500" />
-                                What You'll Learn
+                            <h3 className={`text-xl font-bold text-${current.avatarColor}-600 mt-2`}>
+                                {current.avatarName} {current.avatarName === "Priya" ? "asks:" : "says:"}
                             </h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {learningPoints.map((point, index) => {
-                                    const Icon = point.icon;
-                                    return (
-                                        <div key={index} className="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all hover:scale-105">
-                                            <div className={`${point.color} bg-opacity-10 rounded-lg p-2 flex-shrink-0`}>
-                                                <Icon className={`w-5 h-5 ${point.color}`} />
-                                            </div>
-                                            <p className="text-sm text-gray-700 font-medium leading-snug pt-1">{point.text}</p>
-                                        </div>
-                                    );
-                                })}
-                            </div>
                         </div>
+                    )}
 
-                        <p className="text-center text-gray-600 mb-8">
-                            To make it easier for you, we will be using Aman and Priya as examples. At the end, you will be able to test your knowledge through a range of interactive exercises.
-                        </p>
-                    </div>
-                );
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">{current.title}</h2>
+                    <p className="text-gray-700 leading-relaxed mb-6">{current.content}</p>
 
-            case 1:
-                return (
-                    <div className="animate-fade-in space-y-6">
-                        <div className="flex flex-col items-center mb-6">
-                            <div className="relative w-20 h-20 mb-3">
-                                <Image src="/avatars/avatar5.png" alt="Priya" fill className="rounded-full object-cover border-4 border-pink-500 shadow-lg" />
-                            </div>
-                            <h2 className="text-xl font-bold text-pink-600">Priya asks:</h2>
-                        </div>
-
-                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center">What's your name?</h3>
-                        <p className="text-gray-600 text-center">Type your name below to learn how to say it in Punjabi!</p>
-
-                        <input
-                            type="text"
-                            value={name}
-                            placeholder="e.g. Aman"
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                        />
-
-                        {name && (
-                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-2 border-blue-200 text-left space-y-2 animate-fade-in">
-                                <p className="text-xl text-gray-800 font-bold">ਮੇਰਾ ਨਾਮ {name} ਹੈ।</p>
-                                <p className="text-base italic text-gray-700">Mera naam {name} hai.</p>
-                                <p className="text-sm text-gray-600">My name is {name}.</p>
-                            </div>
-                        )}
-                    </div>
-                );
-
-            case 2:
-                return (
-                    <div className="animate-fade-in space-y-6">
-                        <div className="flex flex-col items-center mb-6">
-                            <div className="relative w-20 h-20 mb-3">
-                                <Image src="/avatars/avatar6.png" alt="Aman" fill className="rounded-full object-cover border-4 border-blue-500 shadow-lg" />
-                            </div>
-                            <h2 className="text-xl font-bold text-blue-600">Aman says:</h2>
-                        </div>
-
-                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center">How old are you?</h3>
-                        <div className="bg-blue-50 p-4 rounded-xl text-center">
-                            <p className="text-gray-700">Someone might ask:</p>
-                            <p className="font-bold text-lg mt-1">Tuhāḍī umar kinnī hai?</p>
-                            <p className="text-sm text-gray-600">ਤੁਹਾਡੀ ਉਮਰ ਕਿੰਨੀ ਹੈ?</p>
-                        </div>
-
-                        <input
-                            type="number"
-                            min="1"
-                            max="120"
-                            placeholder="Enter your age"
-                            value={age}
-                            onChange={(e) => setAge(e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                        />
-
-                        <div className="flex gap-4 justify-center">
-                            <label className="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-blue-400 transition">
-                                <input type="radio" name="gender" value="male" checked={gender === "male"} onChange={(e) => setGender(e.target.value)} className="w-4 h-4" />
-                                <span className="font-medium">Male</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-pink-400 transition">
-                                <input type="radio" name="gender" value="female" checked={gender === "female"} onChange={(e) => setGender(e.target.value)} className="w-4 h-4" />
-                                <span className="font-medium">Female</span>
-                            </label>
-                        </div>
-
-                        {age && gender && (
-                            <div className="space-y-4 animate-fade-in">
-                                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-2 border-blue-200 text-left space-y-2">
-                                    <p className="text-xl font-bold text-gray-800">
-                                        {gender === "male" ? `ਮੈਂ ${age} ਸਾਲਾਂ ਦਾ ਹਾਂ।` : `ਮੈਂ ${age} ਸਾਲਾਂ ਦੀ ਹਾਂ।`}
-                                    </p>
-                                    <p className="text-base italic text-gray-700">
-                                        {gender === "male" ? `Main ${age} saalan da haan.` : `Main ${age} saalan di haan.`}
-                                    </p>
-                                    <p className="text-sm text-gray-600">I am {age} years old.</p>
+                    {/* Examples */}
+                    {current.examples && (
+                        <div className="space-y-4 mb-6">
+                            {current.examples.map((example, idx) => (
+                                <div key={idx} className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                    <p className="text-lg font-semibold text-gray-800 mb-1">{example.punjabi}</p>
+                                    <p className="text-sm italic text-gray-600 mb-1">{example.romanized}</p>
+                                    <p className="text-sm text-gray-500">{example.english}</p>
                                 </div>
-
-                                <div className="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 text-sm text-left">
-                                    <p className="font-bold mb-2">💡 Tip:</p>
-                                    <p>Use <span className="font-bold text-blue-600">"ਦਾ"</span> if you're a boy and <span className="font-bold text-pink-600">"ਦੀ"</span> if you're a girl.</p>
-                                    <p className="mt-3 font-semibold text-blue-700">📚 Check out the 'Numbers Chart' in Learning Resources!</p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                );
-
-            case 3:
-                return (
-                    <div className="animate-fade-in space-y-6">
-                        <div className="flex flex-col items-center mb-6">
-                            <div className="relative w-20 h-20 mb-3">
-                                <Image src="/avatars/avatar5.png" alt="Priya" fill className="rounded-full object-cover border-4 border-pink-500 shadow-lg" />
-                            </div>
-                            <h2 className="text-xl font-bold text-pink-600">Priya asks:</h2>
+                            ))}
                         </div>
+                    )}
 
-                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center">Where are you from?</h3>
-
-                        <input
-                            type="text"
-                            value={fromCity}
-                            placeholder="e.g. London"
-                            onChange={(e) => setFromCity(e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                        />
-
-                        {!gender && (
-                            <div className="flex gap-4 justify-center">
-                                <label className="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-blue-400 transition">
-                                    <input type="radio" name="gender2" value="male" onChange={(e) => setGender(e.target.value)} className="w-4 h-4" />
-                                    <span className="font-medium">Male</span>
-                                </label>
-                                <label className="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-pink-400 transition">
-                                    <input type="radio" name="gender2" value="female" onChange={(e) => setGender(e.target.value)} className="w-4 h-4" />
-                                    <span className="font-medium">Female</span>
-                                </label>
-                            </div>
-                        )}
-
-                        {fromCity && gender && (
-                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-2 border-blue-200 text-left space-y-2 animate-fade-in">
-                                <p className="text-xl font-bold text-gray-800">
-                                    {gender === "male" ? `ਮੈਂ ${fromCity} ਤੋਂ ਆਇਆ ਹਾਂ।` : `ਮੈਂ ${fromCity} ਤੋਂ ਆਈ ਹਾਂ।`}
-                                </p>
-                                <p className="text-base italic text-gray-700">
-                                    {gender === "male" ? `Main ${fromCity} ton āiā haan.` : `Main ${fromCity} ton āī haan.`}
-                                </p>
-                                <p className="text-sm text-gray-600">I am from {fromCity}.</p>
-                            </div>
-                        )}
-                    </div>
-                );
-
-            case 4:
-                return (
-                    <div className="animate-fade-in space-y-6">
-                        <div className="flex flex-col items-center mb-6">
-                            <div className="relative w-20 h-20 mb-3">
-                                <Image src="/avatars/avatar6.png" alt="Aman" fill className="rounded-full object-cover border-4 border-blue-500 shadow-lg" />
-                            </div>
-                            <h2 className="text-xl font-bold text-blue-600">Aman asks:</h2>
-                        </div>
-
-                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center">Where do you live now?</h3>
-
-                        <input
-                            type="text"
-                            value={liveCity}
-                            placeholder="e.g. Birmingham"
-                            onChange={(e) => setLiveCity(e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                        />
-
-                        {liveCity && gender && (
-                            <div className="space-y-4 animate-fade-in">
-                                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-2 border-blue-200 text-left space-y-2">
-                                    <p className="text-xl font-bold text-gray-800">
-                                        {gender === "male" ? `ਮੈਂ ${liveCity} ਵਿੱਚ ਰਹਿੰਦਾ ਹਾਂ।` : `ਮੈਂ ${liveCity} ਵਿੱਚ ਰਹਿੰਦੀ ਹਾਂ।`}
-                                    </p>
-                                    <p className="text-base italic text-gray-700">
-                                        {gender === "male" ? `Main ${liveCity} vich rahindā haan.` : `Main ${liveCity} vich rahindī haan.`}
-                                    </p>
-                                    <p className="text-sm text-gray-600">I live in {liveCity}.</p>
-                                </div>
-
-                                <div className="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 text-sm text-left">
-                                    <p className="font-bold mb-2">📖 Examples:</p>
-                                    <ul className="space-y-2">
-                                        <li>Aman: <span className="font-bold">ਮੈਂ Southall ਵਿੱਚ ਰਹਿੰਦਾ ਹਾਂ।</span></li>
-                                        <li>Priya: <span className="font-bold">ਮੈਂ Birmingham ਵਿੱਚ ਰਹਿੰਦੀ ਹਾਂ।</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                );
-
-            case 5:
-                return (
-                    <div className="animate-fade-in space-y-6">
-                        <div className="flex flex-col items-center mb-6">
-                            <div className="relative w-20 h-20 mb-3">
-                                <Image src="/avatars/avatar5.png" alt="Priya" fill className="rounded-full object-cover border-4 border-pink-500 shadow-lg" />
-                            </div>
-                            <h2 className="text-xl font-bold text-pink-600">Priya asks:</h2>
-                        </div>
-
-                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center">Where do you study or work?</h3>
-
-                        <div className="flex gap-4 justify-center">
-                            <label className="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-blue-400 transition">
-                                <input type="radio" name="mode" value="study" checked={mode === "study"} onChange={() => setMode("study")} className="w-4 h-4" />
-                                <span className="font-medium">Study</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-orange-400 transition">
-                                <input type="radio" name="mode" value="work" checked={mode === "work"} onChange={() => setMode("work")} className="w-4 h-4" />
-                                <span className="font-medium">Work</span>
-                            </label>
-                        </div>
-
-                        <input
-                            type="text"
-                            placeholder="e.g. Heathrow Airport"
-                            value={place}
-                            onChange={(e) => setPlace(e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                        />
-
-                        {!gender && (
-                            <div className="flex gap-4 justify-center">
-                                <label className="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-blue-400 transition">
-                                    <input type="radio" name="gender3" value="male" onChange={(e) => setGender(e.target.value)} className="w-4 h-4" />
-                                    <span className="font-medium">Male</span>
-                                </label>
-                                <label className="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-pink-400 transition">
-                                    <input type="radio" name="gender3" value="female" onChange={(e) => setGender(e.target.value)} className="w-4 h-4" />
-                                    <span className="font-medium">Female</span>
-                                </label>
-                            </div>
-                        )}
-
-                        {place && gender && mode && (
-                            <div className="space-y-4 animate-fade-in">
-                                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-2 border-blue-200 text-left space-y-2">
-                                    <p className="text-xl font-bold text-gray-800">
-                                        {mode === "study"
-                                            ? gender === "male" ? `ਮੈਂ ${place} ਪੜ੍ਹਦਾ ਹਾਂ।` : `ਮੈਂ ${place} ਪੜ੍ਹਦੀ ਹਾਂ।`
-                                            : gender === "male" ? `ਮੈਂ ${place} ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ।` : `ਮੈਂ ${place} ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ।`
-                                        }
-                                    </p>
-                                    <p className="text-base italic text-gray-700">
-                                        {mode === "study"
-                                            ? gender === "male" ? `Main ${place} paṛhdā hāṁ.` : `Main ${place} paṛhdī hāṁ.`
-                                            : gender === "male" ? `Main ${place} laī kam kardā hāṁ.` : `Main ${place} laī kam kardī hāṁ.`
-                                        }
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                        {mode === "study" ? `I study at ${place}.` : `I work at ${place}.`}
-                                    </p>
-                                </div>
-
-                                <div className="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 text-sm text-left">
-                                    <p className="font-bold mb-2">📖 Example:</p>
-                                    <p>Aman: <span className="font-bold">ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ।</span></p>
-                                    <p className="mt-1">Priya: <span className="font-bold">ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ।</span></p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                );
-
-            case 6:
-                return (
-                    <div className="animate-fade-in space-y-6">
-                        <div className="flex flex-col items-center mb-6">
-                            <div className="relative w-20 h-20 mb-3">
-                                <Image src="/avatars/avatar6.png" alt="Aman" fill className="rounded-full object-cover border-4 border-blue-500 shadow-lg" />
-                            </div>
-                            <h2 className="text-xl font-bold text-blue-600">Aman asks:</h2>
-                        </div>
-
-                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center">Tell us about your siblings</h3>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Older Brothers</label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    value={olderBrothers}
-                                    onChange={(e) => setOlderBrothers(e.target.value)}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Younger Sisters</label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    value={youngerSisters}
-                                    onChange={(e) => setYoungerSisters(e.target.value)}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                                />
-                            </div>
-                        </div>
-
-                        {(olderBrothers > 0 || youngerSisters > 0) && (
-                            <div className="space-y-4 animate-fade-in">
-                                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-2 border-blue-200 text-left space-y-2">
-                                    <p className="text-xl font-bold text-gray-800">
-                                        ਮੇਰੇ {olderBrothers} ਵੱਡੇ ਭਰਾ ਅਤੇ {youngerSisters} ਛੋਟੀ ਭੈਣ ਹਨ।
-                                    </p>
-                                    <p className="text-base italic text-gray-700">
-                                        Mere {olderBrothers} vaḍḍe bhrā atē {youngerSisters} chhoṭī bhaiṇ han.
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                        I have {olderBrothers} older brother(s) and {youngerSisters} younger sister(s).
-                                    </p>
-                                </div>
-
-                                <div className="bg-yellow-50 p-4 rounded-xl border-2 border-yellow-200 text-sm text-left">
-                                    <p className="font-bold mb-2">📚 Vocabulary:</p>
-                                    <ul className="space-y-1">
-                                        <li>Brother - <span className="font-bold">ਭਰਾ (bhrā)</span></li>
-                                        <li>Sister - <span className="font-bold">ਭੈਣ (bhaiṇ)</span></li>
-                                        <li>Older - <span className="font-bold">ਵੱਡਾ (vaḍḍā)</span></li>
-                                        <li>Younger - <span className="font-bold">ਛੋਟੀ (chhoṭī)</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                );
-
-            case 7:
-                if (quizStep < questions.length) {
-                    return (
-                        <div className="animate-fade-in space-y-6">
-                            <div className="text-center mb-6">
-                                <h2 className="text-3xl font-bold text-gray-800 mb-2">Test Your Knowledge!</h2>
-                                <p className="text-gray-600">Question {quizStep + 1} of {questions.length}</p>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-6 rounded-2xl border-2 border-purple-200">
-                                <p className="text-xl font-semibold text-gray-800 text-center">{questions[quizStep].question}</p>
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-3">
-                                {questions[quizStep].options.map((option, index) => (
-                                    <button
-                                        key={index}
-                                        className={`p-4 rounded-xl border-2 transition-all text-left font-medium ${
-                                            selectedAnswer === option
-                                                ? option === questions[quizStep].correct
-                                                    ? "bg-green-100 border-green-500 text-green-800"
-                                                    : "bg-red-100 border-red-500 text-red-800"
-                                                : "bg-white border-gray-300 hover:border-blue-400 hover:bg-blue-50"
-                                        }`}
-                                        onClick={() => handleAnswerSelection(option)}
-                                        disabled={selectedAnswer !== null}
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <span>{option}</span>
-                                            {selectedAnswer === option && (
-                                                option === questions[quizStep].correct ?
-                                                    <CheckCircle className="w-5 h-5 text-green-600" /> :
-                                                    <XCircle className="w-5 h-5 text-red-600" />
-                                            )}
-                                        </div>
-                                    </button>
+                    {/* Vocabulary Table */}
+                    {current.vocabulary && (
+                        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-300 mb-6">
+                            <p className="font-bold text-gray-800 mb-3">Vocabulary Breakdown:</p>
+                            <div className="space-y-2">
+                                {current.vocabulary.map((item, idx) => (
+                                    <div key={idx} className="flex items-start gap-2">
+                                        <span className="font-semibold text-gray-800">{item.punjabi}</span>
+                                        <span className="text-gray-600">({item.romanized})</span>
+                                        <span className="text-gray-500">- {item.english}</span>
+                                    </div>
                                 ))}
                             </div>
+                        </div>
+                    )}
 
-                            {feedback && (
-                                <div className={`p-4 rounded-xl border-2 animate-fade-in ${
-                                    feedback.includes("Correct")
-                                        ? "bg-green-50 border-green-300 text-green-800"
-                                        : "bg-red-50 border-red-300 text-red-800"
-                                }`}>
-                                    <p className="font-semibold">{feedback}</p>
-                                </div>
+                    {/* Tip Box */}
+                    {current.tip && (
+                        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-300">
+                            <p className="font-bold text-gray-800 mb-2">{current.tip.title}:</p>
+                            <p className="text-gray-700">{current.tip.content}</p>
+                            {current.tip.reference && (
+                                <p className="text-blue-700 font-semibold mt-2">💡 {current.tip.reference}</p>
                             )}
+                        </div>
+                    )}
 
-                            {selectedAnswer && (
+                    {/* Note */}
+                    {current.note && (
+                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mt-4">
+                            <p className="text-sm text-gray-700 italic">{current.note}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        if (current.type === "quiz") {
+            const userAnswer = quizAnswers[step];
+            const showResult = showFeedback[step];
+            const isCorrect = userAnswer !== undefined && current.options[userAnswer]?.correct;
+
+            return (
+                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="bg-blue-100 p-3 rounded-full">
+                            <Trophy size={24} className="text-blue-600" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-800">Quick Check</h2>
+                    </div>
+
+                    <p className="text-lg text-gray-700 mb-6">{current.question}</p>
+
+                    <div className="space-y-3">
+                        {current.options.map((option, idx) => {
+                            const isSelected = userAnswer === idx;
+                            const showCorrect = showResult && option.correct;
+                            const showIncorrect = showResult && isSelected && !option.correct;
+
+                            return (
                                 <button
-                                    onClick={nextQuestion}
-                                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4 rounded-xl text-lg font-bold hover:from-blue-600 hover:to-blue-700 transition-all hover:scale-105 shadow-lg"
+                                    key={idx}
+                                    onClick={() => !showResult && handleQuizAnswer(idx)}
+                                    disabled={showResult}
+                                    className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                                        showCorrect
+                                            ? 'bg-green-50 border-green-500'
+                                            : showIncorrect
+                                                ? 'bg-red-50 border-red-500'
+                                                : isSelected
+                                                    ? 'bg-blue-50 border-blue-500'
+                                                    : 'bg-white border-gray-300 hover:border-blue-400'
+                                    } ${showResult ? 'cursor-default' : 'cursor-pointer'}`}
                                 >
-                                    {quizStep < questions.length - 1 ? "Next Question" : "See Results"}
-                                    <ArrowRight className="inline ml-2 w-5 h-5" />
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-gray-800">{option.text}</span>
+                                        {showCorrect && <CheckCircle size={20} className="text-green-600" />}
+                                        {showIncorrect && <X size={20} className="text-red-600" />}
+                                    </div>
                                 </button>
+                            );
+                        })}
+                    </div>
+
+                    {showResult && (
+                        <div className={`mt-6 p-4 rounded-lg ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                            <p className={`font-semibold ${isCorrect ? 'text-green-800' : 'text-red-800'}`}>
+                                {isCorrect ? '✅ Correct!' : '❌ Incorrect'}
+                            </p>
+                            {!isCorrect && (
+                                <p className="text-sm text-gray-700 mt-2">
+                                    The correct answer is: <strong>{current.options.find(o => o.correct)?.text}</strong>
+                                </p>
                             )}
                         </div>
-                    );
-                } else {
-                    return (
-                        <div className="animate-fade-in space-y-6 text-center">
-                            <div className="bg-gradient-to-br from-green-100 to-blue-100 p-8 rounded-2xl border-2 border-green-300">
-                                <h2 className="text-3xl font-bold text-gray-800 mb-4">🎉 Quiz Completed!</h2>
-                                <p className="text-2xl font-bold text-green-600 mb-2">
-                                    Score: {score} / {questions.length}
-                                </p>
-                                {score === questions.length ? (
-                                    <p className="text-xl text-green-700 font-semibold">Perfect! You mastered this lesson! 🌟</p>
-                                ) : score >= questions.length / 2 ? (
-                                    <p className="text-xl text-yellow-700 font-semibold">Good job! Keep practicing! 👍</p>
-                                ) : (
-                                    <p className="text-xl text-orange-700 font-semibold">Keep trying! Review the lesson and try again. 💪</p>
-                                )}
-                            </div>
-
-                            <button
-                                onClick={() => {
-                                    setQuizStep(0);
-                                    setScore(0);
-                                    setSelectedAnswer(null);
-                                    setFeedback("");
-                                }}
-                                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-4 rounded-xl text-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-all hover:scale-105 shadow-lg"
-                            >
-                                🔄 Retry Quiz
-                            </button>
-
-                            <button
-                                onClick={() => router.push("/learning/essential-punjabi")}
-                                className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-4 rounded-xl text-lg font-bold hover:from-green-600 hover:to-green-700 transition-all hover:scale-105 shadow-lg"
-                            >
-                                Continue to Next Lesson
-                                <ArrowRight className="inline ml-2 w-5 h-5" />
-                            </button>
-                        </div>
-                    );
-                }
-
-            default:
-                return null;
+                    )}
+                </div>
+            );
         }
     };
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 px-4 sm:px-6 pt-24 sm:pt-32 pb-20">
-            {/* Background Decorations */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-                <div className="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-                <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+    const CompletionSummary = () => {
+        return (
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+                {/* Success Header */}
+                <div className="text-center mb-8">
+                    <div className="inline-block bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-full mb-4">
+                        <Award size={48} className="text-white" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-gray-800 mb-2">Lesson Complete! 🎉</h2>
+                    <p className="text-lg text-gray-600">
+                        You've completed <strong>A Bit About Me</strong>
+                    </p>
+                </div>
+
+                {/* Score Display */}
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 mb-6">
+                    <div className="text-center">
+                        <p className="text-sm text-gray-600 mb-2">Your Quiz Score</p>
+                        <div className="text-5xl font-bold text-blue-600 mb-2">{score}%</div>
+                        <p className="text-gray-700">
+                            {correctAnswers} out of {totalQuizzes} questions correct
+                        </p>
+                    </div>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="bg-gray-50 rounded-lg p-4 text-center">
+                        <div className="text-2xl font-bold text-blue-600 mb-1">{totalQuizzes}</div>
+                        <p className="text-xs text-gray-600">Total Questions</p>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-4 text-center">
+                        <div className="text-2xl font-bold text-green-600 mb-1">{correctAnswers}</div>
+                        <p className="text-xs text-gray-600">Correct</p>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-4 text-center">
+                        <div className="text-2xl font-bold text-orange-600 mb-1">{totalQuizzes - correctAnswers}</div>
+                        <p className="text-xs text-gray-600">Incorrect</p>
+                    </div>
+                </div>
+
+                {/* Progress Saved Message */}
+                {supabase && userId && (
+                    <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded-r mb-6">
+                        <div className="flex items-center gap-2">
+                            <CheckCircle size={18} className="text-green-600" />
+                            <p className="text-sm text-gray-800 font-medium">Progress saved to your profile</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="space-y-3">
+                    <button
+                        onClick={() => router.push("/lessons/lesson4/1")}
+                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm"
+                    >
+                        <span>Continue to Next Lesson</span>
+                        <ArrowRight size={18} />
+                    </button>
+                    <button
+                        onClick={() => {
+                            setStep(0);
+                            setQuizAnswers({});
+                            setShowFeedback({});
+                            setLessonCompleted(false);
+                        }}
+                        className="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm"
+                    >
+                        <RotateCcw size={18} />
+                        <span>Review Lesson</span>
+                    </button>
+                    <button
+                        onClick={() => router.push("/learning/essential-punjabi")}
+                        className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm border border-gray-300"
+                    >
+                        <ArrowLeft size={18} />
+                        <span>Back to Lessons</span>
+                    </button>
+                </div>
             </div>
+        );
+    };
 
-            <div className="max-w-4xl mx-auto relative">
-                {/* Header Badge */}
-                <div className="text-center mb-8 animate-fade-in">
-                    <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-blue-100">
-                        <GraduationCap className="w-5 h-5 text-blue-500" />
-                        <span className="text-sm font-semibold text-gray-700">Lesson 3: Introductions</span>
+    if (lessonCompleted) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-28 pb-12">
+                <div className="max-w-3xl mx-auto">
+                    <CompletionSummary />
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-28 pb-12">
+            <div className="max-w-3xl mx-auto">
+                {/* Back Button */}
+                <button
+                    onClick={() => router.push("/learning/essential-punjabi")}
+                    className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors text-sm"
+                >
+                    <ArrowLeft size={18} />
+                    <span>Back to Lessons</span>
+                </button>
+
+                {/* Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
+                    <div className="flex items-center gap-2 mb-2">
+                        <User size={18} />
+                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 3: Self Introduction</span>
                     </div>
+                    <h1 className="text-3xl font-bold mb-2">
+                        A Bit About Me
+                    </h1>
+                    <p className="text-base text-blue-100">
+                        Learn how to introduce yourself in Punjabi
+                    </p>
                 </div>
 
-                {/* Main Content Card */}
-                <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 sm:p-12 border border-white/20">
-                    {renderStep()}
-
-                    {/* Navigation Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                        {currentStep > 0 && (
-                            <button
-                                onClick={() => {
-                                    setCurrentStep(currentStep - 1);
-                                    setSelectedAnswer(null);
-                                    setFeedback("");
-                                }}
-                                className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all"
-                            >
-                                <ArrowLeft className="w-5 h-5" />
-                                Previous
-                            </button>
-                        )}
-
-                        {currentStep < 7 && (
-                            <button
-                                onClick={() => setCurrentStep(currentStep + 1)}
-                                disabled={!canProceed()}
-                                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
-                                    canProceed()
-                                        ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 hover:scale-105 shadow-lg"
-                                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                }`}
-                            >
-                                {currentStep === 0 ? "Let's Begin" : "Continue"}
-                                <ArrowRight className="w-5 h-5" />
-                            </button>
-                        )}
+                {/* Progress Bar */}
+                <div className="bg-white rounded-xl shadow p-4 mb-6 border border-gray-200">
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-semibold text-gray-700">Lesson Progress</span>
+                        <span className="text-sm font-bold text-blue-600">
+                            {step + 1} / {lessonContent.length}
+                        </span>
                     </div>
-                </div>
-
-                {/* Progress Indicator */}
-                <div className="flex justify-center gap-2 mt-8 animate-fade-in">
-                    {[0, 1, 2, 3, 4, 5, 6, 7].map((index) => (
+                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                         <div
-                            key={index}
-                            className={`h-2 rounded-full transition-all duration-300 ${
-                                index === currentStep
-                                    ? "w-8 bg-blue-500"
-                                    : index < currentStep
-                                        ? "w-2 bg-green-500"
-                                        : "w-2 bg-gray-300"
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 h-full transition-all duration-500"
+                            style={{ width: `${((step + 1) / lessonContent.length) * 100}%` }}
+                        ></div>
+                    </div>
+                </div>
+
+                {/* Main Content */}
+                <div className="mb-6">
+                    {renderContent()}
+                </div>
+
+                {/* Progress Dots */}
+                <div className="flex justify-center gap-1.5 mb-6">
+                    {lessonContent.map((_, idx) => (
+                        <div
+                            key={idx}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                idx === step
+                                    ? 'bg-blue-600 w-6'
+                                    : idx < step
+                                        ? 'bg-blue-400'
+                                        : 'bg-gray-300'
                             }`}
-                        />
+                        ></div>
                     ))}
                 </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex gap-3">
+                    <button
+                        onClick={handlePrevious}
+                        disabled={step === 0}
+                        className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all text-sm ${
+                            step === 0
+                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                    >
+                        <ArrowLeft size={18} />
+                        <span>Previous</span>
+                    </button>
+
+                    {step < lessonContent.length - 1 ? (
+                        <button
+                            onClick={handleNext}
+                            disabled={current.type === 'quiz' && !showFeedback[step]}
+                            className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all text-sm ${
+                                current.type === 'quiz' && !showFeedback[step]
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
+                            }`}
+                        >
+                            <span>Next</span>
+                            <ArrowRight size={18} />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleComplete}
+                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all text-sm"
+                        >
+                            <span>Complete Lesson</span>
+                            <CheckCircle size={18} />
+                        </button>
+                    )}
+                </div>
             </div>
-
-            <style jsx>{`
-                @keyframes fade-in {
-                    from {
-                        opacity: 0;
-                        transform: translateY(10px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                @keyframes blob {
-                    0%, 100% {
-                        transform: translate(0, 0) scale(1);
-                    }
-                    33% {
-                        transform: translate(30px, -50px) scale(1.1);
-                    }
-                    66% {
-                        transform: translate(-20px, 20px) scale(0.9);
-                    }
-                }
-
-                .animate-fade-in {
-                    animation: fade-in 0.6s ease-out forwards;
-                }
-
-                .animate-blob {
-                    animation: blob 7s infinite;
-                }
-
-                .animation-delay-2000 {
-                    animation-delay: 2000ms;
-                }
-
-                .animation-delay-4000 {
-                    animation-delay: 4000ms;
-                }
-            `}</style>
         </div>
     );
 }
