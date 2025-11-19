@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { FaGraduationCap, FaUser, FaTrophy, FaFire, FaChartLine, FaBook, FaClock, FaStar } from "react-icons/fa";
+import { FaGraduationCap, FaUser, FaTrophy, FaFire, FaChartLine, FaBook } from "react-icons/fa";
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -49,14 +49,6 @@ export default function Dashboard() {
         );
     }
 
-    // Mock data - replace with real data from your database
-    const stats = {
-        streak: 7,
-        lessonsCompleted: 24,
-        hoursLearned: 12,
-        currentLevel: "Beginner"
-    };
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
             <div className="max-w-7xl mx-auto">
@@ -66,21 +58,13 @@ export default function Dashboard() {
                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
                         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
 
-                        <div className="relative z-10">
+                        <div className="relative z-10 text-center">
                             <h1 className="text-4xl sm:text-5xl font-bold mb-3">
                                 Welcome back, {userName}! 👋
                             </h1>
-                            <p className="text-xl text-blue-50 mb-6">
+                            <p className="text-xl text-blue-50">
                                 Ready to continue your Punjabi learning journey?
                             </p>
-
-                            {/* Quick Stats Bar */}
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-                                <StatBadge icon={<FaFire />} value={stats.streak} label="Day Streak" />
-                                <StatBadge icon={<FaBook />} value={stats.lessonsCompleted} label="Lessons" />
-                                <StatBadge icon={<FaClock />} value={`${stats.hoursLearned}h`} label="Practice Time" />
-                                <StatBadge icon={<FaStar />} value={stats.currentLevel} label="Level" isText />
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,10 +125,10 @@ export default function Dashboard() {
                         </div>
                         <div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                Keep Your Streak Going!
+                                Ready to Learn Today?
                             </h3>
                             <p className="text-gray-600">
-                                You're on a {stats.streak}-day streak! Complete today's lesson to maintain your momentum and reach new heights.
+                                Start your lesson and take another step towards mastering Punjabi. Every day brings you closer to fluency!
                             </p>
                             <button
                                 onClick={() => router.push("/learning")}
@@ -156,18 +140,6 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-        </div>
-    );
-}
-
-function StatBadge({ icon, value, label, isText = false }) {
-    return (
-        <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
-            <div className="flex items-center justify-center gap-2 mb-1">
-                <span className="text-2xl">{icon}</span>
-                <span className={`font-bold ${isText ? 'text-lg' : 'text-2xl'}`}>{value}</span>
-            </div>
-            <p className="text-sm text-blue-100 font-medium">{label}</p>
         </div>
     );
 }

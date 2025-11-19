@@ -82,7 +82,7 @@ export default function LearningHub() {
                             link="/learning/essential-punjabi"
                             gradient="from-green-500 to-green-700"
                             accentColor="green"
-
+                            stats={{ lessons: "6",  }}
                         />
                         <LearningPathCard
                             icon={<FaMicrophone className="text-5xl" />}
@@ -93,7 +93,7 @@ export default function LearningHub() {
                             link="/learning/speak-with-confidence"
                             gradient="from-blue-500 to-blue-700"
                             accentColor="blue"
-
+                            stats={{ lessons: "6", }}
                         />
                         <LearningPathCard
                             icon={<FaAward className="text-5xl" />}
@@ -104,7 +104,7 @@ export default function LearningHub() {
                             link="/learning/master-punjabi"
                             gradient="from-purple-500 to-purple-700"
                             accentColor="purple"
-
+                            stats={{ lessons: "6",  }}
                         />
                     </div>
                 </div>

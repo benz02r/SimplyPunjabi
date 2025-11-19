@@ -56,7 +56,7 @@ export default function SignupSuccess() {
                                 </h3>
                                 <p className="text-blue-800 text-sm leading-relaxed">
                                     We've sent a verification link to your email address.
-                                    Please check your inbox and click the link to verify your account.
+                                    Please check your inbox or spam and click the link to verify your account.
                                 </p>
                             </div>
                         </div>
@@ -81,7 +81,7 @@ export default function SignupSuccess() {
                             </li>
                             <li className="flex items-center gap-2">
                                 <span className="text-gray-400">•</span>
-                                Wait a few minutes and refresh your inbox
+                                Wait a few minutes and refresh your inbox and check your spam or junk
                             </li>
                         </ul>
                     </div>
