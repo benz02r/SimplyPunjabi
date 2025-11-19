@@ -12,12 +12,12 @@ export default function MasterPunjabiConversations() {
     const router = useRouter();
 
     const lessons = [
-        { id: "lesson1", title: "Fix the Top 3 Mistakes", description: "Common errors English speakers make", link: "/gamified/lessons/common-mistakes", locked: true, duration: "20 min" },
-        { id: "lesson2", title: "Think in Punjabi", description: "The secret to natural fluency", link: "/gamified/lessons/think-in-punjabi", locked: true, duration: "18 min" },
-        { id: "lesson3", title: "Tell Great Stories", description: "Master storytelling in Punjabi", link: "/lesson/storytelling-in-punjabi", locked: true, duration: "22 min" },
-        { id: "lesson4", title: "Deep Conversations", description: "Express complex thoughts and emotions", link: "/lesson/deep-conversations", locked: true, duration: "25 min" },
-        { id: "lesson5", title: "Idioms & Local Phrases", description: "Sound like a native speaker", link: "/lesson/punjabi-idioms", locked: true, duration: "20 min" },
-        { id: "lesson6", title: "Handle Disagreements", description: "Navigate arguments respectfully", link: "/lesson/arguing-politely", locked: true, duration: "18 min" },
+        { id: "lesson1", title: "Fix the Top 3 Mistakes", description: "Common errors English speakers make", link: "/gamified/lessons/common-mistakes", locked: true,  },
+        { id: "lesson2", title: "Think in Punjabi", description: "The secret to natural fluency", link: "/gamified/lessons/think-in-punjabi", locked: true, },
+        { id: "lesson3", title: "Tell Great Stories", description: "Master storytelling in Punjabi", link: "/lesson/storytelling-in-punjabi", locked: true, },
+        { id: "lesson4", title: "Deep Conversations", description: "Express complex thoughts and emotions", link: "/lesson/deep-conversations", locked: true, },
+        { id: "lesson5", title: "Idioms & Local Phrases", description: "Sound like a native speaker", link: "/lesson/punjabi-idioms", locked: true,  },
+        { id: "lesson6", title: "Handle Disagreements", description: "Navigate arguments respectfully", link: "/lesson/arguing-politely", locked: true, },
     ];
 
     useEffect(() => {

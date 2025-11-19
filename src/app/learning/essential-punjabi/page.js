@@ -12,12 +12,12 @@ export default function EssentialPunjabi() {
     const router = useRouter();
 
     const lessons = [
-        { id: "lesson1", title: "What Is Punjabi?", description: "Discover the language and its rich history", link: "/lessons/lesson1/1", locked: false, duration: "10 min" },
-        { id: "lesson2", title: "Learn Punjabi Greetings", description: "Essential phrases for everyday interactions", link: "/lessons/lesson2/1", locked: false, duration: "15 min" },
-        { id: "lesson3", title: "A Bit About Me", description: "Introduce yourself in Punjabi", link: "/lessons/lesson3/1", locked: false, duration: "12 min" },
-        { id: "lesson4", title: "Family And Friends", description: "Talk about your loved ones", link: "/lessons/lesson4", locked: false, duration: "18 min" },
-        { id: "lesson5", title: "Back To Basics", description: "Master fundamental concepts", link: "/lessons/lesson5", locked: false, duration: "20 min" },
-        { id: "lesson6", title: "Making It Easy & Top Tips", description: "Pro strategies for learning success", link: "/lessons/lesson14/1", locked: true, duration: "15 min" },
+        { id: "lesson1", title: "What Is Punjabi?", description: "Discover the language and its rich history", link: "/lessons/lesson1/1", locked: false, },
+        { id: "lesson2", title: "Learn Punjabi Greetings", description: "Essential phrases for everyday interactions", link: "/lessons/lesson2/1", locked: false, },
+        { id: "lesson3", title: "A Bit About Me", description: "Introduce yourself in Punjabi", link: "/lessons/lesson3/1", locked: false, },
+        { id: "lesson4", title: "Family And Friends", description: "Talk about your loved ones", link: "/lessons/lesson4", locked: false, },
+        { id: "lesson5", title: "Back To Basics", description: "Master fundamental concepts", link: "/lessons/lesson5", locked: false,  },
+        { id: "lesson6", title: "Making It Easy & Top Tips", description: "Pro strategies for learning success", link: "/lessons/lesson14/1", locked: true,  },
     ];
 
     useEffect(() => {

@@ -12,12 +12,12 @@ export default function SpeakWithConfidence() {
     const router = useRouter();
 
     const lessons = [
-        { id: "lesson1", title: "Telling The Time", description: "Master time expressions in Punjabi", link: "/gamified/lessons/conversation-flow", locked: true, duration: "15 min" },
-        { id: "lesson2", title: "How To Get From A To B", description: "Navigate and give directions confidently", link: "/gamified/lessons/expressing-feelings", locked: true, duration: "18 min" },
-        { id: "lesson3", title: "Daily Routine", description: "Describe your everyday activities", link: "/gamified/lessons/healthy-living", locked: true, duration: "20 min" },
-        { id: "lesson4", title: "Expressing Yourself", description: "Share your thoughts and feelings", link: "/gamified/lessons/daily-routine", locked: true, duration: "16 min" },
-        { id: "lesson5", title: "Common Questions", description: "Ask and answer everyday questions", link: "/gamified/lessons/common-questions", locked: true, duration: "14 min" },
-        { id: "lesson6", title: "Making It Easy & Top Tips", description: "Advanced strategies for fluency", link: "/lessons/lesson6", locked: true, duration: "15 min" },
+        { id: "lesson1", title: "Telling The Time", description: "Master time expressions in Punjabi", link: "/gamified/lessons/conversation-flow", locked: true, },
+        { id: "lesson2", title: "How To Get From A To B", description: "Navigate and give directions confidently", link: "/gamified/lessons/expressing-feelings", locked: true,  },
+        { id: "lesson3", title: "Daily Routine", description: "Describe your everyday activities", link: "/gamified/lessons/healthy-living", locked: true, },
+        { id: "lesson4", title: "Expressing Yourself", description: "Share your thoughts and feelings", link: "/gamified/lessons/daily-routine", locked: true, },
+        { id: "lesson5", title: "Common Questions", description: "Ask and answer everyday questions", link: "/gamified/lessons/common-questions", locked: true,  },
+        { id: "lesson6", title: "Making It Easy & Top Tips", description: "Advanced strategies for fluency", link: "/lessons/lesson6", locked: true, },
     ];
 
     useEffect(() => {
