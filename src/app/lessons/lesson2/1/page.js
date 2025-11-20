@@ -23,7 +23,8 @@ const lessonContent = [
         title: "Sat Sri Akaal Ji (ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਜੀ)",
         roman: "Sat Sri Akaal Ji",
         meaning: "Roughly translated: 'Truth is God' or 'God is Truth'. We add Ji (ਜੀ) as a form of respect.",
-        usage: "Use this to greet someone formally (family members, elders, or people you're meeting for the first time) and also to say goodbye"
+        usage: "Use this to greet someone formally (family members, elders, or people you're meeting for the first time) and also to say goodbye",
+        audioFile: "sat-sri-akaal-ji.mp3"
     },
     {
         type: "info",
@@ -37,7 +38,8 @@ const lessonContent = [
         title: "ਤੁਹਾਡਾ ਕੀ ਹਾਲ ਹੈ?",
         roman: "Tuhāḍā kī hāl hai?",
         meaning: "How are you?",
-        usage: "A formal way to ask about someone's wellbeing after greeting them"
+        usage: "A formal way to ask about someone's wellbeing after greeting them",
+        audioFile: "tuhada-ki-haal-hai.mp3"
     },
     {
         type: "phrase",
@@ -46,7 +48,8 @@ const lessonContent = [
         title: "ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
         roman: "Tusi(n) kive(n) ho?",
         meaning: "How are you?",
-        usage: "Another formal way to ask 'How are you?' - commonly used with elders and in respectful settings"
+        usage: "Another formal way to ask 'How are you?' - commonly used with elders and in respectful settings",
+        audioFile: "tusi-kiven-ho.mp3"
     },
     {
         type: "context",
@@ -84,7 +87,8 @@ const lessonContent = [
         title: "ਮੈਂ ਠੀਕ ਹਾਂ",
         roman: "Mai(n) theek haa(n)",
         meaning: "I am fine",
-        usage: "Use this to respond when someone asks how you are"
+        usage: "Use this to respond when someone asks how you are",
+        audioFile: "main-theek-haan.mp3"
     },
     {
         type: "info",
@@ -99,7 +103,8 @@ const lessonContent = [
         title: "ਅਪਨਾ ਖਿਆਲ ਰੱਖਣਾ",
         roman: "Apana khay-aal rakh-naa",
         meaning: "You take care",
-        usage: "A polite way to say goodbye, showing care and concern for the person"
+        usage: "A polite way to say goodbye, showing care and concern for the person",
+        audioFile: "apna-khyal-rakhna.mp3"
     },
     {
         type: "info",
@@ -114,7 +119,8 @@ const lessonContent = [
         roman: "Kiddā̃?",
         meaning: "How are you? / What's up?",
         usage: "Informal way of greeting - use this in casual settings when meeting friends",
-        note: "In short, Kidda is an informal way of asking someone 'How are you?' and is used to greet someone, typically in an informal interaction or casual setting such as when meeting up with friends."
+        note: "In short, Kidda is an informal way of asking someone 'How are you?' and is used to greet someone, typically in an informal interaction or casual setting such as when meeting up with friends.",
+        audioFile: "kiddan.mp3"
     },
     {
         type: "quiz",
@@ -164,6 +170,14 @@ export default function GreetingSteps() {
         };
         getUser();
     }, []);
+
+    // Audio playback function
+    const playAudio = (audioFile) => {
+        if (audioFile) {
+            const audio = new Audio(`/audio/${audioFile}`);
+            audio.play().catch(error => console.error('Error playing audio:', error));
+        }
+    };
 
     // Calculate quiz statistics
     const quizSteps = lessonContent.reduce((acc, content, index) => {
@@ -277,7 +291,7 @@ export default function GreetingSteps() {
                                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
                                     {current.title}
                                 </h3>
-                                <button className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm">
+                                <button onClick={() => playAudio(current.audioFile)} className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm">
                                     <Volume2 size={16} />
                                     <span>Listen</span>
                                 </button>

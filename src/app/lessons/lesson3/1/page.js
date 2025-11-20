@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, User, CheckCircle, X, RotateCcw, Trophy, Award } from "lucide-react";
+import { ArrowLeft, ArrowRight, User, CheckCircle, X, RotateCcw, Trophy, Award, Volume2 } from "lucide-react";
 import Image from "next/image";
 import { createClient } from '@supabase/supabase-js';
 
@@ -35,12 +35,14 @@ const lessonContent = [
             {
                 punjabi: "ਮੇਰਾ ਨਾਮ ਪ੍ਰੀਆ ਹੈ।",
                 romanized: "Mera naam Priya hai.",
-                english: "My name is Priya."
+                english: "My name is Priya.",
+                audioFile: "mera-naam-priya-hai.mp3"
             },
             {
                 punjabi: "ਮੇਰਾ ਨਾਮ ਅਮਨ ਹੈ।",
                 romanized: "Mera naam Aman hai.",
-                english: "My name is Aman."
+                english: "My name is Aman.",
+                audioFile: "mera-naam-aman-hai.mp3"
             }
         ],
         note: "Simply replace 'Priya' or 'Aman' with your own name to introduce yourself!"
@@ -56,12 +58,14 @@ const lessonContent = [
             {
                 punjabi: "ਮੈਂ 25 ਸਾਲਾਂ ਦਾ ਹਾਂ।",
                 romanized: "Maiṁ 25 salān dā hān.",
-                english: "I am 25 years old. (male)"
+                english: "I am 25 years old. (male)",
+                audioFile: "main-25-saalan-da-haan.mp3"
             },
             {
                 punjabi: "ਮੈਂ 23 ਸਾਲਾਂ ਦੀ ਹਾਂ।",
                 romanized: "Maiṁ 23 salān dī hān.",
-                english: "I am 23 years old. (female)"
+                english: "I am 23 years old. (female)",
+                audioFile: "main-23-saalan-di-haan.mp3"
             }
         ],
         tip: {
@@ -99,12 +103,14 @@ const lessonContent = [
             {
                 punjabi: "ਮੈਂ London ਤੋਂ ਆਇਆ ਹਾਂ।",
                 romanized: "Maiṁ London ton āiā hān.",
-                english: "I am from London. (male)"
+                english: "I am from London. (male)",
+                audioFile: "main-london-ton-aaya-haan.mp3"
             },
             {
                 punjabi: "ਮੈਂ London ਤੋਂ ਆਈ ਹਾਂ।",
                 romanized: "Maiṁ London ton āī hān.",
-                english: "I am from London. (female)"
+                english: "I am from London. (female)",
+                audioFile: "main-london-ton-aayi-haan.mp3"
             }
         ],
         note: "Notice the gender difference: 'ਆਇਆ' (āiā) for males and 'ਆਈ' (āī) for females."
@@ -120,12 +126,14 @@ const lessonContent = [
             {
                 punjabi: "ਮੈਂ Southall ਵਿੱਚ ਰਹਿੰਦਾ ਹਾਂ।",
                 romanized: "Maiṁ Southall vich rahindā hān.",
-                english: "I live in Southall. (male)"
+                english: "I live in Southall. (male)",
+                audioFile: "main-southall-vich-rahinda-haan.mp3"
             },
             {
                 punjabi: "ਮੈਂ Birmingham ਵਿੱਚ ਰਹਿੰਦੀ ਹਾਂ।",
                 romanized: "Maiṁ Birmingham vich rahindī hān.",
-                english: "I live in Birmingham. (female)"
+                english: "I live in Birmingham. (female)",
+                audioFile: "main-birmingham-vich-rahindi-haan.mp3"
             }
         ],
         tip: {
@@ -162,22 +170,26 @@ const lessonContent = [
             {
                 punjabi: "ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ।",
                 romanized: "Maiṁ Heathrow Airport laī kam kardā hān.",
-                english: "I work at Heathrow Airport. (male)"
+                english: "I work at Heathrow Airport. (male)",
+                audioFile: "main-heathrow-lai-kam-karda-haan.mp3"
             },
             {
                 punjabi: "ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ।",
                 romanized: "Maiṁ Heathrow Airport laī kam kardī hān.",
-                english: "I work at Heathrow Airport. (female)"
+                english: "I work at Heathrow Airport. (female)",
+                audioFile: "main-heathrow-lai-kam-kardi-haan.mp3"
             },
             {
                 punjabi: "ਮੈਂ university ਪੜ੍ਹਦਾ ਹਾਂ।",
                 romanized: "Maiṁ university paṛhdā hān.",
-                english: "I study at university. (male)"
+                english: "I study at university. (male)",
+                audioFile: "main-university-parhda-haan.mp3"
             },
             {
                 punjabi: "ਮੈਂ university ਪੜ੍ਹਦੀ ਹਾਂ।",
                 romanized: "Maiṁ university paṛhdī hān.",
-                english: "I study at university. (female)"
+                english: "I study at university. (female)",
+                audioFile: "main-university-parhdi-haan.mp3"
             }
         ],
         tip: {
@@ -271,6 +283,14 @@ export default function Lesson3AboutMe() {
         };
         getUser();
     }, []);
+
+    // Audio playback function
+    const playAudio = (audioFile) => {
+        if (audioFile) {
+            const audio = new Audio(`/audio/${audioFile}`);
+            audio.play().catch(error => console.error('Error playing audio:', error));
+        }
+    };
 
     // Calculate quiz statistics
     const quizSteps = lessonContent.reduce((acc, content, index) => {
@@ -375,9 +395,22 @@ export default function Lesson3AboutMe() {
                         <div className="space-y-4 mb-6">
                             {current.examples.map((example, idx) => (
                                 <div key={idx} className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                                    <p className="text-lg font-semibold text-gray-800 mb-1">{example.punjabi}</p>
-                                    <p className="text-sm italic text-gray-600 mb-1">{example.romanized}</p>
-                                    <p className="text-sm text-gray-500">{example.english}</p>
+                                    <div className="flex items-start justify-between gap-3">
+                                        <div className="flex-1">
+                                            <p className="text-lg font-semibold text-gray-800 mb-1">{example.punjabi}</p>
+                                            <p className="text-sm italic text-gray-600 mb-1">{example.romanized}</p>
+                                            <p className="text-sm text-gray-500">{example.english}</p>
+                                        </div>
+                                        {example.audioFile && (
+                                            <button
+                                                onClick={() => playAudio(example.audioFile)}
+                                                className="p-2 bg-blue-500 hover:bg-blue-600 rounded-full transition-all flex-shrink-0"
+                                                title="Play audio"
+                                            >
+                                                <Volume2 size={18} className="text-white" />
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
