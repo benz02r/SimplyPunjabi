@@ -19,48 +19,53 @@ export default function Home() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
-            {/* Hero Section with Enhanced Design */}
-            <section className="relative px-4 sm:px-6 lg:px-8 pt-32 sm:pt-40 pb-20">
-                <div className="max-w-6xl mx-auto">
-                    {/* Logo and Main Heading */}
-                    <div className="text-center mb-12">
-                        <div className="inline-block mb-6 relative">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-orange-400 blur-3xl opacity-20 animate-pulse"></div>
+            {/* Hero Section - Professional Grade */}
+            <section className="relative px-6 sm:px-8 lg:px-12 pt-32 sm:pt-40 lg:pt-48 pb-24 sm:pb-32">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center">
+                        {/* Logo with refined presentation */}
+                        <div className="inline-block mb-10 relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-orange-400/20 blur-3xl"></div>
                             <img
                                 src="/Website Banner(shadowing)- Simply Punjabi, Ryan.png"
                                 alt="Simply Punjabi Logo"
-                                className="relative w-full max-w-[500px] mx-auto object-contain drop-shadow-2xl"
+                                className="relative w-full max-w-[480px] mx-auto object-contain drop-shadow-2xl"
                             />
                         </div>
 
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent mb-6 leading-tight">
-                            The Simple Way to Learn Punjabi!
+                        {/* Main Heading - Better typography */}
+                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-blue-600 via-blue-500 to-orange-500 bg-clip-text text-transparent mb-8 leading-[1.1] tracking-tight">
+                            The Simple Way to<br className="hidden sm:block" /> Learn Punjabi
                         </h1>
 
-                        {/* Daily Word Feature - Enhanced */}
-                        <div className="inline-block bg-white rounded-2xl shadow-lg px-8 py-6 mb-8 border-2 border-blue-100 hover:border-blue-300 transition-all duration-300 hover:shadow-xl">
-                            <p className="text-sm text-gray-600 mb-2 font-medium">TODAY IS</p>
-                            <p className="text-4xl font-bold text-orange-500 mb-1">{currentDay.pa}</p>
-                            <p className="text-lg text-gray-700">
-                                <span className="font-semibold">{currentDay.pron}</span>
-                                <span className="text-gray-400 mx-2">•</span>
-                                <span className="text-gray-500">{currentDay.en}</span>
-                            </p>
+                        {/* Daily Word Feature - Refined design */}
+                        <div className="inline-block mb-10">
+                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl px-10 py-7 border border-gray-200/50 hover:border-blue-300/50 hover:shadow-2xl transition-all duration-500 group">
+                                <p className="text-xs uppercase tracking-widest text-gray-500 mb-3 font-bold">Today is</p>
+                                <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600 mb-2">{currentDay.pa}</p>
+                                <p className="text-xl text-gray-700">
+                                    <span className="font-semibold">{currentDay.pron}</span>
+                                    <span className="text-gray-300 mx-3">•</span>
+                                    <span className="text-gray-500">{currentDay.en}</span>
+                                </p>
+                            </div>
                         </div>
 
-                        <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-10">
-                            Dive into interactive lessons, real-world speaking scenarios, and cultural insights to master Punjabi with confidence.
+                        {/* Subtitle - Better line height and spacing */}
+                        <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-12 font-light">
+                            Interactive lessons, real-world scenarios, and cultural insights<br className="hidden sm:block" /> to master Punjabi with confidence
                         </p>
 
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-                            <a href="/lessons/lesson2/1" className="w-full sm:w-auto">
-                                <button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-xl text-lg font-bold shadow-lg hover:shadow-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105">
-                                    Get Started Free
+                        {/* CTA Buttons - Refined spacing and hierarchy */}
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <a href="/lessons/lesson2/1" className="w-full sm:w-auto group">
+                                <button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white px-12 py-5 rounded-xl text-lg font-bold shadow-xl hover:shadow-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 relative overflow-hidden">
+                                    <span className="relative z-10">Get Started Free</span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 </button>
                             </a>
                             <a href="/learn-more" className="w-full sm:w-auto">
-                                <button className="w-full sm:w-auto bg-white text-blue-600 border-2 border-blue-600 px-10 py-4 rounded-xl text-lg font-bold shadow-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105">
+                                <button className="w-full sm:w-auto bg-white text-blue-600 border-2 border-blue-600 px-12 py-5 rounded-xl text-lg font-bold shadow-lg hover:bg-blue-50 hover:shadow-xl transition-all duration-300">
                                     Learn More
                                 </button>
                             </a>
@@ -69,25 +74,25 @@ export default function Home() {
                 </div>
             </section>
 
-
-
-            {/* Learning Paths Section */}
-            <section className="px-4 sm:px-6 lg:px-8 py-20 bg-gradient-to-b from-white to-blue-50">
-                <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-3 bg-blue-100 px-6 py-3 rounded-full mb-4">
-                            <FaBullseye className="text-2xl text-blue-600" />
-                            <span className="text-blue-800 font-semibold">LEARNING PATHS</span>
+            {/* Learning Paths Section - Enhanced professional layout */}
+            <section className="px-6 sm:px-8 lg:px-12 py-24 sm:py-32 bg-gradient-to-b from-white to-blue-50/50">
+                <div className="max-w-7xl mx-auto">
+                    {/* Section Header - Better hierarchy */}
+                    <div className="text-center mb-20">
+                        <div className="inline-flex items-center gap-3 bg-blue-100/80 backdrop-blur-sm px-6 py-3 rounded-full mb-6 shadow-sm">
+                            <FaBullseye className="text-xl text-blue-600" />
+                            <span className="text-blue-800 font-bold text-sm tracking-wide uppercase">Learning Paths</span>
                         </div>
-                        <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
                             Choose Your Journey
                         </h2>
-                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                            Follow our custom-tailored paths to build your confidence from beginner to conversational
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto font-light leading-relaxed">
+                            Structured paths designed to build your confidence from beginner to conversational fluency
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {/* Course Cards - Professional grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
                         <CourseSectionCard
                             title="Essential Punjabi"
                             subtitle="Real Conversations"
@@ -119,85 +124,60 @@ export default function Home() {
                 </div>
             </section>
 
-
-            {/* Features Section */}
-            <section className="px-4 sm:px-6 lg:px-8 py-16 bg-white">
-                <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <FeatureCard
-                            icon={<FaCheckCircle className="text-5xl text-green-500" />}
-                            title="Interactive Learning"
-                            description="Engaging lessons designed for real-world conversations"
-                        />
-                        <FeatureCard
-                            icon={<FaGlobe className="text-5xl text-blue-500" />}
-                            title="Cultural Context"
-                            description="Understand the rich heritage behind the language"
-                        />
-                        <FeatureCard
-                            icon={<FaUsers className="text-5xl text-orange-500" />}
-                            title="Community Support"
-                            description="Learn alongside others on the same journey"
-                        />
-                    </div>
-                </div>
-            </section>
-
-
-
-
-        </div>
-    );
-}
-
-function FeatureCard({ icon, title, description }) {
-    return (
-        <div className="text-center p-6 rounded-xl hover:bg-gray-50 transition-all duration-300">
-            <div className="flex justify-center mb-4">
-                {icon}
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-            <p className="text-gray-600">{description}</p>
         </div>
     );
 }
 
 function CourseSectionCard({ title, subtitle, description, link, icon, gradient, accentColor }) {
-    const hoverColorMap = {
-        blue: 'group-hover:border-blue-400',
-        orange: 'group-hover:border-orange-400',
-        green: 'group-hover:border-green-400'
+    const borderColorMap = {
+        blue: 'border-gray-200/80 hover:border-blue-400/60',
+        orange: 'border-gray-200/80 hover:border-orange-400/60',
+        green: 'border-gray-200/80 hover:border-green-400/60'
+    };
+
+    const shadowColorMap = {
+        blue: 'hover:shadow-blue-500/10',
+        orange: 'hover:shadow-orange-500/10',
+        green: 'hover:shadow-green-500/10'
     };
 
     return (
-        <a href={link} className="group block">
-            <div className={`relative h-full bg-white rounded-2xl border-2 border-gray-200 ${hoverColorMap[accentColor]} shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden`}>
-                {/* Gradient Background on Hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+        <a href={link} className="group block h-full">
+            <div className={`relative h-full bg-white rounded-3xl border-2 ${borderColorMap[accentColor]} shadow-xl ${shadowColorMap[accentColor]} hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 overflow-hidden`}>
+                {/* Subtle gradient overlay on hover */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`}></div>
 
                 {/* Content */}
-                <div className="relative p-8 flex flex-col h-full">
-                    <div className="flex justify-center mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                <div className="relative p-10 flex flex-col h-full">
+                    {/* Icon with refined animation */}
+                    <div className="flex justify-center mb-8 transform group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
                         {icon}
                     </div>
 
-                    <h3 className="text-2xl font-bold text-gray-900 mb-1 text-center">
+                    {/* Title and subtitle with better typography */}
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center tracking-tight">
                         {title}
                     </h3>
-                    <p className="text-sm font-semibold text-gray-500 mb-4 text-center">
+                    <p className="text-sm font-semibold text-gray-500 mb-5 text-center uppercase tracking-wider">
                         {subtitle}
                     </p>
-                    <p className="text-gray-600 text-center mb-6 flex-grow">
+
+                    {/* Description with better readability */}
+                    <p className="text-gray-600 text-center mb-8 flex-grow leading-relaxed text-base">
                         {description}
                     </p>
 
-                    <button className={`w-full bg-gradient-to-r ${gradient} text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition-all duration-300 transform group-hover:scale-105`}>
-                        Start Learning →
+                    {/* CTA Button - Professional styling */}
+                    <button className={`w-full bg-gradient-to-r ${gradient} text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-500 transform group-hover:scale-[1.02] relative overflow-hidden`}>
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                            Start Learning
+                            <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
+                        </span>
                     </button>
                 </div>
 
-                {/* Corner Accent */}
-                <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${gradient} opacity-10 blur-2xl group-hover:opacity-20 transition-opacity duration-300`}></div>
+                {/* Refined corner accent */}
+                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${gradient} opacity-5 blur-3xl group-hover:opacity-10 transition-opacity duration-500`}></div>
             </div>
         </a>
     );

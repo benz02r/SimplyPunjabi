@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { User, Mail, Lock, ArrowRight, CheckCircle, Eye, EyeOff, Loader2, AlertCircle, Home, Sparkles } from "lucide-react";
+import { User, Mail, Lock, ArrowRight, Eye, EyeOff, Loader2, AlertCircle, Home } from "lucide-react";
 
 export default function Signup() {
     const [email, setEmail] = useState("");
@@ -137,235 +137,170 @@ export default function Signup() {
         }
     };
 
-    const benefits = [
-        {
-            text: "Access to interactive lessons",
-            description: "Learn at your own pace"
-        },
-        {
-            text: "Real-world conversation practice",
-            description: "Build confidence speaking"
-        },
-        {
-            text: "Cultural insights and context",
-            description: "Understand the culture"
-        },
-        {
-            text: "Track your learning progress",
-            description: "See your improvement"
-        }
-    ];
-
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center px-4 py-24 md:py-32">
-            <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center px-4 py-24">
+            <div className="w-full max-w-md">
 
-                {/* Left Side - Benefits & Branding */}
-                <div className="hidden lg:block space-y-8 px-8">
-                    <div>
-                        <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent mb-4">
-                            Join Simply Punjabi
-                        </h1>
-                        <p className="text-xl text-gray-600 leading-relaxed">
-                            Start your journey to fluency with thousands of learners worldwide
-                        </p>
-                    </div>
 
-                    <div className="space-y-4">
-                        {benefits.map((benefit, index) => (
-                            <div key={index} className="flex items-start gap-4 p-5 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
-                                <CheckCircle className="text-green-500 w-6 h-6 mt-1 flex-shrink-0" />
-                                <div>
-                                    <p className="text-gray-800 text-lg font-semibold">{benefit.text}</p>
-                                    <p className="text-gray-500 text-sm mt-1">{benefit.description}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-2xl p-8 text-white shadow-lg">
-                        <p className="text-lg font-semibold mb-2 flex items-center gap-2">
-                            <Sparkles className="w-5 h-5" /> Special Offer
-                        </p>
-                        <p className="text-3xl font-bold mb-2">Get Started Free</p>
-                        <p className="text-blue-100">No credit card required</p>
-                    </div>
-                </div>
-
-                {/* Right Side - Signup Form */}
-                <div className="w-full max-w-lg mx-auto">
-                    <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-                        {/* Form Header */}
-                        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
-                            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                <User className="w-12 h-12 text-blue-600" />
-                            </div>
-                            <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
-                            <p className="text-blue-100">Start learning Punjabi today!</p>
+                {/* Signup Form Card */}
+                <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+                    {/* Form Header */}
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
+                        <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <User className="w-12 h-12 text-blue-600" />
                         </div>
+                        <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
+                        <p className="text-blue-100">Start learning Punjabi today</p>
+                    </div>
 
-                        {/* Form Body */}
-                        <div className="px-8 py-8">
-                            {/* Error Message */}
-                            {errorMessage && (
-                                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-                                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                    <p className="text-red-700 text-sm font-medium">{errorMessage}</p>
+                    {/* Form Body */}
+                    <div className="px-8 py-8">
+                        {/* Error Message */}
+                        {errorMessage && (
+                            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                <p className="text-red-700 text-sm font-medium">{errorMessage}</p>
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSignup} className="space-y-5">
+                            {/* Name Input */}
+                            <div>
+                                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Full Name
+                                </label>
+                                <div className="relative">
+                                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        id="name"
+                                        className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        type="text"
+                                        placeholder="Enter your full name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        disabled={loading}
+                                        required
+                                    />
                                 </div>
-                            )}
+                            </div>
 
-                            <form onSubmit={handleSignup} className="space-y-5">
-                                {/* Name Input */}
-                                <div>
-                                    <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Full Name
-                                    </label>
-                                    <div className="relative">
-                                        <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            id="name"
-                                            className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                            type="text"
-                                            placeholder="Enter your full name"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            disabled={loading}
-                                            required
-                                        />
-                                    </div>
+                            {/* Email Input */}
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Email Address
+                                </label>
+                                <div className="relative">
+                                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        id="email"
+                                        className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        type="email"
+                                        placeholder="Enter your email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        disabled={loading}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Password Input */}
+                            <div>
+                                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Password
+                                </label>
+                                <div className="relative">
+                                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        id="password"
+                                        className="w-full pl-12 pr-12 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="Create a strong password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        disabled={loading}
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        disabled={loading}
+                                    >
+                                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
                                 </div>
 
-                                {/* Email Input */}
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Email Address
-                                    </label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            id="email"
-                                            className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                            type="email"
-                                            placeholder="Enter your email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            disabled={loading}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Password Input */}
-                                <div>
-                                    <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Password
-                                    </label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            id="password"
-                                            className="w-full pl-12 pr-12 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                            type={showPassword ? "text" : "password"}
-                                            placeholder="Create a strong password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            disabled={loading}
-                                            required
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                                            disabled={loading}
-                                        >
-                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                        </button>
-                                    </div>
-
-                                    {/* Password Strength Indicator */}
-                                    {password && (
-                                        <div className="mt-2">
-                                            <div className="flex items-center justify-between mb-1">
-                                                <span className="text-xs text-gray-600">Password strength:</span>
-                                                <span className={`text-xs font-medium capitalize ${
-                                                    passwordStrength === "weak" ? "text-red-600" :
-                                                        passwordStrength === "fair" ? "text-orange-600" :
-                                                            passwordStrength === "good" ? "text-yellow-600" :
-                                                                "text-green-600"
-                                                }`}>
-                                                    {passwordStrength}
-                                                </span>
-                                            </div>
-                                            <div className="w-full bg-gray-200 rounded-full h-2">
-                                                <div className={`${getStrengthColor()} ${getStrengthWidth()} h-2 rounded-full transition-all duration-300`}></div>
-                                            </div>
+                                {/* Password Strength Indicator */}
+                                {password && (
+                                    <div className="mt-2">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <span className="text-xs text-gray-600">Password strength:</span>
+                                            <span className={`text-xs font-medium capitalize ${
+                                                passwordStrength === "weak" ? "text-red-600" :
+                                                    passwordStrength === "fair" ? "text-orange-600" :
+                                                        passwordStrength === "good" ? "text-yellow-600" :
+                                                            "text-green-600"
+                                            }`}>
+                                                {passwordStrength}
+                                            </span>
                                         </div>
-                                    )}
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                            <div className={`${getStrengthColor()} ${getStrengthWidth()} h-2 rounded-full transition-all duration-300`}></div>
+                                        </div>
+                                    </div>
+                                )}
 
-                                    <p className="text-xs text-gray-500 mt-2">Must be at least 6 characters</p>
-                                </div>
-
-                                {/* Signup Button */}
-                                <button
-                                    type="submit"
-                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
-                                    disabled={loading}
-                                >
-                                    {loading ? (
-                                        <>
-                                            <Loader2 className="w-5 h-5 animate-spin" />
-                                            <span>Creating Account...</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span>Create Account</span>
-                                            <ArrowRight className="w-5 h-5" />
-                                        </>
-                                    )}
-                                </button>
-                            </form>
-
-                            {/* Divider */}
-                            <div className="my-6 flex items-center gap-4">
-                                <div className="flex-1 h-px bg-gray-200"></div>
-                                <span className="text-sm text-gray-500 font-medium">OR</span>
-                                <div className="flex-1 h-px bg-gray-200"></div>
+                                <p className="text-xs text-gray-500 mt-2">Must be at least 6 characters</p>
                             </div>
 
-                            {/* Back to Home */}
+                            {/* Signup Button */}
                             <button
-                                onClick={() => router.push("/")}
+                                type="submit"
+                                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
                                 disabled={loading}
-                                className="w-full bg-gray-100 text-gray-700 py-3.5 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300 border-2 border-gray-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                <Home className="w-5 h-5" />
-                                Back to Home
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        <span>Creating Account...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>Create Account</span>
+                                        <ArrowRight className="w-5 h-5" />
+                                    </>
+                                )}
                             </button>
+                        </form>
 
-                            {/* Login Link */}
-                            <p className="mt-6 text-center text-sm text-gray-600">
-                                Already have an account?{" "}
-                                <a
-                                    href="/key-functions/auth"
-                                    className="text-blue-600 font-bold hover:text-blue-700 hover:underline transition-colors"
-                                >
-                                    Log In
-                                </a>
-                            </p>
+                        {/* Divider */}
+                        <div className="my-6 flex items-center gap-4">
+                            <div className="flex-1 h-px bg-gray-200"></div>
+                            <span className="text-sm text-gray-500 font-medium">OR</span>
+                            <div className="flex-1 h-px bg-gray-200"></div>
                         </div>
-                    </div>
 
-                    {/* Mobile Benefits */}
-                    <div className="lg:hidden mt-8 space-y-3 px-4">
-                        {benefits.map((benefit, index) => (
-                            <div key={index} className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
-                                <CheckCircle className="text-green-500 w-5 h-5 flex-shrink-0" />
-                                <div>
-                                    <p className="text-sm font-semibold text-gray-800">{benefit.text}</p>
-                                    <p className="text-xs text-gray-500">{benefit.description}</p>
-                                </div>
-                            </div>
-                        ))}
+                        {/* Back to Home */}
+                        <button
+                            onClick={() => router.push("/")}
+                            disabled={loading}
+                            className="w-full bg-gray-100 text-gray-700 py-3.5 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300 border-2 border-gray-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <Home className="w-5 h-5" />
+                            Back to Home
+                        </button>
+
+                        {/* Login Link */}
+                        <p className="mt-6 text-center text-sm text-gray-600">
+                            Already have an account?{" "}
+                            <a
+                                href="/key-functions/auth"
+                                className="text-blue-600 font-bold hover:text-blue-700 hover:underline transition-colors"
+                            >
+                                Log In
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>
