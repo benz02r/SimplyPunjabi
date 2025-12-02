@@ -2,7 +2,22 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Users, CheckCircle, X, RotateCcw, Trophy, Award } from "lucide-react";
+import {
+    ArrowLeft,
+    ArrowRight,
+    Users,
+    CheckCircle,
+    X,
+    RotateCcw,
+    Trophy,
+    Heart,
+    UserCircle,
+    Award,
+    Sparkles,
+    Info,
+    Play,
+    Pause
+} from "lucide-react";
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
@@ -14,306 +29,199 @@ const lessonContent = [
     {
         type: "intro",
         title: "Family and Friends",
-        content: "In this lesson, we will walk you through the Punjabi words for family members and friends so that you are never left stuck when it comes to describing your relations to people. We will begin with the basics here and you will slowly build on them in lessons to come.",
+        content: "Master the precise Panjabi terms for family members—because unlike English, Panjabi has specific words for maternal and paternal relatives.",
         points: [
-            "Learn words for immediate family (mother, father, siblings)",
-            "Understand the difference between maternal and paternal relatives",
-            "Master specific terms for aunts, uncles, and grandparents",
-            "Practice using respectful forms (Ji)"
+            "Immediate family terms",
+            "Why 'Ji' shows respect",
+            "Maternal vs paternal relatives",
+            "Visual family tree"
         ]
     },
     {
-        type: "section",
-        title: "Mother",
-        content: "Where better to start than the person who gave birth to you and brought you into this world. The ways we can say Mother/Mum in Punjabi are as follows:",
-        examples: [
+        type: "immediate-family",
+        title: "Core Family",
+        subtitle: "Parents and siblings",
+        categories: [
             {
-                punjabi: "ਮਾਤਾ ਜੀ",
-                romanized: "Mata Ji",
-                english: "Mother (respectful)"
+                id: "mother",
+                title: "Mother",
+                icon: Heart,
+                terms: [
+                    { punjabi: "ਮਾਤਾ ਜੀ", roman: "Mata Ji", english: "Mother (respectful)" },
+                    { punjabi: "ਮਾ", roman: "Ma", english: "Mum" },
+                    { punjabi: "ਬੇਬੇ", roman: "Bebe", english: "Mother/Grandmother" }
+                ],
+                note: "Ma (ਮਾ) is most common. Add 'Ji' for respect."
             },
             {
-                punjabi: "ਮਾ",
-                romanized: "Ma",
-                english: "Mum"
+                id: "father",
+                title: "Father",
+                icon: UserCircle,
+                terms: [
+                    { punjabi: "ਪਿਤਾ ਜੀ", roman: "Pita Ji", english: "Father (respectful)" },
+                    { punjabi: "ਬਾਪੂ", roman: "Bapu", english: "Dad" },
+                    { punjabi: "ਪਾਪਾ", roman: "Papa", english: "Dad" }
+                ],
+                tip: "'Ji' at the end conveys respect and honor"
             },
             {
-                punjabi: "ਬੇਬੇ",
-                romanized: "Bebe",
-                english: "Mother (also used for grandmother, typically father's mum)"
+                id: "siblings",
+                title: "Siblings",
+                icon: Users,
+                terms: [
+                    { punjabi: "ਭਰਾ", roman: "Bhrā", english: "Brother" },
+                    { punjabi: "ਵੀਰ ਜੀ", roman: "Veer Ji", english: "Older brother (respectful)" },
+                    { punjabi: "ਭੈਣ", roman: "Bhain", english: "Sister" },
+                    { punjabi: "ਦੀਦੀ", roman: "Didi", english: "Older sister (affectionate)" },
+                    { punjabi: "ਭੈਣ ਜੀ", roman: "Bhain Ji", english: "Sister (respectful)" }
+                ],
+                note: "Veer Ji and Didi are specifically for OLDER siblings"
             }
-        ],
-        note: "Ma (ਮਾ) is more commonly used in everyday conversations. We add 'Ji' at the end to convey respect."
+        ]
     },
     {
-        type: "section",
-        title: "Father",
-        content: "To say Father/Dad in Punjabi, we have several options:",
-        examples: [
-            {
-                punjabi: "ਪਿਤਾ ਜੀ",
-                romanized: "Pita Ji",
-                english: "Father (respectful)"
-            },
-            {
-                punjabi: "ਬਾਪੂ",
-                romanized: "Bapu",
-                english: "Dad"
-            },
-            {
-                punjabi: "ਪਾਪਾ",
-                romanized: "Papa",
-                english: "Dad"
-            }
-        ],
-        tip: {
-            title: "Why do we add 'Ji'?",
-            content: "Adding 'Ji' at the end of a word in Punjabi conveys respect and honor."
+        type: "side-comparison",
+        title: "Maternal vs Paternal",
+        subtitle: "The key difference in Panjabi family terms",
+        intro: "Unlike English, Panjabi has specific words for each family member depending on whether they're on your mother's or father's side.",
+        maternal: {
+            title: "Mother's Side",
+            color: "pink",
+            grandparents: [
+                { punjabi: "ਨਾਨੀ", roman: "Nānī", english: "Mum's mum" },
+                { punjabi: "ਨਾਨਾ", roman: "Nānā", english: "Mum's dad" }
+            ],
+            auntsUncles: [
+                { punjabi: "ਮਾਮਾ", roman: "Mama", english: "Mum's brother" },
+                { punjabi: "ਮਾਮੀ", roman: "Mami", english: "Mama's wife" },
+                { punjabi: "ਮਾਸੀ", roman: "Masi", english: "Mum's sister" },
+                { punjabi: "ਮਾਸੜ", roman: "Masaṛ", english: "Masi's husband" }
+            ],
+            note: "All mum's brothers are 'Mama' regardless of age"
+        },
+        paternal: {
+            title: "Father's Side",
+            color: "blue",
+            grandparents: [
+                { punjabi: "ਦਾਦੀ", roman: "Dādī", english: "Dad's mum" },
+                { punjabi: "ਦਾਦਾ", roman: "Dādā", english: "Dad's dad" }
+            ],
+            auntsUncles: [
+                { punjabi: "ਤਾਇਆ", roman: "Tāyā", english: "Dad's OLDER brother" },
+                { punjabi: "ਤਾਈ ਜੀ", roman: "Taī jī", english: "Taya's wife" },
+                { punjabi: "ਚਾਚਾ", roman: "Chacha", english: "Dad's YOUNGER brother" },
+                { punjabi: "ਚਾਚੀ", roman: "Chachi", english: "Chacha's wife" },
+                { punjabi: "ਭੂਆ", roman: "Bhūā", english: "Dad's sister" },
+                { punjabi: "ਫੁਫੜ", roman: "Phuphṛ", english: "Bhua's husband" }
+            ],
+            note: "Dad's side distinguishes between OLDER (Taya) and YOUNGER (Chacha) brothers"
         }
     },
     {
-        type: "quiz",
-        question: "Why do we add 'Ji' at the end of a word in Punjabi?",
-        options: [
-            { text: "To convey respect", correct: true },
-            { text: "To ask a question", correct: false },
-            { text: "To make a joke", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "Siblings",
-        content: "Don't worry about how you can put these words into sentences as we will be building on this in future lessons. For now, let's learn the basic terms for brother and sister.",
-        examples: [
-            {
-                punjabi: "ਭਰਾ",
-                romanized: "Bhrā",
-                english: "Brother (official term, used in most conversations)"
-            },
-            {
-                punjabi: "ਵੀਰ ਜੀ",
-                romanized: "Veer Ji",
-                english: "Older brother (respectful)"
-            },
-            {
-                punjabi: "ਭੈਣ",
-                romanized: "Bhain",
-                english: "Sister"
-            },
-            {
-                punjabi: "ਦੀਦੀ",
-                romanized: "Didi",
-                english: "Older sister (affectionate)"
-            },
-            {
-                punjabi: "ਭੈਣ ਜੀ",
-                romanized: "Bhain Ji",
-                english: "Sister (respectful)"
-            }
-        ],
-        note: "Use Veer Ji when addressing your OLDER brother specifically. Didi and Bhain Ji are extra respectful ways to address your older sister."
-    },
-    {
-        type: "section",
-        title: "Understanding Family Sides",
-        content: "Unlike English, Punjabi has a specific word for each individual family member depending on whether they are on your Dad's side or Mum's side. This is one of the unique features of Punjabi that makes it so precise when talking about family relationships!",
-        highlight: "Get ready to learn the specific terms for maternal (mother's side) and paternal (father's side) relatives."
-    },
-    {
-        type: "section",
-        title: "Mother's Side - Grandparents",
-        content: "How do we refer to your grandparents on your Mum's side? In other words, your Mum's parents:",
-        examples: [
-            {
-                punjabi: "ਨਾਨੀ",
-                romanized: "Nānī",
-                english: "Mother's mother (maternal grandmother)"
-            },
-            {
-                punjabi: "ਨਾਨਾ",
-                romanized: "Nānā",
-                english: "Mother's father (maternal grandfather)"
-            }
-        ]
-    },
-    {
-        type: "section",
-        title: "Mother's Side - Aunts and Uncles",
-        content: "Rather than referring to your Mum's siblings as Auntie and Uncle, Punjabi takes a step further by giving them all specific names:",
-        examples: [
-            {
-                punjabi: "ਮਾਮਾ",
-                romanized: "Mama",
-                english: "Your mum's brother (older or younger)"
-            },
-            {
-                punjabi: "ਮਾਮੀ",
-                romanized: "Mami",
-                english: "Your Mama's wife"
-            },
-            {
-                punjabi: "ਮਾਸੀ",
-                romanized: "Masi",
-                english: "Your mum's sister (older or younger)"
-            },
-            {
-                punjabi: "ਮਾਸੜ",
-                romanized: "Masaṛ",
-                english: "Your Masi's husband"
-            }
-        ],
-        tip: {
-            title: "Remember",
-            content: "All of these terms are specifically for your MOTHER'S side of the family."
+        type: "family-tree",
+        title: "Visual Family Tree",
+        subtitle: "See how all the terms connect",
+        tree: {
+            maternal: [
+                { term: "Nānī", relation: "Mum's mum", level: "grandparent" },
+                { term: "Nānā", relation: "Mum's dad", level: "grandparent" },
+                { term: "Mama", relation: "Mum's brother", level: "aunt-uncle" },
+                { term: "Masi", relation: "Mum's sister", level: "aunt-uncle" }
+            ],
+            paternal: [
+                { term: "Dādī", relation: "Dad's mum", level: "grandparent" },
+                { term: "Dādā", relation: "Dad's dad", level: "grandparent" },
+                { term: "Tāyā", relation: "Dad's older brother", level: "aunt-uncle" },
+                { term: "Chacha", relation: "Dad's younger brother", level: "aunt-uncle" },
+                { term: "Bhūā", relation: "Dad's sister", level: "aunt-uncle" }
+            ]
         }
     },
     {
-        type: "quiz",
-        question: "What do we call our mum's mother?",
-        options: [
-            { text: "Dadi", correct: false },
-            { text: "Nani", correct: true },
-            { text: "Nana", correct: false }
-        ]
-    },
-    {
-        type: "quiz",
-        question: "What is a Mama?",
-        options: [
-            { text: "Your mum's older brother's wife", correct: false },
-            { text: "Your mum's younger brother", correct: false },
-            { text: "Your mum's brother", correct: true }
-        ]
-    },
-    {
-        type: "quiz",
-        question: "What do we call your mum's sister?",
-        options: [
-            { text: "Mami", correct: false },
-            { text: "Masi", correct: true },
-            { text: "Nani", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "Father's Side - Grandparents",
-        content: "As we learned earlier, Punjabi has different names for different family members depending on whether they're on your Mum or Dad's side. For your Dad's parents, we can use any of the following:",
-        examples: [
+        type: "matching-game",
+        title: "Match the Relatives",
+        subtitle: "Test your knowledge",
+        rounds: [
             {
-                punjabi: "ਦਾਦੀ",
-                romanized: "Dādī",
-                english: "Father's mother (paternal grandmother)"
+                id: 1,
+                question: "Match the maternal relatives",
+                pairs: [
+                    { term: "Nānī", definition: "Mum's mum" },
+                    { term: "Mama", definition: "Mum's brother" },
+                    { term: "Masi", definition: "Mum's sister" }
+                ]
             },
             {
-                punjabi: "ਦਾਦਾ",
-                romanized: "Dādā",
-                english: "Father's father (paternal grandfather)"
-            }
-        ],
-        note: "You may also hear people refer to their Dad's parents as Baba (ਬਾਬਾ) and Bibi (ਬੀਬੀ). This is usually up to their own discretion and whatever terms they have been told to use whilst growing up!"
-    },
-    {
-        type: "quiz",
-        question: "What do we call our Dad's Mum?",
-        options: [
-            { text: "Dadi", correct: true },
-            { text: "Nani", correct: false },
-            { text: "Nana", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "Father's Side - Uncles",
-        content: "Unlike your Mum's side of the family, your Dad's side of the family has a few more terms to distinguish between your Dad's older siblings and younger siblings:",
-        examples: [
-            {
-                punjabi: "ਤਾਇਆ",
-                romanized: "Tāyā",
-                english: "Your Dad's older brother"
-            },
-            {
-                punjabi: "ਤਾਈ ਜੀ",
-                romanized: "Taī jī",
-                english: "Your Dad's older brother's wife"
-            },
-            {
-                punjabi: "ਚਾਚਾ",
-                romanized: "Chacha",
-                english: "Your Dad's younger brother"
-            },
-            {
-                punjabi: "ਚਾਚੀ",
-                romanized: "Chachi",
-                english: "Your Dad's younger brother's wife"
-            }
-        ],
-        tip: {
-            title: "Age Matters",
-            content: "Notice how we distinguish between older (Taya) and younger (Chacha) uncles on your father's side, but not on your mother's side (all are Mama)."
-        }
-    },
-    {
-        type: "section",
-        title: "Father's Side - Aunt",
-        content: "And don't forget your Dad's sister!",
-        examples: [
-            {
-                punjabi: "ਭੂਆ",
-                romanized: "Bhūā",
-                english: "Your Dad's sister (paternal aunt)"
-            },
-            {
-                punjabi: "ਫੁਫੜ",
-                romanized: "Phuphṛ",
-                english: "Your Bhua's husband"
+                id: 2,
+                question: "Match the paternal relatives",
+                pairs: [
+                    { term: "Dādī", definition: "Dad's mum" },
+                    { term: "Tāyā", definition: "Dad's older brother" },
+                    { term: "Chacha", definition: "Dad's younger brother" }
+                ]
             }
         ]
     },
     {
-        type: "quiz",
-        question: "What is the difference between Taya and Chacha?",
-        options: [
-            { text: "Taya is older, Chacha is younger", correct: true },
-            { text: "Taya is on mum's side, Chacha is on dad's side", correct: false },
-            { text: "There is no difference", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "Family Tree Summary",
-        content: "Now we've covered both your Mum & Dad's side of the family! Here's a quick visual summary to help you remember:",
-        vocabulary: [
-            { punjabi: "ਨਾਨੀ (Nānī)", english: "Mum's mum", side: "Maternal" },
-            { punjabi: "ਨਾਨਾ (Nānā)", english: "Mum's dad", side: "Maternal" },
-            { punjabi: "ਮਾਮਾ (Mama)", english: "Mum's brother", side: "Maternal" },
-            { punjabi: "ਮਾਸੀ (Masi)", english: "Mum's sister", side: "Maternal" },
-            { punjabi: "ਦਾਦੀ (Dādī)", english: "Dad's mum", side: "Paternal" },
-            { punjabi: "ਦਾਦਾ (Dādā)", english: "Dad's dad", side: "Paternal" },
-            { punjabi: "ਤਾਇਆ (Tāyā)", english: "Dad's older brother", side: "Paternal" },
-            { punjabi: "ਚਾਚਾ (Chacha)", english: "Dad's younger brother", side: "Paternal" },
-            { punjabi: "ਭੂਆ (Bhūā)", english: "Dad's sister", side: "Paternal" }
-        ],
-        tip: {
-            title: "Pro Tip",
-            content: "The key to mastering Punjabi family terms is remembering that maternal and paternal sides have completely different words. Practice by labeling your own family tree!"
-        }
-    },
-    {
-        type: "quiz",
-        question: "Which of these is your Dad's sister?",
-        options: [
-            { text: "Masi", correct: false },
-            { text: "Bhua", correct: true },
-            { text: "Chachi", correct: false }
-        ]
-    },
-    {
-        type: "quiz",
-        question: "Who is your Mama's wife?",
-        options: [
-            { text: "Mami", correct: true },
-            { text: "Masi", correct: false },
-            { text: "Chachi", correct: false }
+        type: "final-quiz",
+        title: "Test Your Knowledge",
+        questions: [
+            {
+                question: "Why do we add 'Ji' at the end of a word in Panjabi?",
+                options: [
+                    { text: "To convey respect", correct: true },
+                    { text: "To ask a question", correct: false },
+                    { text: "To make a joke", correct: false }
+                ]
+            },
+            {
+                question: "What do we call our mum's mother?",
+                options: [
+                    { text: "Dadi", correct: false },
+                    { text: "Nani", correct: true },
+                    { text: "Nana", correct: false }
+                ]
+            },
+            {
+                question: "What is a Mama?",
+                options: [
+                    { text: "Your mum's older brother's wife", correct: false },
+                    { text: "Your mum's brother", correct: true },
+                    { text: "Your dad's brother", correct: false }
+                ]
+            },
+            {
+                question: "What do we call our Dad's mum?",
+                options: [
+                    { text: "Dadi", correct: true },
+                    { text: "Nani", correct: false },
+                    { text: "Nana", correct: false }
+                ]
+            },
+            {
+                question: "What is the difference between Taya and Chacha?",
+                options: [
+                    { text: "Taya is older, Chacha is younger", correct: true },
+                    { text: "Taya is on mum's side, Chacha is on dad's side", correct: false },
+                    { text: "There is no difference", correct: false }
+                ]
+            },
+            {
+                question: "Which of these is your Dad's sister?",
+                options: [
+                    { text: "Masi", correct: false },
+                    { text: "Bhua", correct: true },
+                    { text: "Chachi", correct: false }
+                ]
+            },
+            {
+                question: "Who is your Mama's wife?",
+                options: [
+                    { text: "Mami", correct: true },
+                    { text: "Masi", correct: false },
+                    { text: "Chachi", correct: false }
+                ]
+            }
         ]
     }
 ];
@@ -321,10 +229,23 @@ const lessonContent = [
 export default function Lesson4FamilyAndFriends() {
     const router = useRouter();
     const [step, setStep] = useState(0);
-    const [quizAnswers, setQuizAnswers] = useState({});
-    const [showFeedback, setShowFeedback] = useState({});
-    const [lessonCompleted, setLessonCompleted] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [lessonCompleted, setLessonCompleted] = useState(false);
+
+    // Immediate family state
+    const [selectedCategory, setSelectedCategory] = useState(0);
+
+    // Matching game state
+    const [currentRound, setCurrentRound] = useState(0);
+    const [matchingAnswers, setMatchingAnswers] = useState({});
+    const [matchingComplete, setMatchingComplete] = useState(false);
+    const [roundsCompleted, setRoundsCompleted] = useState([]);
+    const [shuffledDefinitions, setShuffledDefinitions] = useState([]);
+
+    // Quiz state
+    const [quizAnswers, setQuizAnswers] = useState([]);
+    const [quizComplete, setQuizComplete] = useState(false);
+
     const current = lessonContent[step];
 
     // Get user on mount
@@ -340,33 +261,52 @@ export default function Lesson4FamilyAndFriends() {
         getUser();
     }, []);
 
-    // Calculate quiz statistics
-    const quizSteps = lessonContent.reduce((acc, content, index) => {
-        if (content.type === 'quiz') acc.push(index);
-        return acc;
-    }, []);
+    // Initialize shuffled definitions for matching game
+    useEffect(() => {
+        if (current?.type === 'matching-game' && shuffledDefinitions.length === 0) {
+            const round = current.rounds[currentRound];
+            const definitions = round.pairs.map(p => p.definition);
+            setShuffledDefinitions([...definitions].sort(() => Math.random() - 0.5));
+        }
+    }, [current, currentRound, shuffledDefinitions.length]);
 
-    const totalQuizzes = quizSteps.length;
-    const correctAnswers = quizSteps.filter(index => {
-        const answer = quizAnswers[index];
-        return answer !== undefined && lessonContent[index].options[answer]?.correct;
-    }).length;
-    const score = totalQuizzes > 0 ? Math.round((correctAnswers / totalQuizzes) * 100) : 0;
+    // Calculate quiz statistics
+    const calculateScore = () => {
+        let correct = 0;
+        let total = 0;
+
+        if (quizComplete) {
+            lessonContent[5].questions.forEach((q, idx) => {
+                total++;
+                if (quizAnswers[idx] !== undefined && q.options[quizAnswers[idx]]?.correct) {
+                    correct++;
+                }
+            });
+        }
+
+        return { correct, total, score: total > 0 ? Math.round((correct / total) * 100) : 0 };
+    };
 
     // Save progress to Supabase
     const saveProgress = async () => {
         if (!supabase || !userId) return;
 
         try {
+            const { correct, total, score } = calculateScore();
+
             const { error } = await supabase
                 .from('lesson_progress')
                 .upsert({
                     user_id: userId,
-                    lesson_id: 'lesson-4-family-and-friends',
+                    lesson_id: 'lesson-4-family',
                     lesson_name: 'Family and Friends',
                     completed: true,
-                    score: score,
-                    completed_at: new Date().toISOString()
+                    quiz_score: score,
+                    correct_answers: correct,
+                    total_questions: total,
+                    last_accessed: new Date().toISOString()
+                }, {
+                    onConflict: 'user_id,lesson_id'
                 });
 
             if (error) throw error;
@@ -375,7 +315,15 @@ export default function Lesson4FamilyAndFriends() {
         }
     };
 
+    const canProceed = () => {
+        if (current.type === 'matching-game' && !matchingComplete) return false;
+        if (current.type === 'final-quiz' && !quizComplete) return false;
+        return true;
+    };
+
     const handleNext = () => {
+        if (!canProceed()) return;
+
         if (step < lessonContent.length - 1) {
             setStep(step + 1);
         }
@@ -387,218 +335,539 @@ export default function Lesson4FamilyAndFriends() {
         }
     };
 
-    const handleQuizAnswer = (optionIndex) => {
-        setQuizAnswers({ ...quizAnswers, [step]: optionIndex });
-        setShowFeedback({ ...showFeedback, [step]: true });
-    };
-
     const handleComplete = async () => {
         await saveProgress();
         setLessonCompleted(true);
     };
 
+    // Matching game logic
+    const handleMatchingSelect = (definition) => {
+        const round = current.rounds[currentRound];
+        if (Object.values(matchingAnswers).includes(definition)) return;
+
+        const unansweredTerms = round.pairs.filter(pair => !matchingAnswers[pair.term]);
+        if (unansweredTerms.length === 0) return;
+
+        const currentTerm = unansweredTerms[0].term;
+        const newAnswers = { ...matchingAnswers, [currentTerm]: definition };
+        setMatchingAnswers(newAnswers);
+
+        // Check if round is complete and correct
+        if (Object.keys(newAnswers).length === round.pairs.length) {
+            const allCorrect = round.pairs.every(pair => newAnswers[pair.term] === pair.definition);
+
+            if (allCorrect) {
+                setRoundsCompleted([...roundsCompleted, currentRound]);
+
+                // Check if all rounds are complete
+                if (currentRound === current.rounds.length - 1) {
+                    setMatchingComplete(true);
+                }
+            }
+        }
+    };
+
+    const nextRound = () => {
+        if (currentRound < current.rounds.length - 1) {
+            setCurrentRound(currentRound + 1);
+            setMatchingAnswers({});
+            setShuffledDefinitions([]);
+        }
+    };
+
+    const resetRound = () => {
+        setMatchingAnswers({});
+        setShuffledDefinitions([...current.rounds[currentRound].pairs.map(p => p.definition)].sort(() => Math.random() - 0.5));
+    };
+
     const renderContent = () => {
         if (current.type === "intro") {
             return (
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">{current.title}</h2>
-                    <p className="text-gray-700 leading-relaxed mb-6">{current.content}</p>
-                    <ul className="space-y-3">
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-orange-500 rounded-xl flex items-center justify-center">
+                            <Users className="text-white" size={24} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                    </div>
+                    <p className="text-base text-gray-700 mb-6">{current.content}</p>
+                    <div className="space-y-3">
                         {current.points.map((point, idx) => (
-                            <li key={idx} className="flex items-start gap-3">
-                                <CheckCircle size={20} className="text-blue-600 mt-0.5 flex-shrink-0" />
-                                <span className="text-gray-700">{point}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            );
-        }
-
-        if (current.type === "section") {
-            return (
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">{current.title}</h2>
-                    <p className="text-gray-700 leading-relaxed mb-6">{current.content}</p>
-
-                    {/* Highlight Box */}
-                    {current.highlight && (
-                        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border-l-4 border-blue-500 mb-6">
-                            <p className="text-gray-800 font-semibold">{current.highlight}</p>
-                        </div>
-                    )}
-
-                    {/* Examples */}
-                    {current.examples && (
-                        <div className="space-y-4 mb-6">
-                            {current.examples.map((example, idx) => (
-                                <div key={idx} className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                                    <p className="text-lg font-semibold text-gray-800 mb-1">{example.punjabi}</p>
-                                    <p className="text-sm italic text-gray-600 mb-1">{example.romanized}</p>
-                                    <p className="text-sm text-gray-500">{example.english}</p>
+                            <div key={idx} className="flex items-start gap-3 p-4 bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl border border-gray-100">
+                                <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-r from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                    {idx + 1}
                                 </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Vocabulary Table with Sides */}
-                    {current.vocabulary && (
-                        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-300 mb-6">
-                            <p className="font-bold text-gray-800 mb-3">Family Tree Summary:</p>
-                            <div className="space-y-3">
-                                <div>
-                                    <p className="text-sm font-semibold text-purple-700 mb-2">Maternal Side (Mother's Family):</p>
-                                    <div className="space-y-1 ml-4">
-                                        {current.vocabulary.filter(v => v.side === "Maternal").map((item, idx) => (
-                                            <div key={idx} className="text-sm">
-                                                <span className="font-semibold text-gray-800">{item.punjabi}</span>
-                                                <span className="text-gray-600"> - {item.english}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div>
-                                    <p className="text-sm font-semibold text-blue-700 mb-2">Paternal Side (Father's Family):</p>
-                                    <div className="space-y-1 ml-4">
-                                        {current.vocabulary.filter(v => v.side === "Paternal").map((item, idx) => (
-                                            <div key={idx} className="text-sm">
-                                                <span className="font-semibold text-gray-800">{item.punjabi}</span>
-                                                <span className="text-gray-600"> - {item.english}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                                <p className="text-gray-800 font-medium pt-0.5">{point}</p>
                             </div>
-                        </div>
-                    )}
-
-                    {/* Tip Box */}
-                    {current.tip && (
-                        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-300">
-                            <p className="font-bold text-gray-800 mb-2">{current.tip.title}:</p>
-                            <p className="text-gray-700">{current.tip.content}</p>
-                            {current.tip.reference && (
-                                <p className="text-blue-700 font-semibold mt-2">💡 {current.tip.reference}</p>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Note */}
-                    {current.note && (
-                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mt-4">
-                            <p className="text-sm text-gray-700 italic">{current.note}</p>
-                        </div>
-                    )}
+                        ))}
+                    </div>
                 </div>
             );
         }
 
-        if (current.type === "quiz") {
-            const userAnswer = quizAnswers[step];
-            const showResult = showFeedback[step];
-            const isCorrect = userAnswer !== undefined && current.options[userAnswer]?.correct;
+        if (current.type === "immediate-family") {
+            const category = current.categories[selectedCategory];
+            const IconComponent = category.icon;
 
             return (
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="bg-blue-100 p-3 rounded-full">
-                            <Trophy size={24} className="text-blue-600" />
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <Users className="text-blue-600" size={20} />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-800">Quick Check</h2>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
                     </div>
 
-                    <p className="text-lg text-gray-700 mb-6">{current.question}</p>
-
-                    <div className="space-y-3">
-                        {current.options.map((option, idx) => {
-                            const isSelected = userAnswer === idx;
-                            const showCorrect = showResult && option.correct;
-                            const showIncorrect = showResult && isSelected && !option.correct;
-
+                    {/* Category Tabs */}
+                    <div className="flex gap-2 mb-6 mt-6 overflow-x-auto pb-2">
+                        {current.categories.map((cat, idx) => {
+                            const TabIcon = cat.icon;
                             return (
                                 <button
-                                    key={idx}
-                                    onClick={() => !showResult && handleQuizAnswer(idx)}
-                                    disabled={showResult}
-                                    className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
-                                        showCorrect
-                                            ? 'bg-green-50 border-green-500'
-                                            : showIncorrect
-                                                ? 'bg-red-50 border-red-500'
-                                                : isSelected
-                                                    ? 'bg-blue-50 border-blue-500'
-                                                    : 'bg-white border-gray-300 hover:border-blue-400'
-                                    } ${showResult ? 'cursor-default' : 'cursor-pointer'}`}
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(idx)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                                        selectedCategory === idx
+                                            ? 'bg-gradient-to-r from-blue-500 to-orange-500 text-white shadow-md'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-800">{option.text}</span>
-                                        {showCorrect && <CheckCircle size={20} className="text-green-600" />}
-                                        {showIncorrect && <X size={20} className="text-red-600" />}
-                                    </div>
+                                    <TabIcon size={16} />
+                                    <span>{cat.title}</span>
                                 </button>
                             );
                         })}
                     </div>
 
-                    {showResult && (
-                        <div className={`mt-6 p-4 rounded-lg ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
-                            <p className={`font-semibold ${isCorrect ? 'text-green-800' : 'text-red-800'}`}>
-                                {isCorrect ? '✅ Correct!' : '❌ Incorrect'}
-                            </p>
-                            {!isCorrect && (
-                                <p className="text-sm text-gray-700 mt-2">
-                                    The correct answer is: <strong>{current.options.find(o => o.correct)?.text}</strong>
+                    {/* Terms Display */}
+                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border-2 border-gray-200">
+                        <div className="flex items-center gap-3 mb-5">
+                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                                <IconComponent className="text-blue-600" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900">{category.title}</h3>
+                        </div>
+
+                        <div className="space-y-3 mb-4">
+                            {category.terms.map((term, idx) => (
+                                <div key={idx} className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200">
+                                    <div className="flex-1">
+                                        <p className="text-xl font-bold text-gray-900">{term.punjabi}</p>
+                                        <p className="text-sm text-blue-700 font-medium">{term.roman}</p>
+                                    </div>
+                                    <p className="text-sm text-gray-700 font-medium">{term.english}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        {category.note && (
+                            <div className="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r">
+                                <p className="text-sm text-blue-900">{category.note}</p>
+                            </div>
+                        )}
+
+                        {category.tip && (
+                            <div className="mt-3 bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r">
+                                <div className="flex items-start gap-2">
+                                    <Info size={18} className="text-yellow-600 flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="text-sm font-semibold text-yellow-900">{category.tip}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "side-comparison") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <Sparkles className="text-purple-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 mb-6 border-2 border-purple-200">
+                        <p className="text-purple-900 font-medium text-center">{current.intro}</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Maternal Side */}
+                        <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 border-2 border-pink-200">
+                            <h3 className="text-xl font-bold text-pink-900 mb-4">{current.maternal.title}</h3>
+
+                            <div className="mb-4">
+                                <h4 className="text-sm font-bold text-pink-800 mb-2 uppercase tracking-wide">Grandparents</h4>
+                                <div className="space-y-2">
+                                    {current.maternal.grandparents.map((gp, idx) => (
+                                        <div key={idx} className="bg-white rounded-lg p-3 border border-pink-200">
+                                            <p className="font-bold text-gray-900">{gp.punjabi} <span className="text-pink-700 text-sm">({gp.roman})</span></p>
+                                            <p className="text-sm text-gray-700">{gp.english}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <h4 className="text-sm font-bold text-pink-800 mb-2 uppercase tracking-wide">Aunts & Uncles</h4>
+                                <div className="space-y-2">
+                                    {current.maternal.auntsUncles.map((au, idx) => (
+                                        <div key={idx} className="bg-white rounded-lg p-3 border border-pink-200">
+                                            <p className="font-bold text-gray-900">{au.punjabi} <span className="text-pink-700 text-sm">({au.roman})</span></p>
+                                            <p className="text-sm text-gray-700">{au.english}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="bg-pink-200 rounded-lg p-3">
+                                <p className="text-xs text-pink-900 font-medium">{current.maternal.note}</p>
+                            </div>
+                        </div>
+
+                        {/* Paternal Side */}
+                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border-2 border-blue-200">
+                            <h3 className="text-xl font-bold text-blue-900 mb-4">{current.paternal.title}</h3>
+
+                            <div className="mb-4">
+                                <h4 className="text-sm font-bold text-blue-800 mb-2 uppercase tracking-wide">Grandparents</h4>
+                                <div className="space-y-2">
+                                    {current.paternal.grandparents.map((gp, idx) => (
+                                        <div key={idx} className="bg-white rounded-lg p-3 border border-blue-200">
+                                            <p className="font-bold text-gray-900">{gp.punjabi} <span className="text-blue-700 text-sm">({gp.roman})</span></p>
+                                            <p className="text-sm text-gray-700">{gp.english}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <h4 className="text-sm font-bold text-blue-800 mb-2 uppercase tracking-wide">Aunts & Uncles</h4>
+                                <div className="space-y-2">
+                                    {current.paternal.auntsUncles.map((au, idx) => (
+                                        <div key={idx} className="bg-white rounded-lg p-3 border border-blue-200">
+                                            <p className="font-bold text-gray-900">{au.punjabi} <span className="text-blue-700 text-sm">({au.roman})</span></p>
+                                            <p className="text-sm text-gray-700">{au.english}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="bg-blue-200 rounded-lg p-3">
+                                <p className="text-xs text-blue-900 font-medium">{current.paternal.note}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "family-tree") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                            <Award className="text-green-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Maternal Tree */}
+                        <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 border-2 border-pink-200">
+                            <h3 className="text-lg font-bold text-pink-900 mb-4 text-center">Maternal Side</h3>
+                            <div className="space-y-2">
+                                {current.tree.maternal.map((member, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={`p-4 rounded-lg border-2 ${
+                                            member.level === 'grandparent'
+                                                ? 'bg-pink-200 border-pink-400'
+                                                : 'bg-pink-100 border-pink-300'
+                                        }`}
+                                    >
+                                        <p className="font-bold text-pink-900 text-lg">{member.term}</p>
+                                        <p className="text-sm text-pink-800">{member.relation}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Paternal Tree */}
+                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border-2 border-blue-200">
+                            <h3 className="text-lg font-bold text-blue-900 mb-4 text-center">Paternal Side</h3>
+                            <div className="space-y-2">
+                                {current.tree.paternal.map((member, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={`p-4 rounded-lg border-2 ${
+                                            member.level === 'grandparent'
+                                                ? 'bg-blue-200 border-blue-400'
+                                                : 'bg-blue-100 border-blue-300'
+                                        }`}
+                                    >
+                                        <p className="font-bold text-blue-900 text-lg">{member.term}</p>
+                                        <p className="text-sm text-blue-800">{member.relation}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 bg-green-50 border-l-4 border-green-400 p-4 rounded-r">
+                        <div className="flex items-start gap-2">
+                            <Info size={20} className="text-green-600 flex-shrink-0 mt-0.5" />
+                            <div>
+                                <p className="text-sm font-semibold text-green-900 mb-1">Pro Tip</p>
+                                <p className="text-sm text-green-800">
+                                    The key to mastering Panjabi family terms is remembering that maternal and paternal sides have completely different words. Practice by labeling your own family tree!
                                 </p>
-                            )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "matching-game") {
+            const round = current.rounds[currentRound];
+            const isRoundComplete = roundsCompleted.includes(currentRound);
+            const allRoundsComplete = roundsCompleted.length === current.rounds.length;
+
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <Trophy className="text-orange-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    {/* Round Progress */}
+                    <div className="flex items-center justify-center gap-2 mb-6">
+                        {current.rounds.map((_, idx) => (
+                            <div
+                                key={idx}
+                                className={`w-3 h-3 rounded-full ${
+                                    roundsCompleted.includes(idx)
+                                        ? 'bg-green-500'
+                                        : idx === currentRound
+                                            ? 'bg-blue-500'
+                                            : 'bg-gray-300'
+                                }`}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-5 mb-6 border-2 border-orange-200">
+                        <p className="text-orange-900 font-semibold text-center text-lg">{round.question}</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">Terms</h3>
+                            {round.pairs.map((pair, idx) => {
+                                const isAnswered = matchingAnswers[pair.term] !== undefined;
+                                const isCorrect = matchingAnswers[pair.term] === pair.definition;
+
+                                return (
+                                    <div
+                                        key={pair.term}
+                                        className={`p-4 rounded-xl font-semibold text-center transition-all ${
+                                            isCorrect
+                                                ? 'bg-green-100 border-2 border-green-500 text-green-800'
+                                                : isAnswered
+                                                    ? 'bg-red-100 border-2 border-red-500 text-red-800'
+                                                    : idx === Object.keys(matchingAnswers).length
+                                                        ? 'bg-blue-100 border-2 border-blue-500 text-blue-800 ring-2 ring-blue-200'
+                                                        : 'bg-gray-100 border-2 border-gray-300 text-gray-600'
+                                        }`}
+                                    >
+                                        {pair.term}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">Definitions</h3>
+                            {shuffledDefinitions.map((definition, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => handleMatchingSelect(definition)}
+                                    disabled={Object.values(matchingAnswers).includes(definition) || isRoundComplete}
+                                    className={`w-full p-4 rounded-xl font-medium text-center transition-all ${
+                                        Object.values(matchingAnswers).includes(definition) || isRoundComplete
+                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed border-2 border-gray-300'
+                                            : 'bg-orange-50 border-2 border-orange-300 text-orange-800 hover:bg-orange-100 hover:border-orange-400'
+                                    }`}
+                                >
+                                    {definition}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {isRoundComplete && !allRoundsComplete && (
+                        <div className="bg-green-50 border-2 border-green-500 rounded-xl p-4 text-center mb-4">
+                            <CheckCircle className="inline-block text-green-600 mb-2" size={32} />
+                            <p className="text-green-800 font-semibold mb-3">Perfect! Round {currentRound + 1} complete!</p>
+                            <button
+                                onClick={nextRound}
+                                className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                            >
+                                Next Round
+                            </button>
+                        </div>
+                    )}
+
+                    {allRoundsComplete && (
+                        <div className="bg-green-50 border-2 border-green-500 rounded-xl p-4 text-center">
+                            <Trophy className="inline-block text-green-600 mb-2" size={40} />
+                            <p className="text-green-800 font-bold text-lg">All rounds complete! You've mastered family terms!</p>
+                        </div>
+                    )}
+
+                    {Object.keys(matchingAnswers).length === round.pairs.length && !isRoundComplete && (
+                        <div className="bg-red-50 border-2 border-red-500 rounded-xl p-4 text-center">
+                            <X className="inline-block text-red-600 mb-2" size={32} />
+                            <p className="text-red-800 font-semibold mb-3">Not quite right. Try again!</p>
+                            <button
+                                onClick={resetRound}
+                                className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                            >
+                                Reset Round
+                            </button>
                         </div>
                     )}
                 </div>
             );
         }
+
+        if (current.type === "final-quiz") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
+                            <Trophy className="text-yellow-600" size={20} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                    </div>
+
+                    <div className="space-y-6">
+                        {current.questions.map((q, qIdx) => (
+                            <div key={qIdx} className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-orange-200">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="flex-shrink-0 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                        {qIdx + 1}
+                                    </div>
+                                    <p className="text-lg font-semibold text-gray-900">{q.question}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    {q.options.map((option, oIdx) => {
+                                        const isSelected = quizAnswers[qIdx] === oIdx;
+                                        const isCorrect = option.correct;
+                                        const showResult = quizAnswers[qIdx] !== undefined;
+
+                                        return (
+                                            <button
+                                                key={oIdx}
+                                                onClick={() => {
+                                                    if (quizAnswers[qIdx] === undefined) {
+                                                        setQuizAnswers(prev => {
+                                                            const newAnswers = [...prev];
+                                                            newAnswers[qIdx] = oIdx;
+                                                            return newAnswers;
+                                                        });
+                                                    }
+                                                }}
+                                                disabled={quizAnswers[qIdx] !== undefined}
+                                                className={`w-full p-4 rounded-lg text-left font-medium transition-all flex items-center gap-3 ${
+                                                    showResult && isSelected && isCorrect
+                                                        ? 'bg-green-100 border-2 border-green-500 text-green-800'
+                                                        : showResult && isSelected && !isCorrect
+                                                            ? 'bg-red-100 border-2 border-red-500 text-red-800'
+                                                            : showResult && isCorrect
+                                                                ? 'bg-green-50 border-2 border-green-300 text-green-800'
+                                                                : 'bg-white border-2 border-gray-300 text-gray-800 hover:border-orange-400 hover:bg-orange-50'
+                                                }`}
+                                            >
+                                                {showResult && isCorrect && (
+                                                    <CheckCircle size={20} className="flex-shrink-0" />
+                                                )}
+                                                <span>{option.text}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {quizAnswers.length === current.questions.length && !quizComplete && (
+                        <button
+                            onClick={() => setQuizComplete(true)}
+                            className="w-full mt-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all shadow-md"
+                        >
+                            Continue
+                        </button>
+                    )}
+                </div>
+            );
+        }
+
+        return null;
     };
 
     const CompletionSummary = () => {
+        const { correct, total, score } = calculateScore();
+
         return (
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                {/* Success Header */}
-                <div className="text-center mb-8">
-                    <div className="inline-block bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-full mb-4">
-                        <Award size={48} className="text-white" />
-                    </div>
-                    <h2 className="text-3xl font-bold text-gray-800 mb-2">Lesson Complete! 🎉</h2>
-                    <p className="text-lg text-gray-600">
-                        You've completed <strong>Family and Friends</strong>
-                    </p>
-                </div>
-
-                {/* Score Display */}
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 mb-6">
-                    <div className="text-center">
-                        <p className="text-sm text-gray-600 mb-2">Your Quiz Score</p>
-                        <div className="text-5xl font-bold text-blue-600 mb-2">{score}%</div>
-                        <p className="text-gray-700">
-                            {correctAnswers} out of {totalQuizzes} questions correct
-                        </p>
+            <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-green-500">
+                <div className="flex justify-center mb-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Trophy size={40} className="text-white" />
                     </div>
                 </div>
 
-                {/* Stats Grid */}
+                <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+                    Lesson Complete!
+                </h2>
+                <p className="text-center text-gray-600 mb-8">
+                    You've mastered Panjabi family terms!
+                </p>
+
                 <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-2xl font-bold text-blue-600 mb-1">{totalQuizzes}</div>
-                        <p className="text-xs text-gray-600">Total Questions</p>
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl text-center border-2 border-blue-200">
+                        <div className="text-3xl font-bold text-blue-600 mb-1">{score}%</div>
+                        <p className="text-xs text-gray-600 font-medium">Score</p>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-2xl font-bold text-green-600 mb-1">{correctAnswers}</div>
-                        <p className="text-xs text-gray-600">Correct</p>
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl text-center border-2 border-green-200">
+                        <div className="text-3xl font-bold text-green-600 mb-1">{correct}</div>
+                        <p className="text-xs text-gray-600 font-medium">Correct</p>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-2xl font-bold text-orange-600 mb-1">{totalQuizzes - correctAnswers}</div>
-                        <p className="text-xs text-gray-600">Incorrect</p>
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl text-center border-2 border-orange-200">
+                        <div className="text-3xl font-bold text-orange-600 mb-1">{total - correct}</div>
+                        <p className="text-xs text-gray-600 font-medium">Incorrect</p>
                     </div>
                 </div>
 
-                {/* Progress Saved Message */}
                 {supabase && userId && (
                     <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded-r mb-6">
                         <div className="flex items-center gap-2">
@@ -608,11 +877,10 @@ export default function Lesson4FamilyAndFriends() {
                     </div>
                 )}
 
-                {/* Action Buttons */}
                 <div className="space-y-3">
                     <button
-                        onClick={() => router.push("/lessons/lesson5/1")}
-                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm"
+                        onClick={() => router.push("/lessons/lesson5/")}
+                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm shadow-md"
                     >
                         <span>Continue to Next Lesson</span>
                         <ArrowRight size={18} />
@@ -620,8 +888,14 @@ export default function Lesson4FamilyAndFriends() {
                     <button
                         onClick={() => {
                             setStep(0);
-                            setQuizAnswers({});
-                            setShowFeedback({});
+                            setSelectedCategory(0);
+                            setCurrentRound(0);
+                            setMatchingAnswers({});
+                            setMatchingComplete(false);
+                            setRoundsCompleted([]);
+                            setShuffledDefinitions([]);
+                            setQuizAnswers([]);
+                            setQuizComplete(false);
                             setLessonCompleted(false);
                         }}
                         className="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm"
@@ -631,7 +905,7 @@ export default function Lesson4FamilyAndFriends() {
                     </button>
                     <button
                         onClick={() => router.push("/learning/essential-punjabi")}
-                        className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm border border-gray-300"
+                        className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm border-2 border-gray-300"
                     >
                         <ArrowLeft size={18} />
                         <span>Back to Lessons</span>
@@ -654,7 +928,6 @@ export default function Lesson4FamilyAndFriends() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-28 pb-12">
             <div className="max-w-3xl mx-auto">
-                {/* Back Button */}
                 <button
                     onClick={() => router.push("/learning/essential-punjabi")}
                     className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors text-sm"
@@ -663,58 +936,53 @@ export default function Lesson4FamilyAndFriends() {
                     <span>Back to Lessons</span>
                 </button>
 
-                {/* Header */}
-                <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-6 text-white shadow-lg mb-6">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <Users size={18} />
-                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 4: Relationships</span>
+                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 4: Family Vocabulary</span>
                     </div>
                     <h1 className="text-3xl font-bold mb-2">
                         Family and Friends
                     </h1>
-                    <p className="text-base text-purple-100">
-                        Master the Punjabi words for family members
+                    <p className="text-base text-blue-100">
+                        Master the precise terms for maternal and paternal relatives
                     </p>
                 </div>
 
-                {/* Progress Bar */}
                 <div className="bg-white rounded-xl shadow p-4 mb-6 border border-gray-200">
                     <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-semibold text-gray-700">Lesson Progress</span>
+                        <span className="text-xs font-semibold text-gray-700">Progress</span>
                         <span className="text-sm font-bold text-blue-600">
                             {step + 1} / {lessonContent.length}
                         </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                         <div
-                            className="bg-gradient-to-r from-purple-500 to-pink-500 h-full transition-all duration-500"
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 h-full transition-all duration-500"
                             style={{ width: `${((step + 1) / lessonContent.length) * 100}%` }}
                         ></div>
                     </div>
                 </div>
 
-                {/* Main Content */}
                 <div className="mb-6">
                     {renderContent()}
                 </div>
 
-                {/* Progress Dots */}
                 <div className="flex justify-center gap-1.5 mb-6">
                     {lessonContent.map((_, idx) => (
                         <div
                             key={idx}
                             className={`w-2 h-2 rounded-full transition-all duration-300 ${
                                 idx === step
-                                    ? 'bg-purple-600 w-6'
+                                    ? 'bg-blue-600 w-6'
                                     : idx < step
-                                        ? 'bg-purple-400'
+                                        ? 'bg-blue-400'
                                         : 'bg-gray-300'
                             }`}
                         ></div>
                     ))}
                 </div>
 
-                {/* Navigation Buttons */}
                 <div className="flex gap-3">
                     <button
                         onClick={handlePrevious}
@@ -732,11 +1000,11 @@ export default function Lesson4FamilyAndFriends() {
                     {step < lessonContent.length - 1 ? (
                         <button
                             onClick={handleNext}
-                            disabled={current.type === 'quiz' && !showFeedback[step]}
+                            disabled={!canProceed()}
                             className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all text-sm ${
-                                current.type === 'quiz' && !showFeedback[step]
+                                !canProceed()
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
+                                    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-md'
                             }`}
                         >
                             <span>Next</span>
@@ -745,7 +1013,12 @@ export default function Lesson4FamilyAndFriends() {
                     ) : (
                         <button
                             onClick={handleComplete}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all text-sm"
+                            disabled={!quizComplete}
+                            className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all text-sm ${
+                                !quizComplete
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-md'
+                            }`}
                         >
                             <span>Complete Lesson</span>
                             <CheckCircle size={18} />

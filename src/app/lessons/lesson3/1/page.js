@@ -2,8 +2,24 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, User, CheckCircle, X, RotateCcw, Trophy, Award, Volume2 } from "lucide-react";
-import Image from "next/image";
+import {
+    ArrowLeft,
+    ArrowRight,
+    User,
+    CheckCircle,
+    RotateCcw,
+    Trophy,
+    Volume2,
+    Play,
+    Pause,
+    IdCard,
+    Calendar,
+    MapPin,
+    Briefcase,
+    Users,
+    Info,
+    Home
+} from "lucide-react";
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
@@ -14,261 +30,293 @@ const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabase
 const lessonContent = [
     {
         type: "intro",
-        title: "A Bit About Me",
-        content: "In this lesson, you'll learn how to introduce yourself in Punjabi. We'll cover the essentials:",
+        title: "Introduce Yourself",
+        content: "Learn the essentials of introducing yourself in Panjabi—from your name to your family.",
         points: [
-            "Saying your name",
-            "Telling your age",
-            "Saying where you're from and where you live",
-            "Talking about work or studies",
-            "Describing your family"
+            "Name and age",
+            "Where you're from and where you live",
+            "Work or studies",
+            "Family members"
         ]
     },
     {
-        type: "section",
-        title: "What's Your Name?",
-        avatar: "/avatars/avatar5.png",
-        avatarName: "Priya",
-        avatarColor: "pink",
-        content: "Let's start with the most basic introduction - telling someone your name.",
-        examples: [
+        type: "phrase-tabs",
+        title: "Basic Introduction",
+        subtitle: "Choose male or female forms",
+        categories: [
             {
-                punjabi: "ਮੇਰਾ ਨਾਮ ਪ੍ਰੀਆ ਹੈ।",
-                romanized: "Mera naam Priya hai.",
-                english: "My name is Priya.",
-                audioFile: "mera-naam-priya-hai.mp3"
+                id: "name",
+                title: "Name",
+                icon: IdCard,
+                phrases: [
+                    {
+                        gurmukhi: "ਮੇਰਾ ਨਾਮ [Name] ਹੈ",
+                        roman: "Mera naam [Name] hai",
+                        english: "My name is [Name]",
+                        note: "Replace [Name] with your actual name",
+                        audioFile: "mera-naam-priya-hai.mp3"
+                    }
+                ]
             },
             {
-                punjabi: "ਮੇਰਾ ਨਾਮ ਅਮਨ ਹੈ।",
-                romanized: "Mera naam Aman hai.",
-                english: "My name is Aman.",
-                audioFile: "mera-naam-aman-hai.mp3"
+                id: "age",
+                title: "Age",
+                icon: Calendar,
+                male: {
+                    gurmukhi: "ਮੈਂ 25 ਸਾਲਾਂ ਦਾ ਹਾਂ",
+                    roman: "Maiṁ 25 salān dā hān",
+                    english: "I am 25 years old (male)",
+                    audioFile: "main-25-saalan-da-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ 23 ਸਾਲਾਂ ਦੀ ਹਾਂ",
+                    roman: "Maiṁ 23 salān dī hān",
+                    english: "I am 23 years old (female)",
+                    audioFile: "main-23-saalan-di-haan.mp3"
+                },
+                tip: "Use 'ਦਾ' (dā) if you're male and 'ਦੀ' (dī) if you're female"
+            },
+            {
+                id: "origin",
+                title: "Origin",
+                icon: MapPin,
+                male: {
+                    gurmukhi: "ਮੈਂ London ਤੋਂ ਆਇਆ ਹਾਂ",
+                    roman: "Maiṁ London ton āiā hān",
+                    english: "I am from London (male)",
+                    audioFile: "main-london-ton-aaya-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ London ਤੋਂ ਆਈ ਹਾਂ",
+                    roman: "Maiṁ London ton āī hān",
+                    english: "I am from London (female)",
+                    audioFile: "main-london-ton-aayi-haan.mp3"
+                },
+                tip: "Notice: 'ਆਇਆ' (āiā) for males, 'ਆਈ' (āī) for females"
+            },
+            {
+                id: "residence",
+                title: "Where I Live",
+                icon: Home,
+                male: {
+                    gurmukhi: "ਮੈਂ Southall ਵਿੱਚ ਰਹਿੰਦਾ ਹਾਂ",
+                    roman: "Maiṁ Southall vich rahindā hān",
+                    english: "I live in Southall (male)",
+                    audioFile: "main-southall-vich-rahinda-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ Birmingham ਵਿੱਚ ਰਹਿੰਦੀ ਹਾਂ",
+                    roman: "Maiṁ Birmingham vich rahindī hān",
+                    english: "I live in Birmingham (female)",
+                    audioFile: "main-birmingham-vich-rahindi-haan.mp3"
+                },
+                tip: "'ਰਹਿੰਦਾ' (rahindā) changes to 'ਰਹਿੰਦੀ' (rahindī) for females"
             }
-        ],
-        note: "Simply replace 'Priya' or 'Aman' with your own name to introduce yourself!"
-    },
-    {
-        type: "section",
-        title: "How Old Are You?",
-        avatar: "/avatars/avatar6.png",
-        avatarName: "Aman",
-        avatarColor: "blue",
-        content: "After your name, someone might ask: ਤੁਹਾਡੀ ਉਮਰ ਕਿੰਨੀ ਹੈ? (Tuhāḍī umar kinnī hai?) - How old are you?",
-        examples: [
-            {
-                punjabi: "ਮੈਂ 25 ਸਾਲਾਂ ਦਾ ਹਾਂ।",
-                romanized: "Maiṁ 25 salān dā hān.",
-                english: "I am 25 years old. (male)",
-                audioFile: "main-25-saalan-da-haan.mp3"
-            },
-            {
-                punjabi: "ਮੈਂ 23 ਸਾਲਾਂ ਦੀ ਹਾਂ।",
-                romanized: "Maiṁ 23 salān dī hān.",
-                english: "I am 23 years old. (female)",
-                audioFile: "main-23-saalan-di-haan.mp3"
-            }
-        ],
-        tip: {
-            title: "Important Gender Difference",
-            content: "Use 'ਦਾ' (dā) if you're male and 'ਦੀ' (dī) if you're female.",
-            reference: "Check out the 'Numbers Chart' in Learning Resources to learn Punjabi numbers!"
-        }
-    },
-    {
-        type: "quiz",
-        question: "How do you say 'My name is Priya' in Punjabi?",
-        options: [
-            { text: "Mera nām Priya hai.", correct: true },
-            { text: "Main Priya haan.", correct: false },
-            { text: "Tera nām Priya hai.", correct: false }
         ]
     },
     {
-        type: "quiz",
-        question: "Which sentence correctly means 'I am 25 years old' for a boy?",
-        options: [
-            { text: "Maiṁ 25 salān dī hān", correct: false },
-            { text: "Maiṁ 25 salān dā hān", correct: true },
-            { text: "Maiṁ 25 nām dā hān", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "Where Are You From?",
-        avatar: "/avatars/avatar5.png",
-        avatarName: "Priya",
-        avatarColor: "pink",
-        content: "Now let's learn how to say where you're from and where you currently live.",
-        examples: [
+        type: "work-study",
+        title: "Work & Study",
+        subtitle: "Talk about what you do",
+        icon: Briefcase,
+        phrases: [
             {
-                punjabi: "ਮੈਂ London ਤੋਂ ਆਇਆ ਹਾਂ।",
-                romanized: "Maiṁ London ton āiā hān.",
-                english: "I am from London. (male)",
-                audioFile: "main-london-ton-aaya-haan.mp3"
+                type: "work",
+                male: {
+                    gurmukhi: "ਮੈਂ [Place] ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ",
+                    roman: "Maiṁ [Place] laī kam kardā hān",
+                    english: "I work at [Place] (male)",
+                    audioFile: "main-heathrow-lai-kam-karda-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ [Place] ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ",
+                    roman: "Maiṁ [Place] laī kam kardī hān",
+                    english: "I work at [Place] (female)",
+                    audioFile: "main-heathrow-lai-kam-kardi-haan.mp3"
+                }
             },
             {
-                punjabi: "ਮੈਂ London ਤੋਂ ਆਈ ਹਾਂ।",
-                romanized: "Maiṁ London ton āī hān.",
-                english: "I am from London. (female)",
-                audioFile: "main-london-ton-aayi-haan.mp3"
-            }
-        ],
-        note: "Notice the gender difference: 'ਆਇਆ' (āiā) for males and 'ਆਈ' (āī) for females."
-    },
-    {
-        type: "section",
-        title: "Where Do You Live?",
-        avatar: "/avatars/avatar6.png",
-        avatarName: "Aman",
-        avatarColor: "blue",
-        content: "Someone might also ask where you currently live.",
-        examples: [
-            {
-                punjabi: "ਮੈਂ Southall ਵਿੱਚ ਰਹਿੰਦਾ ਹਾਂ।",
-                romanized: "Maiṁ Southall vich rahindā hān.",
-                english: "I live in Southall. (male)",
-                audioFile: "main-southall-vich-rahinda-haan.mp3"
-            },
-            {
-                punjabi: "ਮੈਂ Birmingham ਵਿੱਚ ਰਹਿੰਦੀ ਹਾਂ।",
-                romanized: "Maiṁ Birmingham vich rahindī hān.",
-                english: "I live in Birmingham. (female)",
-                audioFile: "main-birmingham-vich-rahindi-haan.mp3"
-            }
-        ],
-        tip: {
-            title: "Pattern Recognition",
-            content: "Notice how 'ਰਹਿੰਦਾ' (rahindā) changes to 'ਰਹਿੰਦੀ' (rahindī) for females."
-        }
-    },
-    {
-        type: "quiz",
-        question: "How do you say 'I am from London' as a girl?",
-        options: [
-            { text: "Maiṁ London ton āī hān", correct: true },
-            { text: "Maiṁ London ton āiā hān", correct: false },
-            { text: "Maiṁ London vich rahindī hān", correct: false }
-        ]
-    },
-    {
-        type: "quiz",
-        question: "Which phrase means 'I live in Birmingham' for a girl?",
-        options: [
-            { text: "Maiṁ Birmingham vich rahindā hān", correct: false },
-            { text: "Maiṁ Birmingham vich rahindī hān", correct: true },
-            { text: "Maiṁ Birmingham ton āī hān", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "What Do You Do?",
-        avatar: "/avatars/avatar5.png",
-        avatarName: "Priya",
-        avatarColor: "pink",
-        content: "Let's learn how to talk about your work or studies.",
-        examples: [
-            {
-                punjabi: "ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ।",
-                romanized: "Maiṁ Heathrow Airport laī kam kardā hān.",
-                english: "I work at Heathrow Airport. (male)",
-                audioFile: "main-heathrow-lai-kam-karda-haan.mp3"
-            },
-            {
-                punjabi: "ਮੈਂ Heathrow Airport ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ।",
-                romanized: "Maiṁ Heathrow Airport laī kam kardī hān.",
-                english: "I work at Heathrow Airport. (female)",
-                audioFile: "main-heathrow-lai-kam-kardi-haan.mp3"
-            },
-            {
-                punjabi: "ਮੈਂ university ਪੜ੍ਹਦਾ ਹਾਂ।",
-                romanized: "Maiṁ university paṛhdā hān.",
-                english: "I study at university. (male)",
-                audioFile: "main-university-parhda-haan.mp3"
-            },
-            {
-                punjabi: "ਮੈਂ university ਪੜ੍ਹਦੀ ਹਾਂ।",
-                romanized: "Maiṁ university paṛhdī hān.",
-                english: "I study at university. (female)",
-                audioFile: "main-university-parhdi-haan.mp3"
-            }
-        ],
-        tip: {
-            title: "Key Verbs",
-            content: "ਕੰਮ ਕਰਨਾ (kam karnā) = to work | ਪੜ੍ਹਨਾ (paṛhnā) = to study"
-        }
-    },
-    {
-        type: "quiz",
-        question: "What does 'Maiṁ Heathrow Airport laī kam kardā hān' mean?",
-        options: [
-            { text: "I live at Heathrow Airport.", correct: false },
-            { text: "I study at Heathrow Airport.", correct: false },
-            { text: "I work at Heathrow Airport.", correct: true }
-        ]
-    },
-    {
-        type: "quiz",
-        question: "What is the difference between 'paṛhdā' and 'paṛhdī'?",
-        options: [
-            { text: "They mean different things.", correct: false },
-            { text: "One is for boys, one is for girls.", correct: true },
-            { text: "They are different tenses.", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "Your Family",
-        avatar: "/avatars/avatar6.png",
-        avatarName: "Aman",
-        avatarColor: "blue",
-        content: "Finally, let's learn how to talk about your siblings.",
-        examples: [
-            {
-                punjabi: "ਮੇਰੇ 2 ਵੱਡੇ ਭਰਾ ਅਤੇ 1 ਛੋਟੀ ਭੈਣ ਹਨ।",
-                romanized: "Mere 2 vaḍḍe bhrā atē 1 chhoṭī bhaiṇ han.",
-                english: "I have 2 older brothers and 1 younger sister."
-            },
-            {
-                punjabi: "ਮੇਰਾ 1 ਛੋਟਾ ਭਰਾ ਹੈ।",
-                romanized: "Merā 1 chhoṭā bhrā hai.",
-                english: "I have 1 younger brother."
+                type: "study",
+                male: {
+                    gurmukhi: "ਮੈਂ university ਪੜ੍ਹਦਾ ਹਾਂ",
+                    roman: "Maiṁ university paṛhdā hān",
+                    english: "I study at university (male)",
+                    audioFile: "main-university-parhda-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ university ਪੜ੍ਹਦੀ ਹਾਂ",
+                    roman: "Maiṁ university paṛhdī hān",
+                    english: "I study at university (female)",
+                    audioFile: "main-university-parhdi-haan.mp3"
+                }
             }
         ],
         vocabulary: [
-            { punjabi: "ਭਰਾ", romanized: "bhrā", english: "Brother" },
-            { punjabi: "ਭੈਣ", romanized: "bhaiṇ", english: "Sister" },
-            { punjabi: "ਵੱਡਾ/ਵੱਡੀ", romanized: "vaḍḍā/vaḍḍī", english: "Older/Bigger" },
-            { punjabi: "ਛੋਟਾ/ਛੋਟੀ", romanized: "chhoṭā/chhoṭī", english: "Younger/Little" },
-            { punjabi: "ਮੇਰੇ", romanized: "mere", english: "My (plural)" }
+            { punjabi: "ਕੰਮ ਕਰਨਾ", roman: "kam karnā", english: "to work" },
+            { punjabi: "ਪੜ੍ਹਨਾ", roman: "paṛhnā", english: "to study" }
         ]
     },
     {
-        type: "quiz",
-        question: "How would you say: 'I have 2 older brothers and 1 younger sister'?",
-        options: [
-            { text: "Mere 2 vaḍḍe bhrā atē 1 chhoṭī bhaiṇ han", correct: true },
-            { text: "Mere 2 chhoṭe bhrā atē 1 vaḍḍī bhaiṇ han", correct: false },
-            { text: "Mere 2 bhrā 1 bhaiṇ han", correct: false }
+        type: "family",
+        title: "Your Family",
+        subtitle: "Talk about siblings",
+        icon: Users,
+        examples: [
+            {
+                gurmukhi: "ਮੇਰੇ 2 ਵੱਡੇ ਭਰਾ ਅਤੇ 1 ਛੋਟੀ ਭੈਣ ਹਨ",
+                roman: "Mere 2 vaḍḍe bhrā atē 1 chhoṭī bhaiṇ han",
+                english: "I have 2 older brothers and 1 younger sister"
+            },
+            {
+                gurmukhi: "ਮੇਰਾ 1 ਛੋਟਾ ਭਰਾ ਹੈ",
+                roman: "Merā 1 chhoṭā bhrā hai",
+                english: "I have 1 younger brother"
+            }
+        ],
+        vocabulary: [
+            {
+                punjabi: "ਭਰਾ",
+                roman: "bhrā",
+                english: "Brother",
+                icon: User
+            },
+            {
+                punjabi: "ਭੈਣ",
+                roman: "bhaiṇ",
+                english: "Sister",
+                icon: User
+            },
+            {
+                punjabi: "ਵੱਡਾ/ਵੱਡੀ",
+                roman: "vaḍḍā/vaḍḍī",
+                english: "Older/Bigger",
+                icon: ArrowRight
+            },
+            {
+                punjabi: "ਛੋਟਾ/ਛੋਟੀ",
+                roman: "chhoṭā/chhoṭī",
+                english: "Younger/Little",
+                icon: ArrowRight
+            }
         ]
     },
     {
-        type: "quiz",
-        question: "What does 'vaḍḍā' mean?",
-        options: [
-            { text: "Younger", correct: false },
-            { text: "Older/Bigger", correct: true },
-            { text: "Brother", correct: false }
+        type: "practice-builder",
+        title: "Build Your Introduction",
+        subtitle: "Select the correct phrases to create a complete self-introduction",
+        scenario: "Simran is introducing herself to her new classmates",
+        steps: [
+            {
+                id: 1,
+                prompt: "How should Simran say her name?",
+                options: [
+                    { text: "Mera naam Simran hai", correct: true },
+                    { text: "Tera naam Simran hai", correct: false },
+                    { text: "Main Simran haan", correct: false }
+                ],
+                explanation: "'Mera naam [Name] hai' is the standard way to introduce your name"
+            },
+            {
+                id: 2,
+                prompt: "Simran is 23 years old. What should she say?",
+                options: [
+                    { text: "Maiṁ 23 salān dā hān", correct: false },
+                    { text: "Maiṁ 23 salān dī hān", correct: true },
+                    { text: "Maiṁ 23 nām dī hān", correct: false }
+                ],
+                explanation: "Use 'dī' (ਦੀ) for females when stating age"
+            },
+            {
+                id: 3,
+                prompt: "Simran is from Leicester. How does she say this?",
+                options: [
+                    { text: "Maiṁ Leicester ton āiā hān", correct: false },
+                    { text: "Maiṁ Leicester ton āī hān", correct: true },
+                    { text: "Maiṁ Leicester vich rahindī hān", correct: false }
+                ],
+                explanation: "Use 'āī' (ਆਈ) for females when saying where you're from"
+            },
+            {
+                id: 4,
+                prompt: "Simran studies at university. What should she say?",
+                options: [
+                    { text: "Maiṁ university paṛhdā hān", correct: false },
+                    { text: "Maiṁ university paṛhdī hān", correct: true },
+                    { text: "Maiṁ university kam kardī hān", correct: false }
+                ],
+                explanation: "'Paṛhdī' (ਪੜ੍ਹਦੀ) is the female form of 'to study'"
+            }
+        ]
+    },
+    {
+        type: "final-quiz",
+        title: "Test Your Knowledge",
+        questions: [
+            {
+                question: "How do you say 'My name is Priya' in Panjabi?",
+                options: [
+                    { text: "Mera naam Priya hai", correct: true },
+                    { text: "Main Priya haan", correct: false },
+                    { text: "Tera naam Priya hai", correct: false }
+                ]
+            },
+            {
+                question: "Which is correct for a boy saying 'I am 25 years old'?",
+                options: [
+                    { text: "Maiṁ 25 salān dī hān", correct: false },
+                    { text: "Maiṁ 25 salān dā hān", correct: true },
+                    { text: "Maiṁ 25 nām dā hān", correct: false }
+                ]
+            },
+            {
+                question: "How does a girl say 'I am from London'?",
+                options: [
+                    { text: "Maiṁ London ton āī hān", correct: true },
+                    { text: "Maiṁ London ton āiā hān", correct: false },
+                    { text: "Maiṁ London vich rahindī hān", correct: false }
+                ]
+            },
+            {
+                question: "What does 'Maiṁ university paṛhdā hān' mean?",
+                options: [
+                    { text: "I work at university", correct: false },
+                    { text: "I study at university (male)", correct: true },
+                    { text: "I live at university", correct: false }
+                ]
+            },
+            {
+                question: "What is the difference between 'paṛhdā' and 'paṛhdī'?",
+                options: [
+                    { text: "Different meanings", correct: false },
+                    { text: "Male vs female form", correct: true },
+                    { text: "Different tenses", correct: false }
+                ]
+            }
         ]
     }
 ];
 
-export default function Lesson3AboutMe() {
+export default function IntroductionLesson() {
     const router = useRouter();
     const [step, setStep] = useState(0);
-    const [quizAnswers, setQuizAnswers] = useState({});
-    const [showFeedback, setShowFeedback] = useState({});
-    const [lessonCompleted, setLessonCompleted] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [lessonCompleted, setLessonCompleted] = useState(false);
+
+    // Phrase tabs state
+    const [selectedCategory, setSelectedCategory] = useState(0);
+    const [selectedGender, setSelectedGender] = useState("male");
+
+    // Audio state
+    const [playingAudio, setPlayingAudio] = useState(null);
+
+    // Practice builder state
+    const [practiceAnswers, setPracticeAnswers] = useState({});
+    const [practiceComplete, setPracticeComplete] = useState(false);
+
+    // Quiz state
+    const [quizAnswers, setQuizAnswers] = useState([]);
+    const [quizComplete, setQuizComplete] = useState(false);
+
     const current = lessonContent[step];
 
     // Get user on mount
@@ -284,41 +332,51 @@ export default function Lesson3AboutMe() {
         getUser();
     }, []);
 
-    // Audio playback function
-    const playAudio = (audioFile) => {
-        if (audioFile) {
-            const audio = new Audio(`/audio/${audioFile}`);
-            audio.play().catch(error => console.error('Error playing audio:', error));
-        }
+    // Play audio function
+    const playAudio = (audioFile, id) => {
+        setPlayingAudio(id);
+        const audio = new Audio(`/audio/${audioFile}`);
+        audio.play();
+        audio.onended = () => setPlayingAudio(null);
     };
 
     // Calculate quiz statistics
-    const quizSteps = lessonContent.reduce((acc, content, index) => {
-        if (content.type === 'quiz') acc.push(index);
-        return acc;
-    }, []);
+    const calculateScore = () => {
+        let correct = 0;
+        let total = 0;
 
-    const totalQuizzes = quizSteps.length;
-    const correctAnswers = quizSteps.filter(index => {
-        const answer = quizAnswers[index];
-        return answer !== undefined && lessonContent[index].options[answer]?.correct;
-    }).length;
-    const score = totalQuizzes > 0 ? Math.round((correctAnswers / totalQuizzes) * 100) : 0;
+        if (quizComplete) {
+            lessonContent[5].questions.forEach((q, idx) => {
+                total++;
+                if (quizAnswers[idx] !== undefined && q.options[quizAnswers[idx]]?.correct) {
+                    correct++;
+                }
+            });
+        }
+
+        return { correct, total, score: total > 0 ? Math.round((correct / total) * 100) : 0 };
+    };
 
     // Save progress to Supabase
     const saveProgress = async () => {
         if (!supabase || !userId) return;
 
         try {
+            const { correct, total, score } = calculateScore();
+
             const { error } = await supabase
                 .from('lesson_progress')
                 .upsert({
                     user_id: userId,
-                    lesson_id: 'lesson-3-about-me',
-                    lesson_name: 'A Bit About Me',
+                    lesson_id: 'lesson-3-introduction',
+                    lesson_name: 'Self Introduction',
                     completed: true,
-                    score: score,
-                    completed_at: new Date().toISOString()
+                    quiz_score: score,
+                    correct_answers: correct,
+                    total_questions: total,
+                    last_accessed: new Date().toISOString()
+                }, {
+                    onConflict: 'user_id,lesson_id'
                 });
 
             if (error) throw error;
@@ -327,7 +385,15 @@ export default function Lesson3AboutMe() {
         }
     };
 
+    const canProceed = () => {
+        if (current.type === 'practice-builder' && !practiceComplete) return false;
+        if (current.type === 'final-quiz' && !quizComplete) return false;
+        return true;
+    };
+
     const handleNext = () => {
+        if (!canProceed()) return;
+
         if (step < lessonContent.length - 1) {
             setStep(step + 1);
         }
@@ -339,226 +405,494 @@ export default function Lesson3AboutMe() {
         }
     };
 
-    const handleQuizAnswer = (optionIndex) => {
-        setQuizAnswers({ ...quizAnswers, [step]: optionIndex });
-        setShowFeedback({ ...showFeedback, [step]: true });
-    };
-
     const handleComplete = async () => {
         await saveProgress();
         setLessonCompleted(true);
     };
 
+    // Practice builder logic
+    const handlePracticeAnswer = (stepId, optionIndex) => {
+        if (practiceAnswers[stepId] !== undefined) return;
+
+        const newAnswers = { ...practiceAnswers, [stepId]: optionIndex };
+        setPracticeAnswers(newAnswers);
+
+        if (Object.keys(newAnswers).length === current.steps.length) {
+            setPracticeComplete(true);
+        }
+    };
+
     const renderContent = () => {
         if (current.type === "intro") {
             return (
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">{current.title}</h2>
-                    <p className="text-gray-700 leading-relaxed mb-6">{current.content}</p>
-                    <ul className="space-y-3">
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-orange-500 rounded-xl flex items-center justify-center">
+                            <User className="text-white" size={24} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                    </div>
+                    <p className="text-base text-gray-700 mb-6">{current.content}</p>
+                    <div className="space-y-3">
                         {current.points.map((point, idx) => (
-                            <li key={idx} className="flex items-start gap-3">
-                                <CheckCircle size={20} className="text-blue-600 mt-0.5 flex-shrink-0" />
-                                <span className="text-gray-700">{point}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            );
-        }
-
-        if (current.type === "section") {
-            return (
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                    {/* Avatar Header */}
-                    {current.avatar && (
-                        <div className="flex flex-col items-center mb-6">
-                            <div className="relative w-20 h-20">
-                                <Image
-                                    src={current.avatar}
-                                    alt={current.avatarName}
-                                    fill
-                                    className={`rounded-full object-cover border-2 border-${current.avatarColor}-500`}
-                                />
-                            </div>
-                            <h3 className={`text-xl font-bold text-${current.avatarColor}-600 mt-2`}>
-                                {current.avatarName} {current.avatarName === "Priya" ? "asks:" : "says:"}
-                            </h3>
-                        </div>
-                    )}
-
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">{current.title}</h2>
-                    <p className="text-gray-700 leading-relaxed mb-6">{current.content}</p>
-
-                    {/* Examples */}
-                    {current.examples && (
-                        <div className="space-y-4 mb-6">
-                            {current.examples.map((example, idx) => (
-                                <div key={idx} className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                                    <div className="flex items-start justify-between gap-3">
-                                        <div className="flex-1">
-                                            <p className="text-lg font-semibold text-gray-800 mb-1">{example.punjabi}</p>
-                                            <p className="text-sm italic text-gray-600 mb-1">{example.romanized}</p>
-                                            <p className="text-sm text-gray-500">{example.english}</p>
-                                        </div>
-                                        {example.audioFile && (
-                                            <button
-                                                onClick={() => playAudio(example.audioFile)}
-                                                className="p-2 bg-blue-500 hover:bg-blue-600 rounded-full transition-all flex-shrink-0"
-                                                title="Play audio"
-                                            >
-                                                <Volume2 size={18} className="text-white" />
-                                            </button>
-                                        )}
-                                    </div>
+                            <div key={idx} className="flex items-start gap-3 p-4 bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl border border-gray-100">
+                                <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-r from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                    {idx + 1}
                                 </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Vocabulary Table */}
-                    {current.vocabulary && (
-                        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-300 mb-6">
-                            <p className="font-bold text-gray-800 mb-3">Vocabulary Breakdown:</p>
-                            <div className="space-y-2">
-                                {current.vocabulary.map((item, idx) => (
-                                    <div key={idx} className="flex items-start gap-2">
-                                        <span className="font-semibold text-gray-800">{item.punjabi}</span>
-                                        <span className="text-gray-600">({item.romanized})</span>
-                                        <span className="text-gray-500">- {item.english}</span>
-                                    </div>
-                                ))}
+                                <p className="text-gray-800 font-medium pt-0.5">{point}</p>
                             </div>
-                        </div>
-                    )}
-
-                    {/* Tip Box */}
-                    {current.tip && (
-                        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-300">
-                            <p className="font-bold text-gray-800 mb-2">{current.tip.title}:</p>
-                            <p className="text-gray-700">{current.tip.content}</p>
-                            {current.tip.reference && (
-                                <p className="text-blue-700 font-semibold mt-2">💡 {current.tip.reference}</p>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Note */}
-                    {current.note && (
-                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mt-4">
-                            <p className="text-sm text-gray-700 italic">{current.note}</p>
-                        </div>
-                    )}
+                        ))}
+                    </div>
                 </div>
             );
         }
 
-        if (current.type === "quiz") {
-            const userAnswer = quizAnswers[step];
-            const showResult = showFeedback[step];
-            const isCorrect = userAnswer !== undefined && current.options[userAnswer]?.correct;
+        if (current.type === "phrase-tabs") {
+            const category = current.categories[selectedCategory];
+            const IconComponent = category.icon;
 
             return (
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="bg-blue-100 p-3 rounded-full">
-                            <Trophy size={24} className="text-blue-600" />
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <IdCard className="text-blue-600" size={20} />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-800">Quick Check</h2>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
                     </div>
 
-                    <p className="text-lg text-gray-700 mb-6">{current.question}</p>
-
-                    <div className="space-y-3">
-                        {current.options.map((option, idx) => {
-                            const isSelected = userAnswer === idx;
-                            const showCorrect = showResult && option.correct;
-                            const showIncorrect = showResult && isSelected && !option.correct;
-
+                    {/* Category Tabs */}
+                    <div className="flex gap-2 mb-6 mt-6 overflow-x-auto pb-2">
+                        {current.categories.map((cat, idx) => {
+                            const TabIcon = cat.icon;
                             return (
                                 <button
-                                    key={idx}
-                                    onClick={() => !showResult && handleQuizAnswer(idx)}
-                                    disabled={showResult}
-                                    className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
-                                        showCorrect
-                                            ? 'bg-green-50 border-green-500'
-                                            : showIncorrect
-                                                ? 'bg-red-50 border-red-500'
-                                                : isSelected
-                                                    ? 'bg-blue-50 border-blue-500'
-                                                    : 'bg-white border-gray-300 hover:border-blue-400'
-                                    } ${showResult ? 'cursor-default' : 'cursor-pointer'}`}
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(idx)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                                        selectedCategory === idx
+                                            ? 'bg-gradient-to-r from-blue-500 to-orange-500 text-white shadow-md'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-800">{option.text}</span>
-                                        {showCorrect && <CheckCircle size={20} className="text-green-600" />}
-                                        {showIncorrect && <X size={20} className="text-red-600" />}
-                                    </div>
+                                    <TabIcon size={16} />
+                                    <span>{cat.title}</span>
                                 </button>
                             );
                         })}
                     </div>
 
-                    {showResult && (
-                        <div className={`mt-6 p-4 rounded-lg ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
-                            <p className={`font-semibold ${isCorrect ? 'text-green-800' : 'text-red-800'}`}>
-                                {isCorrect ? '✅ Correct!' : '❌ Incorrect'}
-                            </p>
-                            {!isCorrect && (
-                                <p className="text-sm text-gray-700 mt-2">
-                                    The correct answer is: <strong>{current.options.find(o => o.correct)?.text}</strong>
-                                </p>
-                            )}
+                    {/* Gender Toggle (if applicable) */}
+                    {category.male && category.female && (
+                        <div className="flex gap-3 mb-6">
+                            <button
+                                onClick={() => setSelectedGender("male")}
+                                className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                    selectedGender === "male"
+                                        ? 'bg-blue-500 text-white shadow-md'
+                                        : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+                                }`}
+                            >
+                                Male
+                            </button>
+                            <button
+                                onClick={() => setSelectedGender("female")}
+                                className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                    selectedGender === "female"
+                                        ? 'bg-pink-500 text-white shadow-md'
+                                        : 'bg-pink-50 text-pink-700 hover:bg-pink-100'
+                                }`}
+                            >
+                                Female
+                            </button>
                         </div>
+                    )}
+
+                    {/* Phrase Display */}
+                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border-2 border-gray-200">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                                <IconComponent className="text-blue-600" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900">{category.title}</h3>
+                        </div>
+
+                        {category.phrases ? (
+                            // Name category (no gender)
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900 mb-2">{category.phrases[0].gurmukhi}</p>
+                                <p className="text-lg text-blue-700 font-medium mb-2">{category.phrases[0].roman}</p>
+                                <p className="text-lg text-gray-700 mb-3">{category.phrases[0].english}</p>
+                                {category.phrases[0].note && (
+                                    <p className="text-sm text-gray-600 italic">{category.phrases[0].note}</p>
+                                )}
+                                <button
+                                    onClick={() => playAudio(category.phrases[0].audioFile, category.id)}
+                                    className={`mt-4 flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                                        playingAudio === category.id
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                                    }`}
+                                >
+                                    {playingAudio === category.id ? <Pause size={18} /> : <Play size={18} />}
+                                    <span>Listen</span>
+                                </button>
+                            </div>
+                        ) : (
+                            // Categories with gender
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900 mb-2">
+                                    {category[selectedGender].gurmukhi}
+                                </p>
+                                <p className="text-lg text-blue-700 font-medium mb-2">
+                                    {category[selectedGender].roman}
+                                </p>
+                                <p className="text-lg text-gray-700 mb-3">
+                                    {category[selectedGender].english}
+                                </p>
+                                <button
+                                    onClick={() => playAudio(category[selectedGender].audioFile, `${category.id}-${selectedGender}`)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                                        playingAudio === `${category.id}-${selectedGender}`
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                                    }`}
+                                >
+                                    {playingAudio === `${category.id}-${selectedGender}` ? <Pause size={18} /> : <Play size={18} />}
+                                    <span>Listen</span>
+                                </button>
+                                {category.tip && (
+                                    <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r">
+                                        <div className="flex items-start gap-2">
+                                            <Info size={18} className="text-yellow-600 flex-shrink-0 mt-0.5" />
+                                            <p className="text-sm text-yellow-900">{category.tip}</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "work-study") {
+            const IconComponent = current.icon;
+
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <IconComponent className="text-purple-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    {/* Gender Toggle */}
+                    <div className="flex gap-3 mb-6">
+                        <button
+                            onClick={() => setSelectedGender("male")}
+                            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                selectedGender === "male"
+                                    ? 'bg-blue-500 text-white shadow-md'
+                                    : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+                            }`}
+                        >
+                            Male
+                        </button>
+                        <button
+                            onClick={() => setSelectedGender("female")}
+                            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                selectedGender === "female"
+                                    ? 'bg-pink-500 text-white shadow-md'
+                                    : 'bg-pink-50 text-pink-700 hover:bg-pink-100'
+                            }`}
+                        >
+                            Female
+                        </button>
+                    </div>
+
+                    {/* Phrases */}
+                    <div className="space-y-4 mb-6">
+                        {current.phrases.map((phrase, idx) => (
+                            <div key={idx} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border-2 border-purple-200">
+                                <h3 className="text-sm font-bold text-purple-900 mb-3 uppercase tracking-wide">
+                                    {phrase.type === "work" ? "Work" : "Study"}
+                                </h3>
+                                <p className="text-2xl font-bold text-gray-900 mb-2">
+                                    {phrase[selectedGender].gurmukhi}
+                                </p>
+                                <p className="text-lg text-purple-700 font-medium mb-2">
+                                    {phrase[selectedGender].roman}
+                                </p>
+                                <p className="text-lg text-gray-700 mb-3">
+                                    {phrase[selectedGender].english}
+                                </p>
+                                <button
+                                    onClick={() => playAudio(phrase[selectedGender].audioFile, `work-${idx}-${selectedGender}`)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                                        playingAudio === `work-${idx}-${selectedGender}`
+                                            ? 'bg-purple-600 text-white'
+                                            : 'bg-purple-200 text-purple-700 hover:bg-purple-300'
+                                    }`}
+                                >
+                                    {playingAudio === `work-${idx}-${selectedGender}` ? <Pause size={18} /> : <Play size={18} />}
+                                    <span>Listen</span>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Vocabulary */}
+                    <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                        <h3 className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">Key Verbs</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {current.vocabulary.map((word, idx) => (
+                                <div key={idx} className="flex items-center gap-3 p-3 bg-white rounded-lg">
+                                    <div className="text-lg font-bold text-gray-900">{word.punjabi}</div>
+                                    <div className="text-sm text-gray-600">{word.roman}</div>
+                                    <div className="text-sm text-gray-700 ml-auto font-medium">{word.english}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "family") {
+            const IconComponent = current.icon;
+
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                            <IconComponent className="text-green-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    {/* Examples */}
+                    <div className="space-y-4 mb-6">
+                        {current.examples.map((example, idx) => (
+                            <div key={idx} className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border-2 border-green-200">
+                                <p className="text-xl font-bold text-gray-900 mb-2">{example.gurmukhi}</p>
+                                <p className="text-base text-green-700 font-medium mb-1">{example.roman}</p>
+                                <p className="text-base text-gray-700">{example.english}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Vocabulary */}
+                    <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                        <h3 className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">Family Vocabulary</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {current.vocabulary.map((word, idx) => (
+                                <div key={idx} className="flex items-center gap-3 p-3 bg-white rounded-lg">
+                                    <div className="text-lg font-bold text-gray-900">{word.punjabi}</div>
+                                    <div className="text-sm text-gray-600">{word.roman}</div>
+                                    <div className="text-sm text-gray-700 ml-auto font-medium">{word.english}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "practice-builder") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <CheckCircle className="text-orange-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-5 mb-6 border-2 border-orange-200">
+                        <p className="text-orange-900 font-medium text-center">
+                            {current.scenario}
+                        </p>
+                    </div>
+
+                    <div className="space-y-6">
+                        {current.steps.map((practiceStep, idx) => {
+                            const answered = practiceAnswers[practiceStep.id] !== undefined;
+                            const selectedOption = practiceAnswers[practiceStep.id];
+
+                            return (
+                                <div key={practiceStep.id} className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                                            {idx + 1}
+                                        </div>
+                                        <p className="text-lg font-semibold text-gray-900">{practiceStep.prompt}</p>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        {practiceStep.options.map((option, oIdx) => {
+                                            const isSelected = selectedOption === oIdx;
+                                            const isCorrect = option.correct;
+
+                                            return (
+                                                <div key={oIdx}>
+                                                    <button
+                                                        onClick={() => handlePracticeAnswer(practiceStep.id, oIdx)}
+                                                        disabled={answered}
+                                                        className={`w-full p-4 rounded-lg text-left font-medium transition-all flex items-center gap-3 ${
+                                                            answered && isSelected && isCorrect
+                                                                ? 'bg-green-600 text-white'
+                                                                : answered && isSelected && !isCorrect
+                                                                    ? 'bg-red-100 border-2 border-red-500 text-red-800'
+                                                                    : answered && isCorrect
+                                                                        ? 'bg-green-100 border-2 border-green-500 text-green-800'
+                                                                        : 'bg-white border-2 border-gray-300 text-gray-800 hover:border-blue-400 hover:bg-blue-50'
+                                                        }`}
+                                                    >
+                                                        {answered && isCorrect && (
+                                                            <CheckCircle size={20} className="flex-shrink-0" />
+                                                        )}
+                                                        <span>{option.text}</span>
+                                                    </button>
+                                                    {answered && isSelected && (
+                                                        <p className={`mt-2 text-sm px-4 py-2 rounded ${
+                                                            isCorrect ? 'text-green-800 bg-green-50' : 'text-red-800 bg-red-50'
+                                                        }`}>
+                                                            {practiceStep.explanation}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "final-quiz") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
+                            <Trophy className="text-yellow-600" size={20} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                    </div>
+
+                    <div className="space-y-6">
+                        {current.questions.map((q, qIdx) => (
+                            <div key={qIdx} className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-orange-200">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="flex-shrink-0 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                        {qIdx + 1}
+                                    </div>
+                                    <p className="text-lg font-semibold text-gray-900">{q.question}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    {q.options.map((option, oIdx) => {
+                                        const isSelected = quizAnswers[qIdx] === oIdx;
+                                        const isCorrect = option.correct;
+                                        const showResult = quizAnswers[qIdx] !== undefined;
+
+                                        return (
+                                            <button
+                                                key={oIdx}
+                                                onClick={() => {
+                                                    if (quizAnswers[qIdx] === undefined) {
+                                                        setQuizAnswers(prev => {
+                                                            const newAnswers = [...prev];
+                                                            newAnswers[qIdx] = oIdx;
+                                                            return newAnswers;
+                                                        });
+                                                    }
+                                                }}
+                                                disabled={quizAnswers[qIdx] !== undefined}
+                                                className={`w-full p-4 rounded-lg text-left font-medium transition-all flex items-center gap-3 ${
+                                                    showResult && isSelected && isCorrect
+                                                        ? 'bg-green-100 border-2 border-green-500 text-green-800'
+                                                        : showResult && isSelected && !isCorrect
+                                                            ? 'bg-red-100 border-2 border-red-500 text-red-800'
+                                                            : showResult && isCorrect
+                                                                ? 'bg-green-50 border-2 border-green-300 text-green-800'
+                                                                : 'bg-white border-2 border-gray-300 text-gray-800 hover:border-orange-400 hover:bg-orange-50'
+                                                }`}
+                                            >
+                                                {showResult && isCorrect && (
+                                                    <CheckCircle size={20} className="flex-shrink-0" />
+                                                )}
+                                                <span>{option.text}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {quizAnswers.length === current.questions.length && !quizComplete && (
+                        <button
+                            onClick={() => setQuizComplete(true)}
+                            className="w-full mt-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all shadow-md"
+                        >
+                            Continue
+                        </button>
                     )}
                 </div>
             );
         }
+
+        return null;
     };
 
     const CompletionSummary = () => {
+        const { correct, total, score } = calculateScore();
+
         return (
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-                {/* Success Header */}
-                <div className="text-center mb-8">
-                    <div className="inline-block bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-full mb-4">
-                        <Award size={48} className="text-white" />
-                    </div>
-                    <h2 className="text-3xl font-bold text-gray-800 mb-2">Lesson Complete! 🎉</h2>
-                    <p className="text-lg text-gray-600">
-                        You've completed <strong>A Bit About Me</strong>
-                    </p>
-                </div>
-
-                {/* Score Display */}
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 mb-6">
-                    <div className="text-center">
-                        <p className="text-sm text-gray-600 mb-2">Your Quiz Score</p>
-                        <div className="text-5xl font-bold text-blue-600 mb-2">{score}%</div>
-                        <p className="text-gray-700">
-                            {correctAnswers} out of {totalQuizzes} questions correct
-                        </p>
+            <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-green-500">
+                <div className="flex justify-center mb-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Trophy size={40} className="text-white" />
                     </div>
                 </div>
 
-                {/* Stats Grid */}
+                <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+                    Lesson Complete!
+                </h2>
+                <p className="text-center text-gray-600 mb-8">
+                    You can now introduce yourself in Panjabi!
+                </p>
+
                 <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-2xl font-bold text-blue-600 mb-1">{totalQuizzes}</div>
-                        <p className="text-xs text-gray-600">Total Questions</p>
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl text-center border-2 border-blue-200">
+                        <div className="text-3xl font-bold text-blue-600 mb-1">{score}%</div>
+                        <p className="text-xs text-gray-600 font-medium">Score</p>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-2xl font-bold text-green-600 mb-1">{correctAnswers}</div>
-                        <p className="text-xs text-gray-600">Correct</p>
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl text-center border-2 border-green-200">
+                        <div className="text-3xl font-bold text-green-600 mb-1">{correct}</div>
+                        <p className="text-xs text-gray-600 font-medium">Correct</p>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-2xl font-bold text-orange-600 mb-1">{totalQuizzes - correctAnswers}</div>
-                        <p className="text-xs text-gray-600">Incorrect</p>
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl text-center border-2 border-orange-200">
+                        <div className="text-3xl font-bold text-orange-600 mb-1">{total - correct}</div>
+                        <p className="text-xs text-gray-600 font-medium">Incorrect</p>
                     </div>
                 </div>
 
-                {/* Progress Saved Message */}
                 {supabase && userId && (
                     <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded-r mb-6">
                         <div className="flex items-center gap-2">
@@ -568,11 +902,10 @@ export default function Lesson3AboutMe() {
                     </div>
                 )}
 
-                {/* Action Buttons */}
                 <div className="space-y-3">
                     <button
-                        onClick={() => router.push("/lessons/lesson4/1")}
-                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm"
+                        onClick={() => router.push("/lessons/lesson4/")}
+                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm shadow-md"
                     >
                         <span>Continue to Next Lesson</span>
                         <ArrowRight size={18} />
@@ -580,8 +913,13 @@ export default function Lesson3AboutMe() {
                     <button
                         onClick={() => {
                             setStep(0);
-                            setQuizAnswers({});
-                            setShowFeedback({});
+                            setSelectedCategory(0);
+                            setSelectedGender("male");
+                            setPlayingAudio(null);
+                            setPracticeAnswers({});
+                            setPracticeComplete(false);
+                            setQuizAnswers([]);
+                            setQuizComplete(false);
                             setLessonCompleted(false);
                         }}
                         className="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm"
@@ -591,7 +929,7 @@ export default function Lesson3AboutMe() {
                     </button>
                     <button
                         onClick={() => router.push("/learning/essential-punjabi")}
-                        className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm border border-gray-300"
+                        className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm border-2 border-gray-300"
                     >
                         <ArrowLeft size={18} />
                         <span>Back to Lessons</span>
@@ -614,7 +952,6 @@ export default function Lesson3AboutMe() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-28 pb-12">
             <div className="max-w-3xl mx-auto">
-                {/* Back Button */}
                 <button
                     onClick={() => router.push("/learning/essential-punjabi")}
                     className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors text-sm"
@@ -623,7 +960,6 @@ export default function Lesson3AboutMe() {
                     <span>Back to Lessons</span>
                 </button>
 
-                {/* Header */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <User size={18} />
@@ -633,14 +969,13 @@ export default function Lesson3AboutMe() {
                         A Bit About Me
                     </h1>
                     <p className="text-base text-blue-100">
-                        Learn how to introduce yourself in Punjabi
+                        Learn how to introduce yourself in Panjabi
                     </p>
                 </div>
 
-                {/* Progress Bar */}
                 <div className="bg-white rounded-xl shadow p-4 mb-6 border border-gray-200">
                     <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-semibold text-gray-700">Lesson Progress</span>
+                        <span className="text-xs font-semibold text-gray-700">Progress</span>
                         <span className="text-sm font-bold text-blue-600">
                             {step + 1} / {lessonContent.length}
                         </span>
@@ -653,12 +988,10 @@ export default function Lesson3AboutMe() {
                     </div>
                 </div>
 
-                {/* Main Content */}
                 <div className="mb-6">
                     {renderContent()}
                 </div>
 
-                {/* Progress Dots */}
                 <div className="flex justify-center gap-1.5 mb-6">
                     {lessonContent.map((_, idx) => (
                         <div
@@ -674,7 +1007,6 @@ export default function Lesson3AboutMe() {
                     ))}
                 </div>
 
-                {/* Navigation Buttons */}
                 <div className="flex gap-3">
                     <button
                         onClick={handlePrevious}
@@ -692,11 +1024,11 @@ export default function Lesson3AboutMe() {
                     {step < lessonContent.length - 1 ? (
                         <button
                             onClick={handleNext}
-                            disabled={current.type === 'quiz' && !showFeedback[step]}
+                            disabled={!canProceed()}
                             className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all text-sm ${
-                                current.type === 'quiz' && !showFeedback[step]
+                                !canProceed()
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
+                                    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-md'
                             }`}
                         >
                             <span>Next</span>
@@ -705,7 +1037,12 @@ export default function Lesson3AboutMe() {
                     ) : (
                         <button
                             onClick={handleComplete}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all text-sm"
+                            disabled={!quizComplete}
+                            className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all text-sm ${
+                                !quizComplete
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-md'
+                            }`}
                         >
                             <span>Complete Lesson</span>
                             <CheckCircle size={18} />

@@ -10,9 +10,17 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-// API Configuration - Update these with your actual API details
-const API_ENDPOINT = process.env.NEXT_PUBLIC_LLM_API_ENDPOINT || 'YOUR_API_ENDPOINT_HERE';
-const API_KEY = process.env.NEXT_PUBLIC_LLM_API_KEY || 'YOUR_API_KEY_HERE';
+// System prompt
+const SYSTEM_PROMPT = `You are a Punjabi language tutor. You MUST respond in this exact format:
+
+GURMUKHI: [Punjabi in Gurmukhi script]
+ROMANIZED: [Romanized pronunciation]
+ENGLISH: [English translation]
+
+Example:
+GURMUKHI: ਸਤ ਸ੍ਰੀ ਅਕਾਲ
+ROMANIZED: Sat Sri Akaal
+ENGLISH: Hello (formal greeting)`;
 
 export default function PunjabiChat() {
     const router = useRouter();
@@ -25,7 +33,6 @@ export default function PunjabiChat() {
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
-    // Get user on mount
     useEffect(() => {
         const getUser = async () => {
             if (supabase) {
@@ -47,10 +54,9 @@ export default function PunjabiChat() {
     }, [messages]);
 
     const speakPunjabi = (text) => {
-        // Integration with Google Cloud TTS or browser TTS
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'pa-IN'; // Punjabi
+            utterance.lang = 'pa-IN';
             window.speechSynthesis.speak(utterance);
         }
     };
@@ -59,6 +65,18 @@ export default function PunjabiChat() {
         navigator.clipboard.writeText(text);
         setCopiedId(messageId);
         setTimeout(() => setCopiedId(null), 2000);
+    };
+
+    const parseResponse = (text) => {
+        const gurmukhiMatch = text.match(/GURMUKHI:\s*(.+?)(?=\nROMANIZED:|$)/s);
+        const romanizedMatch = text.match(/ROMANIZED:\s*(.+?)(?=\nENGLISH:|$)/s);
+        const englishMatch = text.match(/ENGLISH:\s*(.+?)$/s);
+
+        return {
+            gurmukhi: gurmukhiMatch ? gurmukhiMatch[1].trim() : 'ਜਵਾਬ ਉਪਲਬਧ ਨਹੀਂ',
+            romanized: romanizedMatch ? romanizedMatch[1].trim() : 'Response not available',
+            english: englishMatch ? englishMatch[1].trim() : text
+        };
     };
 
     const sendMessage = async () => {
@@ -72,59 +90,96 @@ export default function PunjabiChat() {
         };
 
         setMessages(prev => [...prev, userMessage]);
+        const currentInput = inputMessage;
         setInputMessage('');
         setIsLoading(true);
 
         try {
-            // API call to your custom LLM
-            const response = await fetch(API_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${API_KEY}`
-                },
-                body: JSON.stringify({
-                    message: inputMessage,
-                    language: 'punjabi',
-                    format: 'gurmukhi'
+            const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+            if (!API_KEY) {
+                throw new Error('API key not found. Please add NEXT_PUBLIC_GEMINI_API_KEY to your .env.local file');
+            }
+
+            // Build conversation history
+            const conversationText = messages
+                .map(msg => {
+                    if (msg.type === 'user') return `User: ${msg.text}`;
+                    if (msg.type === 'ai') return `Assistant: GURMUKHI: ${msg.gurmukhi}\nROMANIZED: ${msg.romanized}\nENGLISH: ${msg.english}`;
+                    return '';
                 })
-            });
+                .filter(Boolean)
+                .join('\n\n');
+
+            const fullPrompt = `${SYSTEM_PROMPT}\n\n${conversationText ? conversationText + '\n\n' : ''}User: ${currentInput}\nAssistant:`;
+
+            // Call Gemini API directly
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: fullPrompt
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 500,
+                        }
+                    })
+                }
+            );
 
             if (!response.ok) {
-                throw new Error('API request failed');
+                const errorData = await response.json();
+                console.error('API Error:', errorData);
+                throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
             }
 
             const data = await response.json();
+            console.log('API Response:', data);
+
+            const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received';
+            const parsed = parseResponse(aiText);
 
             const aiMessage = {
                 id: Date.now() + 1,
                 type: 'ai',
-                gurmukhi: data.gurmukhi || 'ਜਵਾਬ ਉਪਲਬਧ ਨਹੀਂ ਹੈ',
-                romanized: data.romanized || 'Javāb uplabadh nahīṁ hai',
-                english: data.english || 'Response not available',
+                gurmukhi: parsed.gurmukhi,
+                romanized: parsed.romanized,
+                english: parsed.english,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
 
             setMessages(prev => [...prev, aiMessage]);
 
-            // Save conversation to Supabase if user is logged in
+            // Save to Supabase (optional)
             if (supabase && userId) {
-                await supabase.from('chat_history').insert({
-                    user_id: userId,
-                    user_message: inputMessage,
-                    ai_response_gurmukhi: aiMessage.gurmukhi,
-                    ai_response_romanized: aiMessage.romanized,
-                    ai_response_english: aiMessage.english,
-                    created_at: new Date().toISOString()
-                });
+                try {
+                    await supabase.from('chat_history').insert({
+                        user_id: userId,
+                        user_message: currentInput,
+                        ai_response_gurmukhi: aiMessage.gurmukhi,
+                        ai_response_romanized: aiMessage.romanized,
+                        ai_response_english: aiMessage.english,
+                        created_at: new Date().toISOString()
+                    });
+                } catch (dbError) {
+                    console.log('Database save skipped:', dbError.message);
+                }
             }
         } catch (error) {
-            console.error('Error calling API:', error);
+            console.error('Error:', error);
 
             const errorMessage = {
                 id: Date.now() + 1,
                 type: 'error',
-                text: 'Sorry, I couldn\'t process your request. Please try again.',
+                text: error.message || 'Sorry, something went wrong. Please try again.',
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
 
@@ -166,7 +221,6 @@ export default function PunjabiChat() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-28 pb-12">
             <div className="max-w-6xl mx-auto">
-                {/* Back Button */}
                 <button
                     onClick={() => router.push("/learning/essential-punjabi")}
                     className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors text-sm"
@@ -175,7 +229,6 @@ export default function PunjabiChat() {
                     <span>Back to Lessons</span>
                 </button>
 
-                {/* Header */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <MessageCircle size={18} />
@@ -189,16 +242,12 @@ export default function PunjabiChat() {
                     </p>
                 </div>
 
-                {/* Main Container */}
                 <div className="flex gap-4">
-                    {/* Sidebar with Sample Questions */}
                     {isSidebarOpen && (
                         <div className="w-80 flex-shrink-0">
                             <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 sticky top-28">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-gray-900">
-                                        Sample Questions
-                                    </h3>
+                                    <h3 className="text-lg font-bold text-gray-900">Sample Questions</h3>
                                     <button
                                         onClick={() => setIsSidebarOpen(false)}
                                         className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -221,10 +270,8 @@ export default function PunjabiChat() {
                         </div>
                     )}
 
-                    {/* Chat Container */}
                     <div className="flex-1">
                         <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" style={{ height: '70vh', display: 'flex', flexDirection: 'column' }}>
-                            {/* Chat Header */}
                             <div className="bg-gradient-to-r from-blue-50 to-orange-50 p-4 border-b border-gray-200">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
@@ -254,7 +301,6 @@ export default function PunjabiChat() {
                                 </div>
                             </div>
 
-                            {/* Messages Area */}
                             <div className="flex-1 overflow-y-auto p-6" style={{ scrollBehavior: 'smooth' }}>
                                 {messages.length === 0 ? (
                                     <div className="h-full flex flex-col items-center justify-center text-center">
@@ -285,39 +331,25 @@ export default function PunjabiChat() {
                                                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                                             >
                                                 {message.type === 'user' ? (
-                                                    // User Message
                                                     <div className="max-w-[75%]">
                                                         <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-2xl rounded-br-none shadow-md">
-                                                            <p className="text-sm leading-relaxed">
-                                                                {message.text}
-                                                            </p>
-                                                            <p className="text-xs text-blue-100 mt-2 text-right">
-                                                                {message.timestamp}
-                                                            </p>
+                                                            <p className="text-sm leading-relaxed">{message.text}</p>
+                                                            <p className="text-xs text-blue-100 mt-2 text-right">{message.timestamp}</p>
                                                         </div>
                                                     </div>
                                                 ) : message.type === 'error' ? (
-                                                    // Error Message
                                                     <div className="max-w-[75%]">
                                                         <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-                                                            <p className="text-sm text-red-800">
-                                                                {message.text}
-                                                            </p>
-                                                            <p className="text-xs text-red-600 mt-2">
-                                                                {message.timestamp}
-                                                            </p>
+                                                            <p className="text-sm text-red-800">{message.text}</p>
+                                                            <p className="text-xs text-red-600 mt-2">{message.timestamp}</p>
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    // AI Response
                                                     <div className="max-w-[75%]">
                                                         <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-100 p-5 rounded-2xl rounded-bl-none shadow-md">
-                                                            {/* Gurmukhi Script */}
                                                             <div className="mb-4">
                                                                 <div className="flex items-center justify-between mb-2">
-                                                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
-                                                                        Gurmukhi
-                                                                    </span>
+                                                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">Gurmukhi</span>
                                                                     <div className="flex gap-2">
                                                                         <button
                                                                             onClick={() => speakPunjabi(message.gurmukhi)}
@@ -344,29 +376,17 @@ export default function PunjabiChat() {
                                                                 </p>
                                                             </div>
 
-                                                            {/* Romanisation */}
                                                             <div className="mb-4 pb-4 border-b border-gray-200">
-                                                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">
-                                                                    Romanised
-                                                                </span>
-                                                                <p className="text-base text-gray-700 italic">
-                                                                    {message.romanized}
-                                                                </p>
+                                                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Romanised</span>
+                                                                <p className="text-base text-gray-700 italic">{message.romanized}</p>
                                                             </div>
 
-                                                            {/* English Translation */}
                                                             <div>
-                                                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">
-                                                                    English
-                                                                </span>
-                                                                <p className="text-sm text-gray-600">
-                                                                    {message.english}
-                                                                </p>
+                                                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">English</span>
+                                                                <p className="text-sm text-gray-600">{message.english}</p>
                                                             </div>
 
-                                                            <p className="text-xs text-gray-400 mt-3">
-                                                                {message.timestamp}
-                                                            </p>
+                                                            <p className="text-xs text-gray-400 mt-3">{message.timestamp}</p>
                                                         </div>
                                                     </div>
                                                 )}
@@ -387,7 +407,6 @@ export default function PunjabiChat() {
                                 )}
                             </div>
 
-                            {/* Input Area */}
                             <div className="p-4 bg-gray-50 border-t border-gray-200">
                                 <div className="flex gap-3 items-end">
                                     <textarea
@@ -429,7 +448,6 @@ export default function PunjabiChat() {
                             </div>
                         </div>
 
-                        {/* Tip Section */}
                         <div className="mt-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200">
                             <div className="flex items-start gap-3">
                                 <Lightbulb size={20} className="text-orange-600 flex-shrink-0 mt-0.5" />
@@ -442,7 +460,6 @@ export default function PunjabiChat() {
                             </div>
                         </div>
 
-                        {/* Progress Saved Indicator */}
                         {supabase && userId && messages.length > 0 && (
                             <div className="mt-4 bg-green-50 border-l-4 border-green-500 p-3 rounded-r">
                                 <div className="flex items-center gap-2">

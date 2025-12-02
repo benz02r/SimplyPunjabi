@@ -2,7 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Book, Globe, History, CheckCircle, HelpCircle, X, RotateCcw, Trophy, Award } from "lucide-react";
+import {
+    ArrowLeft,
+    ArrowRight,
+    Book,
+    CheckCircle,
+    X,
+    RotateCcw,
+    Trophy,
+    Sparkles,
+    Clock,
+    Users,
+    Globe,
+    FileText,
+    Lightbulb
+} from "lucide-react";
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
@@ -13,105 +27,133 @@ const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabase
 const lessonContent = [
     {
         type: "intro",
-        title: "What is Panjabi?",
-        content: "Anyone can learn a language but why not take a step further and learn how that language came to be? Before we teach you the basics, in this section, we will be taking you back in time to bring you up to speed with the following:",
+        title: "The Story of Panjabi",
+        content: "Discover how Panjabi evolved from ancient dialects to the vibrant language we know today.",
         points: [
-            "Where did Panjabi come from?",
-            "How did it develop?",
-            "Difference between Panjabi and Hindi"
+            "Origins and early history",
+            "Key figures who shaped the language",
+            "How Panjabi differs from Hindi"
         ]
     },
     {
-        type: "section",
-        title: "Where did Panjabi come from?",
-        content: "Panjabi originates from Northwestern Apabhramsa – a family of locally spoken dialects that derived from early forms of Sanskrit and popular amongst Northwestern Indian subcontinents that we now know as Panjab, Haryana, Himachal Pradesh and Sindh.",
-        note: "At this stage, Panjabi was beginning to emerge as vernacular primarily spoken amongst the locals in what would be considered the Panjab region. In other words, it was not codified in a standardised script that people could refer to."
-    },
-    {
-        type: "section",
-        title: "Early Literary Influence",
-        content: "A significant turning point in the development of Panjabi is the works of Baba Farid, a revered Sufi Saint renowned for his poems and hymns preaching spirituality, devotion to God and detachment from worldly possessions.",
-        highlight: "Baba Farid was regarded as one of the first to incorporate Panjabi vernacular in his literary works in an era where most others were being composed in Persian, Arabic or Sanskrit."
-    },
-    {
-        type: "section",
-        title: "Guru Nanak Dev Ji's Contribution",
-        content: "Guru Nanak Dev Ji (Founder of Sikhi) later used this same Panjabi vernacular to convey his teachings and hymns amongst those that he came across.",
-        note: "We can see how Panjabi was beginning to transition from a local vernacular to a way of promoting and spreading spiritual guidance."
-    },
-    {
-        type: "quiz",
-        question: "Who was one of the first to incorporate Panjabi vernacular in literary works?",
-        options: [
-            { text: "Guru Nanak Dev Ji", correct: false },
-            { text: "Baba Farid", correct: true },
-            { text: "Guru Angad Dev Ji", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "Development in Panjabi",
-        content: "Up until this point, Panjabi was regarded as a spoken vernacular. There was no codified language, and most reproductions of Panjabi text were written in Lanada, Mahajani or Shahmukhi.",
-        note: "The issue with this was that scripts such as Lanada were merchant scripts used in business transactions or shorthand. There were no vowel sounds meaning the reader would often have to imagine them to make sense of what was being written."
-    },
-    {
-        type: "section",
-        title: "Creation of Gurmukhi Script",
-        content: "Concerned that people would misinterpret the teachings of the Gurus, the second Sikh Guru, Guru Angad Dev Ji took it upon himself to create what we now know as the 'Gurmukhi Script.'",
-        highlight: "The Gurmukhi Script is what we now use to read and write Panjabi."
-    },
-    {
-        type: "quiz",
-        question: "Who created the Gurmukhi Script?",
-        options: [
-            { text: "Guru Nanak Dev Ji", correct: false },
-            { text: "Guru Angad Dev Ji", correct: true },
-            { text: "Baba Farid", correct: false }
-        ]
-    },
-    {
-        type: "section",
-        title: "Difference Between Panjabi and Hindi",
-        content: "Often you may hear people make the misconception that Panjabi and Hindi are the same or you may hear people confuse one for the other. In this part of the lesson, we will look at some key differences between the two languages so that you can avoid this common mistake.",
-        comparison: [
+        type: "timeline",
+        title: "Panjabi's Evolution",
+        subtitle: "Click each event to explore",
+        events: [
             {
-                title: "Script",
-                panjabi: "Uses Gurmukhi script",
-                hindi: "Uses Devanagari script"
+                id: 1,
+                title: "Ancient Roots",
+                period: "Early Origins",
+                description: "Panjabi emerged from Northwestern Apabhramsa dialects, derived from early Sanskrit in the Panjab region.",
+                icon: Globe
             },
             {
-                title: "Origins",
-                panjabi: "Northwestern Apabhramsa dialects",
-                hindi: "Central/Eastern dialects of Sanskrit"
+                id: 2,
+                title: "Baba Farid",
+                period: "12th-13th Century",
+                description: "The Sufi Saint was among the first to write poetry in Panjabi, establishing it as a literary language.",
+                icon: FileText
             },
             {
-                title: "Phonetics",
-                panjabi: "Unique tones and sounds specific to Punjabi",
-                hindi: "Different phonetic structure"
+                id: 3,
+                title: "Guru Nanak Dev Ji",
+                period: "15th-16th Century",
+                description: "Used Panjabi to spread spiritual teachings, transforming it into a language of devotion.",
+                icon: Sparkles
             },
             {
-                title: "Cultural Context",
-                panjabi: "Deeply tied to Sikh and Punjabi culture",
-                hindi: "Associated with broader North Indian culture"
+                id: 4,
+                title: "Gurmukhi Script",
+                period: "16th Century",
+                description: "Guru Angad Dev Ji created Gurmukhi to standardise Panjabi writing and preserve teachings accurately.",
+                icon: Book
             }
         ]
     },
     {
-        type: "quiz",
-        question: "What script is used to write Panjabi?",
-        options: [
-            { text: "Devanagari", correct: false },
-            { text: "Gurmukhi", correct: true },
-            { text: "Arabic", correct: false }
+        type: "matching",
+        title: "Match the Pioneers",
+        subtitle: "Connect each figure to their contribution",
+        pairs: [
+            { term: "Baba Farid", definition: "Early Panjabi poetry" },
+            { term: "Guru Nanak Dev Ji", definition: "Spiritual teachings in Panjabi" },
+            { term: "Guru Angad Dev Ji", definition: "Created Gurmukhi script" }
         ]
     },
     {
-        type: "quiz",
-        question: "Why was the Gurmukhi Script created?",
-        options: [
-            { text: "For business transactions", correct: false },
-            { text: "To prevent misinterpretation of the Gurus' teachings", correct: true },
-            { text: "To replace Persian", correct: false }
+        type: "comparison",
+        title: "Panjabi vs Hindi",
+        subtitle: "Key differences at a glance",
+        categories: [
+            {
+                title: "Script",
+                panjabi: "Gurmukhi",
+                hindi: "Devanagari",
+                icon: FileText
+            },
+            {
+                title: "Origins",
+                panjabi: "Northwestern dialects",
+                hindi: "Central/Eastern dialects",
+                icon: Globe
+            },
+            {
+                title: "Cultural Roots",
+                panjabi: "Sikh & Punjabi heritage",
+                hindi: "Broader North Indian culture",
+                icon: Users
+            }
+        ]
+    },
+    {
+        type: "insight",
+        title: "Why Gurmukhi Mattered",
+        cards: [
+            {
+                title: "The Challenge",
+                content: "Earlier scripts like Lanada lacked vowels, making accurate reading difficult.",
+                icon: Lightbulb
+            },
+            {
+                title: "The Solution",
+                content: "Gurmukhi included complete vowel notation for precise pronunciation.",
+                icon: CheckCircle
+            },
+            {
+                title: "The Legacy",
+                content: "Became the standard script, preserving Panjabi accurately for centuries.",
+                icon: Trophy
+            }
+        ]
+    },
+    {
+        type: "final-quiz",
+        title: "Test Your Knowledge",
+        questions: [
+            {
+                question: "Who created the Gurmukhi script?",
+                options: [
+                    { text: "Baba Farid", correct: false },
+                    { text: "Guru Angad Dev Ji", correct: true },
+                    { text: "Guru Nanak Dev Ji", correct: false }
+                ]
+            },
+            {
+                question: "What makes Panjabi different from Hindi?",
+                options: [
+                    { text: "Different scripts and origins", correct: true },
+                    { text: "They're identical languages", correct: false },
+                    { text: "Only pronunciation differs", correct: false }
+                ]
+            },
+            {
+                question: "Who first used Panjabi for poetry?",
+                options: [
+                    { text: "Baba Farid", correct: true },
+                    { text: "Guru Angad Dev Ji", correct: false },
+                    { text: "Guru Nanak Dev Ji", correct: false }
+                ]
+            }
         ]
     }
 ];
@@ -119,10 +161,24 @@ const lessonContent = [
 export default function Lesson1WhatIsPanjabi() {
     const router = useRouter();
     const [step, setStep] = useState(0);
-    const [quizAnswers, setQuizAnswers] = useState({});
-    const [showFeedback, setShowFeedback] = useState({});
-    const [lessonCompleted, setLessonCompleted] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [lessonCompleted, setLessonCompleted] = useState(false);
+
+    // Timeline state
+    const [selectedEvent, setSelectedEvent] = useState(null);
+
+    // Matching game state
+    const [matchingAnswers, setMatchingAnswers] = useState({});
+    const [matchingComplete, setMatchingComplete] = useState(false);
+    const [shuffledDefinitions, setShuffledDefinitions] = useState([]);
+
+    // Comparison state
+    const [selectedCategory, setSelectedCategory] = useState(0);
+
+    // Quiz state
+    const [quizAnswers, setQuizAnswers] = useState([]);
+    const [quizComplete, setQuizComplete] = useState(false);
+
     const current = lessonContent[step];
 
     // Get user on mount
@@ -138,24 +194,38 @@ export default function Lesson1WhatIsPanjabi() {
         getUser();
     }, []);
 
-    // Calculate quiz statistics
-    const quizSteps = lessonContent.reduce((acc, content, index) => {
-        if (content.type === 'quiz') acc.push(index);
-        return acc;
-    }, []);
+    // Initialize shuffled definitions for matching game
+    useEffect(() => {
+        if (current?.type === 'matching' && shuffledDefinitions.length === 0) {
+            const definitions = current.pairs.map(p => p.definition);
+            setShuffledDefinitions([...definitions].sort(() => Math.random() - 0.5));
+        }
+    }, [current, shuffledDefinitions.length]);
 
-    const totalQuizzes = quizSteps.length;
-    const correctAnswers = quizSteps.filter(index => {
-        const answer = quizAnswers[index];
-        return answer !== undefined && lessonContent[index].options[answer]?.correct;
-    }).length;
-    const score = totalQuizzes > 0 ? Math.round((correctAnswers / totalQuizzes) * 100) : 0;
+    // Calculate quiz statistics
+    const calculateScore = () => {
+        let correct = 0;
+        let total = 0;
+
+        if (quizComplete) {
+            lessonContent[5].questions.forEach((q, idx) => {
+                total++;
+                if (quizAnswers[idx] !== undefined && q.options[quizAnswers[idx]]?.correct) {
+                    correct++;
+                }
+            });
+        }
+
+        return { correct, total, score: total > 0 ? Math.round((correct / total) * 100) : 0 };
+    };
 
     // Save progress to Supabase
     const saveProgress = async () => {
         if (!supabase || !userId) return;
 
         try {
+            const { correct, total, score } = calculateScore();
+
             const { error } = await supabase
                 .from('lesson_progress')
                 .upsert({
@@ -163,256 +233,425 @@ export default function Lesson1WhatIsPanjabi() {
                     lesson_id: 'lesson-1-what-is-panjabi',
                     lesson_name: 'What is Panjabi?',
                     completed: true,
-                    score: score,
-                    total_questions: totalQuizzes,
-                    correct_answers: correctAnswers,
-                    completed_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
+                    quiz_score: score,
+                    correct_answers: correct,
+                    total_questions: total,
+                    last_accessed: new Date().toISOString()
                 }, {
                     onConflict: 'user_id,lesson_id'
                 });
 
-            if (error) {
-                console.error('Error saving progress:', error);
-            }
-        } catch (err) {
-            console.error('Error:', err);
+            if (error) throw error;
+        } catch (error) {
+            console.error('Error saving progress:', error);
+        }
+    };
+
+    const canProceed = () => {
+        if (current.type === 'matching' && !matchingComplete) return false;
+        if (current.type === 'final-quiz' && !quizComplete) return false;
+        return true;
+    };
+
+    const handleNext = () => {
+        if (!canProceed()) return;
+
+        if (step < lessonContent.length - 1) {
+            setStep(step + 1);
         }
     };
 
     const handlePrevious = () => {
         if (step > 0) {
             setStep(step - 1);
-            setShowFeedback({});
-            setLessonCompleted(false);
-        }
-    };
-
-    const handleNext = () => {
-        if (step < lessonContent.length - 1) {
-            setStep(step + 1);
-            setShowFeedback({});
         }
     };
 
     const handleComplete = async () => {
-        setLessonCompleted(true);
         await saveProgress();
+        setLessonCompleted(true);
     };
 
-    const handleQuizAnswer = (optionIndex) => {
-        setQuizAnswers({ ...quizAnswers, [step]: optionIndex });
-        setShowFeedback({ ...showFeedback, [step]: true });
-    };
+    // Matching game logic
+    const handleMatchingSelect = (definition) => {
+        if (Object.values(matchingAnswers).includes(definition)) return;
 
-    const resetQuiz = () => {
-        setQuizAnswers({ ...quizAnswers, [step]: null });
-        setShowFeedback({ ...showFeedback, [step]: false });
-    };
+        const unansweredTerms = current.pairs.filter(pair => !matchingAnswers[pair.term]);
+        if (unansweredTerms.length === 0) return;
 
-    const renderContent = () => {
-        switch (current.type) {
-            case "intro":
-                return (
-                    <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-                        <div className="mb-4">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-3">{current.title}</h2>
-                        </div>
-                        <p className="text-base text-gray-700 leading-relaxed mb-4">{current.content}</p>
-                        {current.points && (
-                            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                                <ul className="space-y-2">
-                                    {current.points.map((point, index) => (
-                                        <li key={index} className="flex items-start gap-2">
-                                            <CheckCircle size={18} className="text-blue-600 flex-shrink-0 mt-0.5" />
-                                            <span className="text-sm text-gray-800">{point}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-                    </div>
-                );
+        const currentTerm = unansweredTerms[0].term;
+        const newAnswers = { ...matchingAnswers, [currentTerm]: definition };
+        setMatchingAnswers(newAnswers);
 
-            case "section":
-                return (
-                    <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-                        <div className="mb-4">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-3">{current.title}</h2>
-                        </div>
-                        <p className="text-base text-gray-700 leading-relaxed mb-4">{current.content}</p>
-
-                        {current.highlight && (
-                            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r mb-4">
-                                <p className="text-sm text-gray-800 font-medium">{current.highlight}</p>
-                            </div>
-                        )}
-
-                        {current.note && (
-                            <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r">
-                                <p className="text-sm text-gray-800">{current.note}</p>
-                            </div>
-                        )}
-
-                        {current.comparison && (
-                            <div className="mt-4 space-y-3">
-                                <h3 className="text-lg font-bold text-gray-900 mb-3">Key Differences:</h3>
-                                {current.comparison.map((item, index) => (
-                                    <div key={index} className="bg-gradient-to-r from-blue-50 to-orange-50 rounded-lg p-4 border border-gray-200">
-                                        <h4 className="font-bold text-gray-900 mb-2">{item.title}</h4>
-                                        <div className="grid md:grid-cols-2 gap-3 text-sm">
-                                            <div className="bg-blue-100 rounded p-2 border border-blue-200">
-                                                <p className="font-semibold text-blue-900 mb-1">Panjabi:</p>
-                                                <p className="text-gray-800">{item.panjabi}</p>
-                                            </div>
-                                            <div className="bg-orange-100 rounded p-2 border border-orange-200">
-                                                <p className="font-semibold text-orange-900 mb-1">Hindi:</p>
-                                                <p className="text-gray-800">{item.hindi}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                );
-
-            case "quiz":
-                const selectedAnswer = quizAnswers[step];
-                const hasAnswered = showFeedback[step];
-                const isCorrect = hasAnswered && current.options[selectedAnswer]?.correct;
-
-                return (
-                    <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
-                                <HelpCircle size={20} className="text-yellow-600" />
-                            </div>
-                            <h2 className="text-xl font-bold text-gray-900">Quick Check</h2>
-                        </div>
-
-                        <div className="mb-6">
-                            <p className="text-base font-semibold text-gray-800 mb-4">{current.question}</p>
-
-                            <div className="space-y-2">
-                                {current.options.map((option, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => !hasAnswered && handleQuizAnswer(index)}
-                                        disabled={hasAnswered}
-                                        className={`w-full text-left p-3 rounded-lg border-2 transition-all text-sm ${
-                                            hasAnswered
-                                                ? option.correct
-                                                    ? 'border-green-500 bg-green-50'
-                                                    : selectedAnswer === index
-                                                        ? 'border-red-500 bg-red-50'
-                                                        : 'border-gray-200 bg-gray-50 opacity-50'
-                                                : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50 cursor-pointer'
-                                        }`}
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium">{option.text}</span>
-                                            {hasAnswered && option.correct && (
-                                                <CheckCircle size={18} className="text-green-600" />
-                                            )}
-                                            {hasAnswered && !option.correct && selectedAnswer === index && (
-                                                <X size={18} className="text-red-600" />
-                                            )}
-                                        </div>
-                                    </button>
-                                ))}
-                            </div>
-
-                            {hasAnswered && (
-                                <div className="mt-4 space-y-3">
-                                    <div className={`p-3 rounded-lg border ${isCorrect ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'}`}>
-                                        <p className="font-bold text-sm">
-                                            {isCorrect ? '✓ Correct!' : '✗ Not quite'}
-                                        </p>
-                                    </div>
-
-                                    {!isCorrect && (
-                                        <button
-                                            onClick={resetQuiz}
-                                            className="w-full flex items-center justify-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors text-sm"
-                                        >
-                                            <RotateCcw size={16} />
-                                            <span>Try Again</span>
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                );
-
-            default:
-                return null;
+        // Check if complete and correct
+        if (Object.keys(newAnswers).length === current.pairs.length) {
+            const allCorrect = current.pairs.every(pair => newAnswers[pair.term] === pair.definition);
+            setMatchingComplete(allCorrect);
         }
     };
 
-    // Completion Summary Component
+    const resetMatching = () => {
+        setMatchingAnswers({});
+        setMatchingComplete(false);
+        setShuffledDefinitions([...current.pairs.map(p => p.definition)].sort(() => Math.random() - 0.5));
+    };
+
+    const renderContent = () => {
+        if (current.type === "intro") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-orange-500 rounded-xl flex items-center justify-center">
+                            <Sparkles className="text-white" size={24} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                    </div>
+                    <p className="text-base text-gray-700 mb-6">{current.content}</p>
+                    <div className="space-y-3">
+                        {current.points.map((point, idx) => (
+                            <div key={idx} className="flex items-start gap-3 p-4 bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl border border-gray-100">
+                                <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-r from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                    {idx + 1}
+                                </div>
+                                <p className="text-gray-800 font-medium pt-0.5">{point}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "timeline") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <Clock className="text-blue-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3 mt-6">
+                        {current.events.map((event) => {
+                            const IconComponent = event.icon;
+                            const isSelected = selectedEvent === event.id;
+
+                            return (
+                                <div
+                                    key={event.id}
+                                    onClick={() => setSelectedEvent(isSelected ? null : event.id)}
+                                    className={`cursor-pointer p-5 rounded-xl border-2 transition-all ${
+                                        isSelected
+                                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                                            : 'border-gray-200 bg-gray-50 hover:border-blue-300 hover:bg-blue-50'
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                                            isSelected ? 'bg-blue-500' : 'bg-gray-200'
+                                        }`}>
+                                            <IconComponent className={isSelected ? 'text-white' : 'text-gray-600'} size={20} />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-3 mb-1 flex-wrap">
+                                                <h3 className="text-lg font-bold text-gray-900">{event.title}</h3>
+                                                <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full whitespace-nowrap">
+                                                    {event.period}
+                                                </span>
+                                            </div>
+                                            {isSelected && (
+                                                <p className="text-sm text-gray-700 mt-2 leading-relaxed">
+                                                    {event.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "matching") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <Users className="text-orange-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-6">
+                        <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">Figures</h3>
+                            {current.pairs.map((pair, idx) => {
+                                const isAnswered = matchingAnswers[pair.term] !== undefined;
+                                const isCorrect = matchingAnswers[pair.term] === pair.definition;
+
+                                return (
+                                    <div
+                                        key={pair.term}
+                                        className={`p-4 rounded-xl font-semibold text-center transition-all ${
+                                            isCorrect
+                                                ? 'bg-green-100 border-2 border-green-500 text-green-800'
+                                                : isAnswered
+                                                    ? 'bg-red-100 border-2 border-red-500 text-red-800'
+                                                    : idx === Object.keys(matchingAnswers).length
+                                                        ? 'bg-blue-100 border-2 border-blue-500 text-blue-800 ring-2 ring-blue-200'
+                                                        : 'bg-gray-100 border-2 border-gray-300 text-gray-600'
+                                        }`}
+                                    >
+                                        {pair.term}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">Contributions</h3>
+                            {shuffledDefinitions.map((definition, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => handleMatchingSelect(definition)}
+                                    disabled={Object.values(matchingAnswers).includes(definition)}
+                                    className={`w-full p-4 rounded-xl font-medium text-center transition-all ${
+                                        Object.values(matchingAnswers).includes(definition)
+                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed border-2 border-gray-300'
+                                            : 'bg-orange-50 border-2 border-orange-300 text-orange-800 hover:bg-orange-100 hover:border-orange-400'
+                                    }`}
+                                >
+                                    {definition}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {matchingComplete && (
+                        <div className="bg-green-50 border-2 border-green-500 rounded-xl p-4 text-center">
+                            <CheckCircle className="inline-block text-green-600 mb-2" size={32} />
+                            <p className="text-green-800 font-semibold">Perfect! All matches are correct!</p>
+                        </div>
+                    )}
+
+                    {Object.keys(matchingAnswers).length === current.pairs.length && !matchingComplete && (
+                        <div className="bg-red-50 border-2 border-red-500 rounded-xl p-4 text-center">
+                            <X className="inline-block text-red-600 mb-2" size={32} />
+                            <p className="text-red-800 font-semibold mb-3">Not quite right. Try again!</p>
+                            <button
+                                onClick={resetMatching}
+                                className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                            >
+                                Reset
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        if (current.type === "comparison") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <Globe className="text-purple-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-2 mb-6 mt-6 flex-wrap">
+                        {current.categories.map((cat, idx) => {
+                            const IconComponent = cat.icon;
+                            return (
+                                <button
+                                    key={idx}
+                                    onClick={() => setSelectedCategory(idx)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                                        selectedCategory === idx
+                                            ? 'bg-gradient-to-r from-blue-500 to-orange-500 text-white shadow-md'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <IconComponent size={16} />
+                                    <span>{cat.title}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
+                            <h3 className="text-lg font-bold text-blue-900 mb-3">Panjabi</h3>
+                            <p className="text-blue-800 text-lg font-medium">
+                                {current.categories[selectedCategory].panjabi}
+                            </p>
+                        </div>
+
+                        <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-orange-200">
+                            <h3 className="text-lg font-bold text-orange-900 mb-3">Hindi</h3>
+                            <p className="text-orange-800 text-lg font-medium">
+                                {current.categories[selectedCategory].hindi}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "insight") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                            <Lightbulb className="text-green-600" size={20} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {current.cards.map((card, idx) => {
+                            const IconComponent = card.icon;
+                            return (
+                                <div
+                                    key={idx}
+                                    className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all"
+                                >
+                                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
+                                        <IconComponent className="text-blue-600" size={24} />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-gray-900 mb-2">{card.title}</h3>
+                                    <p className="text-gray-700 leading-relaxed">{card.content}</p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "final-quiz") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
+                            <Trophy className="text-yellow-600" size={20} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                    </div>
+
+                    <div className="space-y-6">
+                        {current.questions.map((q, qIdx) => (
+                            <div key={qIdx} className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-orange-200">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="flex-shrink-0 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                        {qIdx + 1}
+                                    </div>
+                                    <p className="text-lg font-semibold text-gray-900">{q.question}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    {q.options.map((option, oIdx) => {
+                                        const isSelected = quizAnswers[qIdx] === oIdx;
+                                        const isCorrect = option.correct;
+                                        const showResult = quizAnswers[qIdx] !== undefined;
+
+                                        return (
+                                            <button
+                                                key={oIdx}
+                                                onClick={() => {
+                                                    if (quizAnswers[qIdx] === undefined) {
+                                                        setQuizAnswers(prev => {
+                                                            const newAnswers = [...prev];
+                                                            newAnswers[qIdx] = oIdx;
+                                                            return newAnswers;
+                                                        });
+                                                    }
+                                                }}
+                                                disabled={quizAnswers[qIdx] !== undefined}
+                                                className={`w-full p-4 rounded-lg text-left font-medium transition-all flex items-center gap-3 ${
+                                                    showResult && isSelected && isCorrect
+                                                        ? 'bg-green-100 border-2 border-green-500 text-green-800'
+                                                        : showResult && isSelected && !isCorrect
+                                                            ? 'bg-red-100 border-2 border-red-500 text-red-800'
+                                                            : showResult && isCorrect
+                                                                ? 'bg-green-50 border-2 border-green-300 text-green-800'
+                                                                : 'bg-white border-2 border-gray-300 text-gray-800 hover:border-orange-400 hover:bg-orange-50'
+                                                }`}
+                                            >
+                                                {showResult && isCorrect && (
+                                                    <CheckCircle size={20} className="flex-shrink-0" />
+                                                )}
+                                                {showResult && isSelected && !isCorrect && (
+                                                    <X size={20} className="flex-shrink-0" />
+                                                )}
+                                                <span>{option.text}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {quizAnswers.length === current.questions.length && !quizComplete && (
+                        <button
+                            onClick={() => setQuizComplete(true)}
+                            className="w-full mt-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all shadow-md"
+                        >
+                            Continue
+                        </button>
+                    )}
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     const CompletionSummary = () => {
-        const getScoreMessage = () => {
-            if (score === 100) return "Perfect Score!";
-            if (score >= 75) return "Great Job!";
-            if (score >= 50) return "Good Effort!";
-            return "Keep Practicing!";
-        };
-
-        const getScoreColor = () => {
-            if (score === 100) return "text-green-600";
-            if (score >= 75) return "text-blue-600";
-            if (score >= 50) return "text-orange-600";
-            return "text-red-600";
-        };
-
-        const getScoreIcon = () => {
-            if (score === 100) return <Award size={40} className="text-green-600" />;
-            if (score >= 75) return <Trophy size={40} className="text-blue-600" />;
-            if (score >= 50) return <CheckCircle size={40} className="text-orange-600" />;
-            return <Book size={40} className="text-red-600" />;
-        };
+        const { correct, total, score } = calculateScore();
 
         return (
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-                <div className="text-center mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        {getScoreIcon()}
+            <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-green-500">
+                {/* Trophy Icon */}
+                <div className="flex justify-center mb-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Trophy size={40} className="text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">Lesson Complete!</h2>
-                    <p className="text-gray-600">You've finished the What is Panjabi? lesson</p>
                 </div>
 
-                {/* Score Display */}
-                <div className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-xl p-6 mb-6 border border-blue-200">
-                    <div className="text-center">
-                        <p className="text-sm font-semibold text-gray-600 uppercase mb-2">Your Score</p>
-                        <div className="flex items-center justify-center gap-4 mb-3">
-                            <div className={`text-5xl font-bold ${getScoreColor()}`}>
-                                {score}%
-                            </div>
-                        </div>
-                        <p className="text-lg font-semibold text-gray-800 mb-2">{getScoreMessage()}</p>
-                        <p className="text-sm text-gray-600">
-                            {correctAnswers} out of {totalQuizzes} questions correct
-                        </p>
-                    </div>
-                </div>
+                {/* Title */}
+                <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+                    Lesson Complete!
+                </h2>
+                <p className="text-center text-gray-600 mb-8">
+                    You've learned the story of Panjabi
+                </p>
 
                 {/* Stats */}
-                <div className="grid grid-cols-3 gap-3 mb-6">
-                    <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200">
-                        <div className="text-2xl font-bold text-blue-600 mb-1">{totalQuizzes}</div>
-                        <p className="text-xs text-gray-600">Total Questions</p>
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl text-center border-2 border-blue-200">
+                        <div className="text-3xl font-bold text-blue-600 mb-1">{score}%</div>
+                        <p className="text-xs text-gray-600 font-medium">Score</p>
                     </div>
-                    <div className="bg-green-50 rounded-lg p-4 text-center border border-green-200">
-                        <div className="text-2xl font-bold text-green-600 mb-1">{correctAnswers}</div>
-                        <p className="text-xs text-gray-600">Correct</p>
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl text-center border-2 border-green-200">
+                        <div className="text-3xl font-bold text-green-600 mb-1">{correct}</div>
+                        <p className="text-xs text-gray-600 font-medium">Correct</p>
                     </div>
-                    <div className="bg-orange-50 rounded-lg p-4 text-center border border-orange-200">
-                        <div className="text-2xl font-bold text-orange-600 mb-1">{totalQuizzes - correctAnswers}</div>
-                        <p className="text-xs text-gray-600">Incorrect</p>
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl text-center border-2 border-orange-200">
+                        <div className="text-3xl font-bold text-orange-600 mb-1">{total - correct}</div>
+                        <p className="text-xs text-gray-600 font-medium">Incorrect</p>
                     </div>
                 </div>
 
@@ -430,7 +669,7 @@ export default function Lesson1WhatIsPanjabi() {
                 <div className="space-y-3">
                     <button
                         onClick={() => router.push("/lessons/lesson2/1")}
-                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm"
+                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm shadow-md"
                     >
                         <span>Continue to Next Lesson</span>
                         <ArrowRight size={18} />
@@ -438,8 +677,13 @@ export default function Lesson1WhatIsPanjabi() {
                     <button
                         onClick={() => {
                             setStep(0);
-                            setQuizAnswers({});
-                            setShowFeedback({});
+                            setSelectedEvent(null);
+                            setMatchingAnswers({});
+                            setMatchingComplete(false);
+                            setShuffledDefinitions([]);
+                            setSelectedCategory(0);
+                            setQuizAnswers([]);
+                            setQuizComplete(false);
                             setLessonCompleted(false);
                         }}
                         className="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm"
@@ -449,7 +693,7 @@ export default function Lesson1WhatIsPanjabi() {
                     </button>
                     <button
                         onClick={() => router.push("/learning/essential-punjabi")}
-                        className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm border border-gray-300"
+                        className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm border-2 border-gray-300"
                     >
                         <ArrowLeft size={18} />
                         <span>Back to Lessons</span>
@@ -498,7 +742,7 @@ export default function Lesson1WhatIsPanjabi() {
                 {/* Progress Bar */}
                 <div className="bg-white rounded-xl shadow p-4 mb-6 border border-gray-200">
                     <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-semibold text-gray-700">Lesson Progress</span>
+                        <span className="text-xs font-semibold text-gray-700">Progress</span>
                         <span className="text-sm font-bold text-blue-600">
                             {step + 1} / {lessonContent.length}
                         </span>
@@ -550,11 +794,11 @@ export default function Lesson1WhatIsPanjabi() {
                     {step < lessonContent.length - 1 ? (
                         <button
                             onClick={handleNext}
-                            disabled={current.type === 'quiz' && !showFeedback[step]}
+                            disabled={!canProceed()}
                             className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all text-sm ${
-                                current.type === 'quiz' && !showFeedback[step]
+                                !canProceed()
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
+                                    : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-md'
                             }`}
                         >
                             <span>Next</span>
@@ -563,7 +807,12 @@ export default function Lesson1WhatIsPanjabi() {
                     ) : (
                         <button
                             onClick={handleComplete}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all text-sm"
+                            disabled={!quizComplete}
+                            className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all text-sm ${
+                                !quizComplete
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-md'
+                            }`}
                         >
                             <span>Complete Lesson</span>
                             <CheckCircle size={18} />
