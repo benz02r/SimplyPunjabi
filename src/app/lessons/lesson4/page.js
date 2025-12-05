@@ -29,7 +29,8 @@ const lessonContent = [
     {
         type: "intro",
         title: "Family and Friends",
-        content: "Master the precise Panjabi terms for family members—because unlike English, Panjabi has specific words for maternal and paternal relatives.",
+        content: "In this section, we will walk through the Panjabi words for family members and friends so that you are never stuck when it comes to describing your relations with people.         " +
+            "                  You will learn the following:",
         points: [
             "Immediate family terms",
             "Why 'Ji' shows respect",
@@ -49,9 +50,11 @@ const lessonContent = [
                 terms: [
                     { punjabi: "ਮਾਤਾ ਜੀ", roman: "Mata Ji", english: "Mother (respectful)" },
                     { punjabi: "ਮਾ", roman: "Ma", english: "Mum" },
-                    { punjabi: "ਬੇਬੇ", roman: "Bebe", english: "Mother/Grandmother" }
+                  //  { /punjabi: "ਬੇਬੇ", roman: "Bebe", english: "Mother/Grandmother" }//
                 ],
-                note: "Ma (ਮਾ) is most common. Add 'Ji' for respect."
+                note: "Whats the difference between the two?  " +
+                    "- Ma (ਮਾ) is more commonly used in everyday conversations." +
+                    "If you want to go rhe extra mile you can also refer to Mother as Bebe"
             },
             {
                 id: "father",
