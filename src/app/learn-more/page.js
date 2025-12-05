@@ -6,7 +6,7 @@ export default function About() {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section - Mission-Driven */}
-            <section className="relative px-6 pt-20 pb-24 sm:pt-32 sm:pb-32 overflow-hidden bg-gradient-to-br from-blue-50 via-orange-50/30 to-white">
+            <section className="relative px-6 pt-32 pb-24 sm:pt-40 sm:pb-32 overflow-hidden bg-gradient-to-br from-blue-50 via-orange-50/30 to-white">
                 {/* Subtle background decoration */}
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-100/40 to-orange-100/40 rounded-full blur-3xl -z-10"></div>
                 <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-orange-100/30 to-blue-100/30 rounded-full blur-3xl -z-10"></div>
