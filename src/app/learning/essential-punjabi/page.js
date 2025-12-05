@@ -176,7 +176,7 @@ export default function EssentialPunjabi() {
                     <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white text-center shadow-xl">
                         <FaRocket className="text-6xl mx-auto mb-6" />
                         <h2 className="text-3xl font-bold mb-4">
-                             Want Full Access to All Lessons?
+                            Want Full Access to All Lessons?
                         </h2>
                         <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
                             Subscribe to unlock premium content, track your progress, and accelerate your learning journey!
@@ -240,12 +240,6 @@ function LessonCard({ lesson, user, lessonNumber }) {
                         <div className="flex items-start justify-between mb-4">
                             <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
                                 {lessonNumber}
-                            </div>
-                            <div className="text-sm text-gray-500 flex items-center gap-1">
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                                </svg>
-                                <span>{lesson.duration}</span>
                             </div>
                         </div>
 

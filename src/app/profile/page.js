@@ -13,7 +13,6 @@ const avatars = [
     "/avatars/avatar5.png",
     "/avatars/avatar6.png",
     "/avatars/avatar7.png",
-    "/avatars/avatar8.png",
 ];
 
 export default function Profile() {

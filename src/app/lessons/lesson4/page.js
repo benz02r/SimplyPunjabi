@@ -54,7 +54,7 @@ const lessonContent = [
                 ],
                 note: "Whats the difference between the two?  " +
                     "- Ma (ਮਾ) is more commonly used in everyday conversations." +
-                    "If you want to go rhe extra mile you can also refer to Mother as Bebe"
+                    "If you want to go the extra mile you can also refer to Mother as Bebe"
             },
             {
                 id: "father",
