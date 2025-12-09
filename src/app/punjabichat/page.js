@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { MessageCircle, Send, Loader2, Volume2, Copy, CheckCircle, Trash2, Menu, ArrowLeft, Lightbulb, X } from "lucide-react";
+import { MessageCircle, Send, Loader2, Volume2, Copy, CheckCircle, Trash2, Menu, ArrowLeft, Lightbulb, X, BookOpen, Users, MessageSquare } from "lucide-react";
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
@@ -10,17 +10,127 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-// System prompt
-const SYSTEM_PROMPT = `You are a Punjabi language tutor. You MUST respond in this exact format:
+// COMPREHENSIVE SYSTEM PROMPT
+const SYSTEM_PROMPT = `You are a specialized Punjabi language tutor for diaspora learners - second and third-generation Punjabis in the UK, US, Canada, and Australia who want to reconnect with their heritage through family conversations.
 
-GURMUKHI: [Punjabi in Gurmukhi script]
-ROMANIZED: [Romanized pronunciation]
-ENGLISH: [English translation]
+## YOUR CORE PURPOSE
+Help users have meaningful conversations with their Punjabi-speaking family members. Focus on practical, everyday phrases used in households, not formal or literary Punjabi.
 
-Example:
-GURMUKHI: ਸਤ ਸ੍ਰੀ ਅਕਾਲ
-ROMANIZED: Sat Sri Akaal
-ENGLISH: Hello (formal greeting)`;
+## RESPONSE FORMAT (ALWAYS USE THIS)
+For every Punjabi phrase or sentence, provide:
+
+GURMUKHI: [Punjabi script]
+ROMANIZED: [Phonetic spelling with clear pronunciation]
+ENGLISH: [Natural English translation]
+
+Then add context when helpful:
+CULTURAL NOTE: [Explain cultural context, formality levels, or when to use this]
+GRAMMAR TIP: [Optional - only for complex structures]
+
+## LANGUAGE RULES
+1. Formality Levels - Always indicate whether a phrase is:
+   - Formal/Respectful (for elders): Use ਤੁਸੀਂ (tuseen)
+   - Informal (for peers/younger): Use ਤੂੰ (toon)
+
+2. Regional Preferences: Default to conversational Punjabi common across diaspora families (Doabi/Majhi mix). Avoid overly rural or literary terms.
+
+3. Family Context - Prioritize vocabulary for:
+   - Talking with grandparents, parents, aunts/uncles
+   - Family gatherings and celebrations
+   - Food and meal conversations
+   - Expressing affection and respect
+   - Common household topics
+
+4. Cultural Sensitivity - Explain cultural nuances like:
+   - Respect terms (ji, bebe, baba)
+   - Gender considerations in language
+   - Generational communication styles
+
+## TEACHING STYLE
+- Patient and encouraging: Celebrate small wins
+- Practical: Focus on what they'll actually say
+- Relatable: Reference diaspora experiences (visiting Punjab, family weddings, learning from grandparents)
+- Interactive: Ask if they want to practice variations
+- Break down complex phrases: Show how sentences are built
+
+## EXAMPLE RESPONSES
+
+Example 1 - Basic Greeting:
+User: "How do I greet my grandmother?"
+
+GURMUKHI: ਸਤ ਸ੍ਰੀ ਅਕਾਲ, ਬੀਬੀ ਜੀ। ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?
+ROMANIZED: Sat sri akaal, Bibi ji. Tuseen kivein ho?
+ENGLISH: Hello, Grandmother. How are you?
+
+CULTURAL NOTE: "Bibi ji" is a respectful term for elderly women. "Tuseen" is the formal "you" - always use this with elders. The response you'll likely hear is "ਠੀਕ ਹਾਂ" (theek haan - I'm fine).
+
+Would you like to learn how to respond when she asks how you are?
+
+Example 2 - Explaining Grammar:
+User: "Why does 'you' change?"
+
+Great question! Punjabi has two forms of "you":
+
+Informal (ਤੂੰ - toon): 
+- Use with: friends, younger siblings, children
+- Example: ਤੂੰ ਕਿੱਥੇ ਜਾ ਰਿਹਾ ਹੈਂ? (Toon kitthe ja riha hain? - Where are you going?)
+
+Formal/Respectful (ਤੁਸੀਂ - tuseen):
+- Use with: parents, grandparents, elders, strangers, showing respect
+- Example: ਤੁਸੀਂ ਕਿੱਥੇ ਜਾ ਰਹੇ ਹੋ? (Tuseen kitthe ja rahe ho? - Where are you going?)
+
+CULTURAL NOTE: When in doubt, use "tuseen" - it's better to be overly respectful than accidentally disrespectful!
+
+Example 3 - Family Conversation:
+User: "How do I tell my dad I'm hungry?"
+
+Informal (since it's your dad, but respectfully):
+GURMUKHI: ਪਾਪਾ ਜੀ, ਮੈਨੂੰ ਭੁੱਖ ਲੱਗੀ ਹੈ।
+ROMANIZED: Papa ji, mainoo bhukh laggi hai.
+ENGLISH: Dad, I'm hungry.
+
+More casual version:
+GURMUKHI: ਪਾਪਾ, ਮੈਂ ਭੁੱਖਾ ਹਾਂ।
+ROMANIZED: Papa, main bhukha haan.
+ENGLISH: Dad, I'm hungry.
+
+CULTURAL NOTE: Adding "ji" shows respect even to parents. The first version is more polite, the second is casual but still affectionate - both are fine!
+
+## WHAT NOT TO DO
+- Don't use overly formal/literary Punjabi unless specifically requested
+- Don't overwhelm with grammar rules - keep it conversational
+- Don't translate word-for-word - explain natural usage
+- Don't assume knowledge - explain even basic concepts
+- Don't skip the format (GURMUKHI/ROMANIZED/ENGLISH)
+
+## ENCOURAGEMENT
+Celebrate their progress! Recognize that learning heritage languages as adults is meaningful work. Remind them that even small phrases help connect with family and culture.
+
+## ADDITIONAL CONTEXT - COMMON PATTERNS
+
+Asking Questions:
+- ਕੀ (kee) = what
+- ਕਿਵੇਂ (kivein) = how
+- ਕਿੱਥੇ (kitthe) = where
+- ਕਦੋਂ (kadon) = when
+- ਕਿਉਂ (kiun) = why
+
+Common Responses:
+- ਹਾਂ (haan) = yes
+- ਨਹੀਂ (nahin) = no
+- ਠੀਕ ਹੈ (theek hai) = okay/alright
+- ਪਤਾ ਨਹੀਂ (pata nahin) = I don't know
+- ਸ਼ਾਇਦ (shaaid) = maybe
+
+Family Terms:
+- ਬੀਬੀ/ਦਾਦੀ (Bibi/Dadi) = grandmother
+- ਬਾਬਾ/ਦਾਦਾ (Baba/Dada) = grandfather
+- ਮਾਤਾ ਜੀ/ਮੰਮੀ (Mata ji/Mammi) = mother
+- ਪਿਤਾ ਜੀ/ਪਾਪਾ (Pita ji/Papa) = father
+- ਭਰਾ/ਵੀਰ (Bhra/Veer) = brother
+- ਭੈਣ (Bhain) = sister
+
+Now, help this user with their Punjabi learning journey!`;
 
 export default function PunjabiChat() {
     const router = useRouter();
@@ -70,12 +180,22 @@ export default function PunjabiChat() {
     const parseResponse = (text) => {
         const gurmukhiMatch = text.match(/GURMUKHI:\s*(.+?)(?=\nROMANIZED:|$)/s);
         const romanizedMatch = text.match(/ROMANIZED:\s*(.+?)(?=\nENGLISH:|$)/s);
-        const englishMatch = text.match(/ENGLISH:\s*(.+?)$/s);
+        const englishMatch = text.match(/ENGLISH:\s*(.+?)(?=\nCULTURAL NOTE:|GRAMMAR TIP:|$)/s);
+        const culturalNoteMatch = text.match(/CULTURAL NOTE:\s*(.+?)(?=\nGRAMMAR TIP:|$)/s);
+        const grammarTipMatch = text.match(/GRAMMAR TIP:\s*(.+?)$/s);
+
+        // If no structured format found, try to extract any remaining text
+        let additionalContext = '';
+        if (culturalNoteMatch || grammarTipMatch) {
+            additionalContext = (culturalNoteMatch ? culturalNoteMatch[1].trim() : '') +
+                (grammarTipMatch ? '\n\nGRAMMAR TIP: ' + grammarTipMatch[1].trim() : '');
+        }
 
         return {
             gurmukhi: gurmukhiMatch ? gurmukhiMatch[1].trim() : 'ਜਵਾਬ ਉਪਲਬਧ ਨਹੀਂ',
             romanized: romanizedMatch ? romanizedMatch[1].trim() : 'Response not available',
-            english: englishMatch ? englishMatch[1].trim() : text
+            english: englishMatch ? englishMatch[1].trim() : text,
+            context: additionalContext
         };
     };
 
@@ -101,21 +221,24 @@ export default function PunjabiChat() {
                 throw new Error('API key not found. Please add NEXT_PUBLIC_GEMINI_API_KEY to your .env.local file');
             }
 
-            // Build conversation history
-            const conversationText = messages
+            // Build conversation history (last 6 messages for context)
+            const conversationHistory = messages
+                .slice(-6)
                 .map(msg => {
                     if (msg.type === 'user') return `User: ${msg.text}`;
-                    if (msg.type === 'ai') return `Assistant: GURMUKHI: ${msg.gurmukhi}\nROMANIZED: ${msg.romanized}\nENGLISH: ${msg.english}`;
+                    if (msg.type === 'ai') {
+                        return `Assistant: GURMUKHI: ${msg.gurmukhi}\nROMANIZED: ${msg.romanized}\nENGLISH: ${msg.english}${msg.context ? '\n' + msg.context : ''}`;
+                    }
                     return '';
                 })
                 .filter(Boolean)
                 .join('\n\n');
 
-            const fullPrompt = `${SYSTEM_PROMPT}\n\n${conversationText ? conversationText + '\n\n' : ''}User: ${currentInput}\nAssistant:`;
+            const fullPrompt = `${SYSTEM_PROMPT}\n\n${conversationHistory ? '## CONVERSATION HISTORY:\n' + conversationHistory + '\n\n' : ''}## CURRENT USER MESSAGE:\n${currentInput}\n\nRemember to use the format (GURMUKHI/ROMANIZED/ENGLISH) and add cultural context when helpful!`;
 
             // Call Gemini API directly
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${API_KEY}`,
                 {
                     method: 'POST',
                     headers: {
@@ -129,7 +252,7 @@ export default function PunjabiChat() {
                         }],
                         generationConfig: {
                             temperature: 0.7,
-                            maxOutputTokens: 500,
+                            maxOutputTokens: 800,
                         }
                     })
                 }
@@ -153,6 +276,7 @@ export default function PunjabiChat() {
                 gurmukhi: parsed.gurmukhi,
                 romanized: parsed.romanized,
                 english: parsed.english,
+                context: parsed.context,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
 
@@ -203,14 +327,14 @@ export default function PunjabiChat() {
     };
 
     const sampleQuestions = [
-        "How do I say 'Good morning' in Punjabi?",
-        "How do I introduce myself in Punjabi?",
-        "What is 'thank you' in Punjabi?",
-        "How do I ask 'How are you?' in Punjabi?",
-        "Teach me Punjabi numbers from 1 to 10",
-        "How do I say 'I love you' in Punjabi?",
-        "What are common Punjabi family terms?",
-        "How do I order food in Punjabi?"
+        "How do I greet my grandmother in Punjabi?",
+        "How do I introduce myself to my uncle?",
+        "What's the difference between formal and informal Punjabi?",
+        "How do I ask my dad if he's eaten?",
+        "Teach me family relationship terms in Punjabi",
+        "How do I say 'I love you' to my mom?",
+        "What are common Punjabi phrases for family gatherings?",
+        "How do I ask someone about their wellbeing?"
     ];
 
     const handleSampleQuestion = (question) => {
@@ -238,7 +362,7 @@ export default function PunjabiChat() {
                         Chat with Simply Punjabi AI
                     </h1>
                     <p className="text-base text-blue-100">
-                        Ask me anything in English and I'll respond in Punjabi with Gurmukhi script, romanisation, and translations
+                        Your personal Punjabi tutor for meaningful family conversations. Ask in English, learn in Punjabi.
                     </p>
                 </div>
 
@@ -247,7 +371,10 @@ export default function PunjabiChat() {
                         <div className="w-80 flex-shrink-0">
                             <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 sticky top-28">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-gray-900">Sample Questions</h3>
+                                    <div className="flex items-center gap-2">
+                                        <Lightbulb size={18} className="text-orange-600" />
+                                        <h3 className="text-lg font-bold text-gray-900">Sample Questions</h3>
+                                    </div>
                                     <button
                                         onClick={() => setIsSidebarOpen(false)}
                                         className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -276,7 +403,7 @@ export default function PunjabiChat() {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                                        <span className="text-sm font-semibold text-gray-700">AI Assistant Online</span>
+                                        <span className="text-sm font-semibold text-gray-700">AI Tutor Online</span>
                                     </div>
                                     <div className="flex gap-2">
                                         {!isSidebarOpen && (
@@ -310,13 +437,27 @@ export default function PunjabiChat() {
                                         <h2 className="text-2xl font-bold text-gray-900 mb-2">
                                             Welcome to Simply Punjabi AI
                                         </h2>
-                                        <p className="text-gray-600 max-w-md">
-                                            Ask me anything in English and I'll respond in Punjabi with Gurmukhi script, romanisation, and English translation!
+                                        <p className="text-gray-600 max-w-md mb-4">
+                                            Your personal tutor for learning family-focused Punjabi. Ask anything in English and get responses with Gurmukhi script, pronunciation, and cultural context.
                                         </p>
+                                        <div className="flex items-center gap-6 text-sm text-gray-600 mb-6">
+                                            <div className="flex items-center gap-2">
+                                                <BookOpen size={16} className="text-blue-600" />
+                                                <span>Authentic pronunciation</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Users size={16} className="text-blue-600" />
+                                                <span>Family conversations</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <MessageSquare size={16} className="text-blue-600" />
+                                                <span>Cultural context</span>
+                                            </div>
+                                        </div>
                                         {!isSidebarOpen && (
                                             <button
                                                 onClick={() => setIsSidebarOpen(true)}
-                                                className="mt-6 flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all text-sm"
+                                                className="mt-2 flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all text-sm"
                                             >
                                                 <Lightbulb size={16} />
                                                 View Sample Questions
@@ -381,10 +522,16 @@ export default function PunjabiChat() {
                                                                 <p className="text-base text-gray-700 italic">{message.romanized}</p>
                                                             </div>
 
-                                                            <div>
+                                                            <div className={message.context ? "mb-4 pb-4 border-b border-gray-200" : ""}>
                                                                 <span className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">English</span>
                                                                 <p className="text-sm text-gray-600">{message.english}</p>
                                                             </div>
+
+                                                            {message.context && (
+                                                                <div className="bg-white bg-opacity-50 rounded-lg p-3">
+                                                                    <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line">{message.context}</p>
+                                                                </div>
+                                                            )}
 
                                                             <p className="text-xs text-gray-400 mt-3">{message.timestamp}</p>
                                                         </div>
@@ -397,7 +544,7 @@ export default function PunjabiChat() {
                                                 <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-100 p-4 rounded-2xl rounded-bl-none shadow-md">
                                                     <div className="flex items-center gap-2">
                                                         <Loader2 size={18} className="animate-spin text-blue-600" />
-                                                        <span className="text-sm text-gray-600">Processing your question...</span>
+                                                        <span className="text-sm text-gray-600">Preparing your lesson...</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -414,7 +561,7 @@ export default function PunjabiChat() {
                                         value={inputMessage}
                                         onChange={(e) => setInputMessage(e.target.value)}
                                         onKeyPress={handleKeyPress}
-                                        placeholder="Ask me anything in English... (e.g., 'How do I say hello in Punjabi?')"
+                                        placeholder="Ask me anything in English... (e.g., 'How do I greet my grandmother?')"
                                         disabled={isLoading}
                                         rows="2"
                                         className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl resize-none focus:outline-none focus:border-blue-500 transition-colors text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
@@ -454,7 +601,7 @@ export default function PunjabiChat() {
                                 <div>
                                     <h3 className="font-bold text-gray-900 mb-1 text-sm">Pro Tip</h3>
                                     <p className="text-sm text-gray-700">
-                                        Practice pronunciation using the audio button () on each response. The more you listen and repeat, the better your Punjabi will become!
+                                        Use the audio button on each response to hear authentic Punjabi pronunciation. Our AI tutor provides cultural context for every phrase, helping you understand not just what to say, but when and how to say it.
                                     </p>
                                 </div>
                             </div>
