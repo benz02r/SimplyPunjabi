@@ -50,7 +50,7 @@ const lessonContent = [
                 terms: [
                     { punjabi: "ਮਾਤਾ ਜੀ", roman: "Mata Ji", english: "Mother (respectful)" },
                     { punjabi: "ਮਾ", roman: "Ma", english: "Mum" },
-                  //  { /punjabi: "ਬੇਬੇ", roman: "Bebe", english: "Mother/Grandmother" }//
+                    //  { /punjabi: "ਬੇਬੇ", roman: "Bebe", english: "Mother/Grandmother" }//
                 ],
                 note: "Whats the difference between the two?  " +
                     "- Ma (ਮਾ) is more commonly used in everyday conversations." +
@@ -942,7 +942,7 @@ export default function Lesson4FamilyAndFriends() {
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <Users size={18} />
-                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 4: Family Vocabulary</span>
+                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 3: Family And Friends</span>
                     </div>
                     <h1 className="text-3xl font-bold mb-2">
                         Family and Friends

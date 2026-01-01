@@ -31,7 +31,7 @@ const lessonContent = [
     {
         type: "intro",
         title: "Introduce Yourself",
-        content: "Learn the essentials of introducing yourself in Panjabi—from your name to your family.",
+        content: "Learn the essentials of introducing yourself in Panjabi from your name to your family.",
         points: [
             "Name and age",
             "Where you're from and where you live",
@@ -963,7 +963,7 @@ export default function IntroductionLesson() {
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <User size={18} />
-                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 3: Self Introduction</span>
+                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 2: A Bit About Me</span>
                     </div>
                     <h1 className="text-3xl font-bold mb-2">
                         A Bit About Me

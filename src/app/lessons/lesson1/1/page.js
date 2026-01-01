@@ -887,7 +887,7 @@ export default function GreetingSteps() {
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <User size={18} />
-                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 2: Greetings</span>
+                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 1: Learn Panjabi Greetings</span>
                     </div>
                     <h1 className="text-3xl font-bold mb-2">
                         Learn Panjabi Greetings
