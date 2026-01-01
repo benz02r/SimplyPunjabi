@@ -29,57 +29,65 @@ const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabase
 const lessonContent = [
     {
         type: "intro",
-        title: "Master Panjabi Greetings",
-        content: "Learn how to greet people in different settings from formal encounters with elders to casual meetups with friends.",
+        title: "Learn Panjabi Greetings",
+        content: "Where best to start your Panjabi learning journey with an introduction into Panjabi Greetings. Whether you are new to Panjabi, here to expand your Panjabi or here for a refresher, in this section, we will be taking you back to the basics and teach you how to:",
         points: [
-            "Formal greetings and farewells",
-            "How to ask 'How are you?'",
-            "Informal greetings with friends"
-        ]
+            "Formally greet and bid farewell to someone",
+            "Ask about a person's wellbeing",
+            "Informally greet and bid farewell to someone"
+        ],
+        helpfulText: "This section will be useful in helping you kick start conversations with anyone you come across whether you are visiting your Grandma on a Sunday morning, socialising with friends on a Friday night or meeting someone for the first time"
     },
     {
         type: "phrase-collection",
         title: "Formal Greetings",
-        subtitle: "Click each phrase to hear pronunciation",
+        subtitle: "Go through the info boxes below to learn how we greet people in Panjabi and the different ways we can build on these initial greetings.",
         phrases: [
             {
                 id: 1,
                 gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਜੀ",
                 roman: "Sat Sri Akaal Ji",
-                english: "Hello / Goodbye (Formal)",
-                usage: "Use with elders, family, or people you're meeting for the first time. Also used to say goodbye.",
-                context: "Literally means 'God is Truth'. Adding 'Ji' shows respect.",
+                english: "Hello / Goodbye",
+                usage: "Formal/Informal. When you want to say Hello or Goodbye to someone",
+                context: "'God is Truth.' We add 'Ji' at the end to convey Respect.",
                 audioFile: "sat-sri-akaal-ji.mp3",
-                icon: Hand
+                icon: Hand,
+                boldTitle: "How to say 'Hello' or 'Goodbye' to someone in Panjabi?"
             },
             {
                 id: 2,
                 gurmukhi: "ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
                 roman: "Tusi(n) kive(n) ho?",
                 english: "How are you?",
-                usage: "Formal way to ask about someone's wellbeing after greeting them.",
+                gurmukhi2: "ਤੁਹਾਡਾ ਕੀ ਹਾਲ ਹੈ?",
+                roman2: "Tuhāḍā kī hāl hai?",
+                usage: "Formal/Informal. You can use either of these phrases to build on your initial greeting and ask someone about their wellbeing",
                 audioFile: "tusi-kiven-ho.mp3",
-                icon: MessageCircle
+                icon: MessageCircle,
+                boldTitle: "How to ask someone how they are?"
             },
             {
                 id: 3,
                 gurmukhi: "ਮੈਂ ਠੀਕ ਹਾਂ",
                 roman: "Mai(n) theek haa(n)",
                 english: "I am fine",
-                usage: "Response when someone asks how you are.",
+                usage: "Formal/Informal. Can be used in response to someone asking how you are",
                 audioFile: "main-theek-haan.mp3",
-                icon: Heart
+                icon: Heart,
+                boldTitle: "How to tell someone that you are fine"
             },
             {
                 id: 4,
                 gurmukhi: "ਅਪਨਾ ਖਿਆਲ ਰੱਖਣਾ",
                 roman: "Apana khay-aal rakh-naa",
-                english: "Take care",
-                usage: "A polite way to say goodbye, showing care for the person.",
+                english: "Take Care of Yourself",
+                usage: "Formal/Informal. As you saw in the earlier Boxes, we can use Sat Sri Akaal to also say goodbye to someone. However, when you may want to add this phrase as a follow up to add an extra layer of compassion or consideration for the other person.",
                 audioFile: "apna-khyal-rakhna.mp3",
-                icon: Heart
+                icon: Heart,
+                boldTitle: "How to tell someone to 'take care'"
             }
-        ]
+        ],
+        bottomNote: "These are just a few basics to get you started. We will be building on these points in further lessons and sections so don't be concerned if this page does not cover everything you may wish to know or say!"
     },
     {
         type: "scenario",
@@ -88,39 +96,41 @@ const lessonContent = [
         scenario: {
             setting: "Amar visits his grandparents' house",
             characters: [
-                { name: "Amar", avatar: "/avatars/avatar6.png" },
-                { name: "Grandma", avatar: "/avatars/avatar5.png" }
+                { name: "Amar (ਅਮਰ)", avatar: "/avatars/avatar6.png" },
+                { name: "Grandma (ਬੀਬੀ)", avatar: "/avatars/avatar5.png" }
             ],
             dialogue: [
                 {
-                    speaker: "Amar",
-                    gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਜੀ। ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
-                    roman: "Sat Sri Akaal Ji. Tusi(n) kive(n) ho?",
-                    english: "Hello. How are you?",
+                    speaker: "Amar (ਅਮਰ)",
+                    gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਬੀਬੀ ਜੀ। ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
+                    roman: "Sat Sri Akaal Bibi Ji. Tusi(n) kive(n) ho?",
+                    english: "Hello Grandma. How are you?",
                     avatar: "/avatars/avatar6.png"
                 },
                 {
-                    speaker: "Grandma",
-                    gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਅਮਰ। ਮੈਂ ਠੀਕ ਹਾਂ।",
-                    roman: "Sat Sri Akaal Amar. Mai(n) theek haa(n).",
-                    english: "Hello Amar. I am fine.",
+                    speaker: "Grandma (ਬੀਬੀ)",
+                    gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਅਮਰ। ਮੈਂ ਠੀਕ ਹਾਂ। ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
+                    roman: "Sat Sri Akaal Amar. Mai(n) theek haa(n). Tusi(n) kive(n) ho?",
+                    english: "Hello Amar. I am fine. How are you?",
                     avatar: "/avatars/avatar5.png"
                 }
-            ]
+            ],
+            bottomNote: "We will be covering family members in another lesson where we will include terms for each individual family member"
         }
     },
     {
         type: "informal-section",
         title: "Casual Greetings",
-        subtitle: "For friends and informal settings",
+        subtitle: "Ways to greet and speak with friends or people your own age in an informal or social setting.",
         phrase: {
             gurmukhi: "ਕਿੱਦਾਂ?",
             roman: "Kiddā̃?",
-            english: "What's up? / How are you?",
-            usage: "Use this casual greeting when meeting friends in informal settings.",
+            english: "How are you? (Shortened)",
+            usage: "Informal. When greeting people your own age, typically friends or cousins in a social setting away from elderly family members.",
             note: "Think of this as the Panjabi equivalent of 'What's up?' or 'How's it going?'",
             audioFile: "kiddan.mp3",
-            icon: Users
+            icon: Users,
+            boldTitle: "How to greet friends or cousins in a social setting?"
         },
         comparison: {
             formal: {
@@ -169,26 +179,64 @@ const lessonContent = [
         title: "Test Your Knowledge",
         questions: [
             {
-                question: "What does 'Mai(n) theek haa(n)' mean?",
+                question: "We can only use Sat Sri Akaal to say hello to someone in Panjabi.",
                 options: [
-                    { text: "I am unhappy", correct: false },
-                    { text: "I am fine", correct: true },
-                    { text: "I am excited", correct: false }
+                    { text: "True", correct: false },
+                    { text: "False", correct: true }
                 ]
             },
             {
-                question: "Can 'Sat Sri Akaal' be used for both hello and goodbye?",
+                question: "Why do we add 'Ji' at the end of Sat Sri Akaal?",
+                options: [
+                    { text: "To convey respect to the other person", correct: true },
+                    { text: "We only use it when someone's name is Ji", correct: false },
+                    { text: "To let the other person know we are older than them", correct: false }
+                ]
+            },
+            {
+                question: "We can say Sat Sri Akaal to say goodbye to someone in Panjabi as well as saying hello to them?",
                 options: [
                     { text: "True", correct: true },
                     { text: "False", correct: false }
                 ]
             },
             {
-                question: "Complete the phrase: '_____ kive(n) ho?' (How are you?)",
+                question: "Why would we add 'Tusi Kive Ho' when we are greeting someone?",
                 options: [
-                    { text: "Tuhāḍā", correct: false },
-                    { text: "Tusi(n)", correct: true },
-                    { text: "Kiddā̃", correct: false }
+                    { text: "To ask someone where they come from", correct: false },
+                    { text: "To ask someone how they are", correct: true },
+                    { text: "To ask someone where they are?", correct: false }
+                ]
+            },
+            {
+                question: "What is the English translation for Sat Sri Akaal?",
+                options: [
+                    { text: "Good Morning", correct: false },
+                    { text: "God is True", correct: true },
+                    { text: "God is With You", correct: false }
+                ]
+            },
+            {
+                question: "Please translate 'Main Theek Han'",
+                options: [
+                    { text: "I am excited", correct: false },
+                    { text: "I am sad", correct: false },
+                    { text: "I am fine", correct: true }
+                ]
+            },
+            {
+                question: "Please translate 'Aapna Khay Aal'",
+                options: [
+                    { text: "Take care of yourself", correct: true },
+                    { text: "See you soon", correct: false },
+                    { text: "It was nice meeting you", correct: false }
+                ]
+            },
+            {
+                question: "Saying Kidda is more appropriate for a formal setting rather than informal setting?",
+                options: [
+                    { text: "True", correct: false },
+                    { text: "False", correct: true }
                 ]
             }
         ]
@@ -333,7 +381,7 @@ export default function GreetingSteps() {
                         <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
                     </div>
                     <p className="text-base text-gray-700 mb-6">{current.content}</p>
-                    <div className="space-y-3">
+                    <div className="space-y-3 mb-6">
                         {current.points.map((point, idx) => (
                             <div key={idx} className="flex items-start gap-3 p-4 bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl border border-gray-100">
                                 <div className="flex-shrink-0 w-7 h-7 bg-gradient-to-r from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
@@ -343,6 +391,15 @@ export default function GreetingSteps() {
                             </div>
                         ))}
                     </div>
+                    {current.helpfulText && (
+                        <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-5">
+                            <p className="text-gray-800 leading-relaxed">
+                                <span className="font-semibold text-green-700">This section will be useful in helping you</span>
+                                <br />
+                                {current.helpfulText.replace("This section will be useful in helping you ", "")}
+                            </p>
+                        </div>
+                    )}
                 </div>
             );
         }
@@ -390,6 +447,10 @@ export default function GreetingSteps() {
                                         </div>
 
                                         <div className="flex-1 min-w-0">
+                                            {phrase.boldTitle && (
+                                                <h3 className="text-base font-bold text-gray-900 mb-3">{phrase.boldTitle}</h3>
+                                            )}
+
                                             <div className="flex items-center gap-3 mb-2 flex-wrap">
                                                 <h3 className="text-xl font-bold text-gray-900">{phrase.gurmukhi}</h3>
                                                 <button
@@ -408,16 +469,24 @@ export default function GreetingSteps() {
                                             </div>
 
                                             <p className="text-blue-700 font-medium mb-1">{phrase.roman}</p>
+
+                                            {phrase.gurmukhi2 && (
+                                                <>
+                                                    <h3 className="text-xl font-bold text-gray-900 mt-2">{phrase.gurmukhi2}</h3>
+                                                    <p className="text-blue-700 font-medium mb-1">{phrase.roman2}</p>
+                                                </>
+                                            )}
+
                                             <p className="text-lg text-gray-800 font-semibold mb-2">{phrase.english}</p>
 
                                             {isSelected && (
                                                 <>
                                                     <p className="text-sm text-gray-700 mt-3 leading-relaxed">
-                                                        <span className="font-semibold">Usage:</span> {phrase.usage}
+                                                        <span className="font-semibold">When to Use:</span> {phrase.usage}
                                                     </p>
                                                     {phrase.context && (
-                                                        <p className="text-sm text-gray-600 mt-2 italic">
-                                                            {phrase.context}
+                                                        <p className="text-sm text-gray-700 mt-2 leading-relaxed">
+                                                            <span className="font-semibold">Translation:</span> {phrase.context}
                                                         </p>
                                                     )}
                                                 </>
@@ -428,6 +497,12 @@ export default function GreetingSteps() {
                             );
                         })}
                     </div>
+
+                    {current.bottomNote && (
+                        <div className="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                            <p className="text-sm text-gray-700 leading-relaxed">{current.bottomNote}</p>
+                        </div>
+                    )}
                 </div>
             );
         }
@@ -492,6 +567,12 @@ export default function GreetingSteps() {
                             <span className="font-semibold">Tip:</span> Click on each message to see the English translation!
                         </p>
                     </div>
+
+                    {current.scenario.bottomNote && (
+                        <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                            <p className="text-sm text-gray-700 leading-relaxed">{current.scenario.bottomNote}</p>
+                        </div>
+                    )}
                 </div>
             );
         }
@@ -512,6 +593,9 @@ export default function GreetingSteps() {
                     </div>
 
                     <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 mb-6 border-2 border-orange-200">
+                        {current.phrase.boldTitle && (
+                            <h3 className="text-base font-bold text-gray-900 mb-4">{current.phrase.boldTitle}</h3>
+                        )}
                         <div className="flex items-center gap-4 mb-4">
                             <h3 className="text-3xl font-bold text-gray-900">{current.phrase.gurmukhi}</h3>
                             <button
@@ -528,7 +612,10 @@ export default function GreetingSteps() {
                         <p className="text-orange-700 font-medium text-lg mb-2">{current.phrase.roman}</p>
                         <p className="text-2xl text-gray-900 font-semibold mb-3">{current.phrase.english}</p>
                         <p className="text-gray-700 mb-2">
-                            <span className="font-semibold">Usage:</span> {current.phrase.usage}
+                            <span className="font-semibold">When to Use:</span> {current.phrase.usage}
+                        </p>
+                        <p className="text-gray-700 mb-2">
+                            <span className="font-semibold">Translation:</span> {current.phrase.english}
                         </p>
                         <p className="text-gray-600 italic text-sm">
                             {current.phrase.note}
