@@ -132,7 +132,7 @@ export default function Home() {
                                 level="Beginner"
                                 title="Essential Punjabi"
                                 description="Perfect for complete beginners. Learn greetings, introductions, and basic family vocabulary."
-                                lessons="6 lessons"
+                                lessons="5 lessons"
                                 link="/learning/essential-punjabi"
                                 gradient="from-blue-500 to-blue-600"
                                 icon={<FaComments className="text-5xl text-blue-600" />}
