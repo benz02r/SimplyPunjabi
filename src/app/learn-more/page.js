@@ -126,11 +126,11 @@ export default function About() {
                             </p>
 
                             <p>
-                                <strong>The breaking point came during a family gathering.</strong> My grandmother was sharing stories from her childhood, and I could only understand pieces. I watched my younger cousins completely disconnected from the conversation—and realised: if we don't learn Punjabi now, this connection dies with our generation.
+                                <strong>The breaking point came during a conversation.</strong> My grandmother was asking me how school was and what I had been doing, and there I was unable to put together a proper sentence, using a mix of broken Punjabi with English.: If we don't learn Punjabi now, this connection dies with our generation.
                             </p>
 
                             <p>
-                                That's when I decided to build something different. A platform specifically for people like us English speakers who don't need travel phrases or business vocabulary. We need family vocabulary. We need cultural context. We need to preserve the language that connects us to our heritage.
+                                That's when I decided to build something different. A platform specifically for people like us English speakers who want to truly learn and undertsand the language. We need to preserve the language that connects us to our heritage.
                             </p>
 
                             <p className="text-lg font-semibold text-gray-900">
@@ -138,7 +138,7 @@ export default function About() {
                             </p>
 
                             <p className="text-base text-gray-600 italic border-l-4 border-blue-500 pl-4">
-                                — Ryan, Founder of Simply Punjabi
+                                - Ryan
                             </p>
                         </div>
                     </div>

@@ -48,7 +48,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                        {/* Logo - Larger */}
+                        {/* Logo - LARGER */}
                         <div className="flex justify-center mb-6">
                             <img
                                 src="/Website Banner(shadowing)- Simply Punjabi, Ryan.png"
@@ -57,7 +57,7 @@ export default function Home() {
                             />
                         </div>
 
-                        {/* Tagline - Smaller and more subtle */}
+                        {/* Emotional Headline - SMALLER */}
                         <div className="text-center max-w-4xl mx-auto mb-8">
                             <h1 className="text-2xl sm:text-3xl font-semibold text-gray-700 mb-6 leading-tight">
                                 The Simple Way To Learn Punjabi
@@ -114,65 +114,53 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* Learning Paths Section - Moved up */}
-                <section className="py-24 px-6 bg-white">
+                {/* Course Paths - MOVED UP */}
+                <section className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <p className="text-blue-600 font-bold uppercase tracking-wider text-sm mb-4">Your Learning Journey</p>
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                                Choose Your Learning Path
+                        <div className="text-center mb-20">
+                            <p className="text-blue-600 font-bold uppercase tracking-wider text-sm mb-4">Learning Paths</p>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                                Choose Your Starting Point
                             </h2>
-                            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                                Start with the basics or jump straight into conversations. Each path is designed to get you speaking with your family quickly.
+                            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                                Structured courses that take you from complete beginner to confident speaker
                             </p>
                         </div>
 
                         <div className="grid md:grid-cols-3 gap-8">
                             <CourseCard
                                 level="Beginner"
-                                title="Start Speaking"
-                                description="Master essential greetings, introductions, and everyday phrases to start conversations with confidence."
-                                lessons="8 lessons"
-                                link="/key-functions/lessons"
+                                title="Essential Punjabi"
+                                description="Perfect for complete beginners. Learn greetings, introductions, and basic family vocabulary."
+                                lessons="6 lessons"
+                                link="/learning/essential-punjabi"
                                 gradient="from-blue-500 to-blue-600"
-                                icon={
-                                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white text-3xl">
-                                        <FaComments />
-                                    </div>
-                                }
+                                icon={<FaComments className="text-5xl text-blue-600" />}
                             />
                             <CourseCard
                                 level="Intermediate"
-                                title="Family Conversations"
-                                description="Learn the vocabulary and phrases you need to have meaningful conversations with your family."
-                                lessons="Coming Soon"
-                                link="#"
+                                title="Speak with Confidence"
+                                description="Build vocabulary and express yourself in everyday conversations with family members."
+                                lessons="6 lessons"
+                                link="/learning/speak-with-confidence"
                                 gradient="from-orange-500 to-orange-600"
-                                icon={
-                                    <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center text-white text-3xl">
-                                        <FaHeart />
-                                    </div>
-                                }
+                                icon={<FaMicrophone className="text-5xl text-orange-600" />}
                                 featured={true}
                             />
                             <CourseCard
                                 level="Advanced"
-                                title="Cultural Fluency"
-                                description="Deep dive into cultural nuances, idioms, and the language skills to fully connect with your heritage."
-                                lessons="Coming Soon"
-                                link="#"
-                                gradient="from-purple-500 to-purple-600"
-                                icon={
-                                    <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-3xl">
-                                        <FaGraduationCap />
-                                    </div>
-                                }
+                                title="Master Punjabi"
+                                description="Achieve fluency and understand cultural nuances for natural, confident conversations."
+                                lessons="6 lessons"
+                                link="/learning/master-punjabi"
+                                gradient="from-green-500 to-green-600"
+                                icon={<FaAward className="text-5xl text-green-600" />}
                             />
                         </div>
                     </div>
                 </section>
 
-                {/* Problem-Solution Section */}
+                {/* Problem-Solution Section - Emotional Resonance */}
                 <section className="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
@@ -207,96 +195,105 @@ export default function Home() {
                                 accentColor="green"
                             />
                             <ProblemSolutionCard
-                                problem="Too slow to see real progress"
-                                solution="Start speaking in your first lesson"
-                                icon={<FaRocket className="text-3xl" />}
+                                problem="Long, overwhelming lessons"
+                                solution="10-minute lessons that fit your life"
+                                icon={<FaClock className="text-3xl" />}
                                 accentColor="purple"
                             />
                         </div>
                     </div>
                 </section>
 
-                {/* How It Works Section */}
+                {/* How It Works - Process Flow */}
                 <section className="py-24 px-6 bg-white">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
-                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">Simple Process</p>
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                                How It Works
+                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">How It Works</p>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                                Your Journey to Fluency
                             </h2>
-                            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                                A simple, proven approach that gets you speaking Punjabi with your family in weeks, not years.
+                            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                                A proven, step-by-step approach designed specifically for diaspora learners
                             </p>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-12">
+                        <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
                             <ProcessStep
-                                number="1"
-                                title="Start with the Basics"
-                                description="Begin with essential greetings and phrases you'll use every day with your family."
-                                icon={<FaPlay className="text-3xl text-blue-600" />}
+                                number="01"
+                                title="Start with Essentials"
+                                description="Learn greetings, introductions, and basic phrases to start conversations today"
+                                icon={<FaBook className="text-4xl text-blue-600" />}
                             />
                             <ProcessStep
-                                number="2"
-                                title="Practice with Audio"
-                                description="Listen to native speakers and practice pronunciation until you feel confident."
-                                icon={<FaMicrophone className="text-3xl text-orange-600" />}
+                                number="02"
+                                title="Build Confidence"
+                                description="Practice real scenarios with interactive exercises and authentic pronunciation"
+                                icon={<FaMicrophone className="text-4xl text-orange-600" />}
                             />
                             <ProcessStep
-                                number="3"
-                                title="Apply in Real Life"
-                                description="Use your new skills in real conversations with your family and see instant results."
-                                icon={<FaAward className="text-3xl text-green-600" />}
+                                number="03"
+                                title="Connect with Family"
+                                description="Have meaningful conversations and preserve your cultural connection"
+                                icon={<FaHeart className="text-4xl text-green-600" />}
                             />
+                        </div>
+
+                        {/* Secondary CTA */}
+                        <div className="text-center mt-16">
+                            <a href="/lessons/lesson2/1">
+                                <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-10 py-4 rounded-2xl text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                                    Try Your First Lesson Now
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </section>
 
-                {/* Testimonials Section */}
-                <section className="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
+                {/* Testimonials - Emotional Stories */}
+                <section className="py-24 px-6 bg-white">
                     <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <p className="text-blue-600 font-bold uppercase tracking-wider text-sm mb-4">What Learners Say</p>
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                                Trusted by Diaspora Learners Worldwide
+                        <div className="text-center mb-20">
+                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">Success Stories</p>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                                Real People. Real Results.
                             </h2>
                         </div>
 
                         <div className="grid md:grid-cols-3 gap-8">
                             <TestimonialCard
-                                quote="Finally, a Punjabi course that understands what I actually need to learn. I can now have real conversations with my grandparents."
-                                name="Priya K."
-                                location="London, UK"
+                                quote="I had my first full conversation with my grandmother in Punjabi last week. She cried tears of joy. This platform gave me the tools to connect with her in a way I never thought possible."
+                                name="Priya S."
+                                location="Birmingham, UK"
                                 avatar="from-blue-400 to-blue-600"
                             />
                             <TestimonialCard
-                                quote="The cultural context in every lesson makes such a difference. It's not just learning words, it's connecting with my heritage."
-                                name="Harjot S."
-                                location="Toronto, Canada"
+                                quote="Six months ago, I couldn't say a single sentence. Now I'm translating for my younger cousins at family gatherings. The bite-sized lessons made it actually achievable."
+                                name="Raj M."
+                                location="Vancouver, Canada"
                                 avatar="from-orange-400 to-orange-600"
                             />
                             <TestimonialCard
-                                quote="I tried Duolingo and YouTube but nothing worked. Simply Punjabi is the only platform designed for people like us."
-                                name="Amandeep P."
-                                location="Melbourne, Australia"
-                                avatar="from-purple-400 to-purple-600"
+                                quote="Finally, a platform that gets it. The cultural context in each lesson helped me understand not just what to say, but why. It's helped me feel more connected to my roots."
+                                name="Simran K."
+                                location="Wolverhampton, UK"
+                                avatar="from-green-400 to-green-600"
                             />
                         </div>
                     </div>
                 </section>
 
-                {/* Final CTA Section */}
-                <section className="relative py-24 px-6 bg-gradient-to-br from-blue-600 via-blue-700 to-orange-600 text-white overflow-hidden">
-                    <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500 rounded-full blur-3xl opacity-20"></div>
-                    <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500 rounded-full blur-3xl opacity-20"></div>
+                {/* Final CTA - Conversion Focused */}
+                <section className="py-32 px-6 bg-gradient-to-br from-blue-600 via-blue-700 to-orange-600 text-white relative overflow-hidden">
+                    {/* Decorative elements */}
+                    <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl"></div>
 
                     <div className="max-w-4xl mx-auto text-center relative z-10">
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                             Start Speaking Punjabi with Your Family Today
                         </h2>
                         <p className="text-lg sm:text-xl text-blue-100 mb-10 leading-relaxed max-w-2xl mx-auto">
-                            Join our beta programme and get <span className="font-bold text-white">complete access for free.</span> No credit card required. Cancel anytime.
+                            Join our beta program and get <span className="font-bold text-white"> complete access for free.</span> No credit card required. Cancel anytime.
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
