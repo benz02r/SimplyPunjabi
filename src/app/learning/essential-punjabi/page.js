@@ -12,12 +12,12 @@ export default function EssentialPunjabi() {
     const router = useRouter();
 
     const lessons = [
-        { id: "lesson1", title: "What Is Punjabi?", description: "Discover the language and its rich history", link: "/lessons/lesson1/1", locked: false, },
-        { id: "lesson2", title: "Learn Punjabi Greetings", description: "Essential phrases for everyday interactions", link: "/lessons/lesson2/1", locked: false, },
-        { id: "lesson3", title: "A Bit About Me", description: "Introduce yourself in Punjabi", link: "/lessons/lesson3/1", locked: false, },
-        { id: "lesson4", title: "Family And Friends", description: "Talk about your loved ones", link: "/lessons/lesson4", locked: false, },
-        { id: "lesson5", title: "Back To Basics", description: "Master fundamental concepts", link: "/lessons/lesson5", locked: false,  },
-        { id: "lesson6", title: "Making It Easy & Top Tips", description: "Pro strategies for learning success", link: "/lessons/lesson14/1", locked: true,  },
+        { id: "lesson1", title: "Learn Punjabi Greetings?", description: "Essential phrases for everyday interactions", link: "/lessons/lesson1/1", locked: false, },
+        { id: "lesson2", title: "A Bit About Me", description: "Introduce yourself in Punjabi", link: "/lessons/lesson2/1", locked: false, },
+        { id: "lesson3", title: "Family And Friends", description: "Talk about your loved ones", link: "/lessons/lesson3/1", locked: false, },
+        { id: "lesson4", title: "Back To Basics", description: "Master fundamental concepts", link: "/lessons/lesson4", locked: false, },
+        { id: "lesson5", title: "Making It Easy & Top Tips", description: "Pro strategies for learning success", link: "/lessons/lesson5", locked: false,  },
+        { id: "lesson6", title: "pending update", description: "needs update", link: "/lessons/lesson14/1", locked: true,  },
     ];
 
     useEffect(() => {

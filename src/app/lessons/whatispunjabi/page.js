@@ -5,19 +5,17 @@ import { useRouter } from "next/navigation";
 import {
     ArrowLeft,
     ArrowRight,
-    Volume2,
+    Book,
     CheckCircle,
-    User,
+    X,
     RotateCcw,
     Trophy,
-    MessageCircle,
-    Users,
-    Hand,
-    Heart,
     Sparkles,
-    BookOpen,
-    Play,
-    Pause
+    Clock,
+    Users,
+    Globe,
+    FileText,
+    Lightbulb
 } from "lucide-react";
 import { createClient } from '@supabase/supabase-js';
 
@@ -29,138 +27,102 @@ const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabase
 const lessonContent = [
     {
         type: "intro",
-        title: "Master Panjabi Greetings",
-        content: "Learn how to greet people in different settings from formal encounters with elders to casual meetups with friends.",
+        title: "The Story of Panjabi",
+        content: "Discover how Panjabi evolved from ancient dialects to the vibrant language we know today.",
         points: [
-            "Formal greetings and farewells",
-            "How to ask 'How are you?'",
-            "Informal greetings with friends"
+            "Origins and early history",
+            "Key figures who shaped the language",
+            "How Panjabi differs from Hindi"
         ]
     },
     {
-        type: "phrase-collection",
-        title: "Formal Greetings",
-        subtitle: "Click each phrase to hear pronunciation",
-        phrases: [
+        type: "timeline",
+        title: "Panjabi's Evolution",
+        subtitle: "Click each event to explore",
+        events: [
             {
                 id: 1,
-                gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਜੀ",
-                roman: "Sat Sri Akaal Ji",
-                english: "Hello / Goodbye (Formal)",
-                usage: "Use with elders, family, or people you're meeting for the first time. Also used to say goodbye.",
-                context: "Literally means 'God is Truth'. Adding 'Ji' shows respect.",
-                audioFile: "sat-sri-akaal-ji.mp3",
-                icon: Hand
+                title: "Ancient Roots",
+                period: "Early Origins",
+                description: "Panjabi emerged from Northwestern Apabhramsa dialects, derived from early Sanskrit in the Panjab region.",
+                icon: Globe
             },
             {
                 id: 2,
-                gurmukhi: "ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
-                roman: "Tusi(n) kive(n) ho?",
-                english: "How are you?",
-                usage: "Formal way to ask about someone's wellbeing after greeting them.",
-                audioFile: "tusi-kiven-ho.mp3",
-                icon: MessageCircle
+                title: "Baba Farid",
+                period: "12th-13th Century",
+                description: "The Sufi Saint was among the first to write poetry in Panjabi, establishing it as a literary language.",
+                icon: FileText
             },
             {
                 id: 3,
-                gurmukhi: "ਮੈਂ ਠੀਕ ਹਾਂ",
-                roman: "Mai(n) theek haa(n)",
-                english: "I am fine",
-                usage: "Response when someone asks how you are.",
-                audioFile: "main-theek-haan.mp3",
-                icon: Heart
+                title: "Guru Nanak Dev Ji",
+                period: "15th-16th Century",
+                description: "Used Panjabi to spread spiritual teachings, transforming it into a language of devotion.",
+                icon: Sparkles
             },
             {
                 id: 4,
-                gurmukhi: "ਅਪਨਾ ਖਿਆਲ ਰੱਖਣਾ",
-                roman: "Apana khay-aal rakh-naa",
-                english: "Take care",
-                usage: "A polite way to say goodbye, showing care for the person.",
-                audioFile: "apna-khyal-rakhna.mp3",
-                icon: Heart
+                title: "Gurmukhi Script",
+                period: "16th Century",
+                description: "Guru Angad Dev Ji created Gurmukhi to standardise Panjabi writing and preserve teachings accurately.",
+                icon: Book
             }
         ]
     },
     {
-        type: "scenario",
-        title: "Real-Life Scenario",
-        subtitle: "Watch how greetings work in practice",
-        scenario: {
-            setting: "Amar visits his grandparents' house",
-            characters: [
-                { name: "Amar", avatar: "/avatars/avatar6.png" },
-                { name: "Grandma", avatar: "/avatars/avatar5.png" }
-            ],
-            dialogue: [
-                {
-                    speaker: "Amar",
-                    gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਜੀ। ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
-                    roman: "Sat Sri Akaal Ji. Tusi(n) kive(n) ho?",
-                    english: "Hello. How are you?",
-                    avatar: "/avatars/avatar6.png"
-                },
-                {
-                    speaker: "Grandma",
-                    gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਅਮਰ। ਮੈਂ ਠੀਕ ਹਾਂ।",
-                    roman: "Sat Sri Akaal Amar. Mai(n) theek haa(n).",
-                    english: "Hello Amar. I am fine.",
-                    avatar: "/avatars/avatar5.png"
-                }
-            ]
-        }
+        type: "matching",
+        title: "Match the Pioneers",
+        subtitle: "Connect each figure to their contribution",
+        pairs: [
+            { term: "Baba Farid", definition: "Early Panjabi poetry" },
+            { term: "Guru Nanak Dev Ji", definition: "Spiritual teachings in Panjabi" },
+            { term: "Guru Angad Dev Ji", definition: "Created Gurmukhi script" }
+        ]
     },
     {
-        type: "informal-section",
-        title: "Casual Greetings",
-        subtitle: "For friends and informal settings",
-        phrase: {
-            gurmukhi: "ਕਿੱਦਾਂ?",
-            roman: "Kiddā̃?",
-            english: "What's up? / How are you?",
-            usage: "Use this casual greeting when meeting friends in informal settings.",
-            note: "Think of this as the Panjabi equivalent of 'What's up?' or 'How's it going?'",
-            audioFile: "kiddan.mp3",
-            icon: Users
-        },
-        comparison: {
-            formal: {
-                phrase: "Sat Sri Akaal Ji",
-                use: "Uncle, Auntie, Elders"
+        type: "comparison",
+        title: "Panjabi vs Hindi",
+        subtitle: "Key differences at a glance",
+        categories: [
+            {
+                title: "Script",
+                panjabi: "Gurmukhi",
+                hindi: "Devanagari",
+                icon: FileText
             },
-            informal: {
-                phrase: "Kiddā̃?",
-                use: "Friends, Peers"
+            {
+                title: "Origins",
+                panjabi: "Northwestern dialects",
+                hindi: "Central/Eastern dialects",
+                icon: Globe
+            },
+            {
+                title: "Cultural Roots",
+                panjabi: "Sikh & Punjabi heritage",
+                hindi: "Broader North Indian culture",
+                icon: Users
             }
-        }
+        ]
     },
     {
-        type: "practice-scenarios",
-        title: "Practice Makes Perfect",
-        subtitle: "Choose the right greeting for each situation",
-        scenarios: [
+        type: "insight",
+        title: "Why Gurmukhi Mattered",
+        cards: [
             {
-                id: 1,
-                situation: "Meeting your friend's parents for the first time",
-                options: [
-                    { text: "Sat Sri Akaal Ji", correct: true, explanation: "Perfect! This shows respect when meeting elders." },
-                    { text: "Kiddā̃?", correct: false, explanation: "Too casual for meeting elders for the first time." }
-                ]
+                title: "The Challenge",
+                content: "Earlier scripts like Lanada lacked vowels, making accurate reading difficult.",
+                icon: Lightbulb
             },
             {
-                id: 2,
-                situation: "Bumping into friends at a party",
-                options: [
-                    { text: "Sat Sri Akaal Ji", correct: false, explanation: "A bit too formal for friends in a casual setting." },
-                    { text: "Kiddā̃?", correct: true, explanation: "Perfect for a casual, friendly greeting!" }
-                ]
+                title: "The Solution",
+                content: "Gurmukhi included complete vowel notation for precise pronunciation.",
+                icon: CheckCircle
             },
             {
-                id: 3,
-                situation: "Leaving your grandmother's house",
-                options: [
-                    { text: "Say 'Sat Sri Akaal Ji' and 'Apana khay-aal rakh-naa'", correct: true, explanation: "Excellent! Respectful goodbye with care." },
-                    { text: "Just say 'Kiddā̃?'", correct: false, explanation: "Not appropriate when leaving elders." }
-                ]
+                title: "The Legacy",
+                content: "Became the standard script, preserving Panjabi accurately for centuries.",
+                icon: Trophy
             }
         ]
     },
@@ -169,48 +131,49 @@ const lessonContent = [
         title: "Test Your Knowledge",
         questions: [
             {
-                question: "What does 'Mai(n) theek haa(n)' mean?",
+                question: "Who created the Gurmukhi script?",
                 options: [
-                    { text: "I am unhappy", correct: false },
-                    { text: "I am fine", correct: true },
-                    { text: "I am excited", correct: false }
+                    { text: "Baba Farid", correct: false },
+                    { text: "Guru Angad Dev Ji", correct: true },
+                    { text: "Guru Nanak Dev Ji", correct: false }
                 ]
             },
             {
-                question: "Can 'Sat Sri Akaal' be used for both hello and goodbye?",
+                question: "What makes Panjabi different from Hindi?",
                 options: [
-                    { text: "True", correct: true },
-                    { text: "False", correct: false }
+                    { text: "Different scripts and origins", correct: true },
+                    { text: "They're identical languages", correct: false },
+                    { text: "Only pronunciation differs", correct: false }
                 ]
             },
             {
-                question: "Complete the phrase: '_____ kive(n) ho?' (How are you?)",
+                question: "Who first used Panjabi for poetry?",
                 options: [
-                    { text: "Tuhāḍā", correct: false },
-                    { text: "Tusi(n)", correct: true },
-                    { text: "Kiddā̃", correct: false }
+                    { text: "Baba Farid", correct: true },
+                    { text: "Guru Angad Dev Ji", correct: false },
+                    { text: "Guru Nanak Dev Ji", correct: false }
                 ]
             }
         ]
     }
 ];
 
-export default function GreetingSteps() {
+export default function Lesson1WhatIsPanjabi() {
     const router = useRouter();
     const [step, setStep] = useState(0);
     const [userId, setUserId] = useState(null);
     const [lessonCompleted, setLessonCompleted] = useState(false);
 
-    // Audio state
-    const [playingAudio, setPlayingAudio] = useState(null);
-    const [selectedPhrases, setSelectedPhrases] = useState([]);
+    // Timeline state
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
-    // Scenario state
-    const [selectedDialogue, setSelectedDialogue] = useState(null);
+    // Matching game state
+    const [matchingAnswers, setMatchingAnswers] = useState({});
+    const [matchingComplete, setMatchingComplete] = useState(false);
+    const [shuffledDefinitions, setShuffledDefinitions] = useState([]);
 
-    // Practice scenarios state
-    const [practiceAnswers, setPracticeAnswers] = useState({});
-    const [practiceComplete, setPracticeComplete] = useState(false);
+    // Comparison state
+    const [selectedCategory, setSelectedCategory] = useState(0);
 
     // Quiz state
     const [quizAnswers, setQuizAnswers] = useState([]);
@@ -231,13 +194,13 @@ export default function GreetingSteps() {
         getUser();
     }, []);
 
-    // Play audio function
-    const playAudio = (audioFile, phraseId) => {
-        setPlayingAudio(phraseId);
-        const audio = new Audio(`/audio/${audioFile}`);
-        audio.play();
-        audio.onended = () => setPlayingAudio(null);
-    };
+    // Initialize shuffled definitions for matching game
+    useEffect(() => {
+        if (current?.type === 'matching' && shuffledDefinitions.length === 0) {
+            const definitions = current.pairs.map(p => p.definition);
+            setShuffledDefinitions([...definitions].sort(() => Math.random() - 0.5));
+        }
+    }, [current, shuffledDefinitions.length]);
 
     // Calculate quiz statistics
     const calculateScore = () => {
@@ -267,8 +230,8 @@ export default function GreetingSteps() {
                 .from('lesson_progress')
                 .upsert({
                     user_id: userId,
-                    lesson_id: 'lesson-2-greetings',
-                    lesson_name: 'Panjabi Greetings',
+                    lesson_id: 'lesson-1-what-is-panjabi',
+                    lesson_name: 'What is Panjabi?',
                     completed: true,
                     quiz_score: score,
                     correct_answers: correct,
@@ -285,7 +248,7 @@ export default function GreetingSteps() {
     };
 
     const canProceed = () => {
-        if (current.type === 'practice-scenarios' && !practiceComplete) return false;
+        if (current.type === 'matching' && !matchingComplete) return false;
         if (current.type === 'final-quiz' && !quizComplete) return false;
         return true;
     };
@@ -309,17 +272,28 @@ export default function GreetingSteps() {
         setLessonCompleted(true);
     };
 
-    // Practice scenarios logic
-    const handlePracticeAnswer = (scenarioId, optionIndex) => {
-        if (practiceAnswers[scenarioId] !== undefined) return;
+    // Matching game logic
+    const handleMatchingSelect = (definition) => {
+        if (Object.values(matchingAnswers).includes(definition)) return;
 
-        const newAnswers = { ...practiceAnswers, [scenarioId]: optionIndex };
-        setPracticeAnswers(newAnswers);
+        const unansweredTerms = current.pairs.filter(pair => !matchingAnswers[pair.term]);
+        if (unansweredTerms.length === 0) return;
 
-        // Check if all scenarios are answered
-        if (Object.keys(newAnswers).length === current.scenarios.length) {
-            setPracticeComplete(true);
+        const currentTerm = unansweredTerms[0].term;
+        const newAnswers = { ...matchingAnswers, [currentTerm]: definition };
+        setMatchingAnswers(newAnswers);
+
+        // Check if complete and correct
+        if (Object.keys(newAnswers).length === current.pairs.length) {
+            const allCorrect = current.pairs.every(pair => newAnswers[pair.term] === pair.definition);
+            setMatchingComplete(allCorrect);
         }
+    };
+
+    const resetMatching = () => {
+        setMatchingAnswers({});
+        setMatchingComplete(false);
+        setShuffledDefinitions([...current.pairs.map(p => p.definition)].sort(() => Math.random() - 0.5));
     };
 
     const renderContent = () => {
@@ -328,7 +302,7 @@ export default function GreetingSteps() {
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-orange-500 rounded-xl flex items-center justify-center">
-                            <Hand className="text-white" size={24} />
+                            <Sparkles className="text-white" size={24} />
                         </div>
                         <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
                     </div>
@@ -347,12 +321,12 @@ export default function GreetingSteps() {
             );
         }
 
-        if (current.type === "phrase-collection") {
+        if (current.type === "timeline") {
             return (
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
                     <div className="flex items-center gap-3 mb-3">
                         <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                            <BookOpen className="text-blue-600" size={20} />
+                            <Clock className="text-blue-600" size={20} />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
@@ -360,67 +334,38 @@ export default function GreetingSteps() {
                         </div>
                     </div>
 
-                    <div className="space-y-4 mt-6">
-                        {current.phrases.map((phrase) => {
-                            const IconComponent = phrase.icon;
-                            const isSelected = selectedPhrases.includes(phrase.id);
-                            const isPlaying = playingAudio === phrase.id;
+                    <div className="space-y-3 mt-6">
+                        {current.events.map((event) => {
+                            const IconComponent = event.icon;
+                            const isSelected = selectedEvent === event.id;
 
                             return (
                                 <div
-                                    key={phrase.id}
-                                    onClick={() => {
-                                        setSelectedPhrases(prev =>
-                                            prev.includes(phrase.id)
-                                                ? prev.filter(id => id !== phrase.id)
-                                                : [...prev, phrase.id]
-                                        );
-                                    }}
+                                    key={event.id}
+                                    onClick={() => setSelectedEvent(isSelected ? null : event.id)}
                                     className={`cursor-pointer p-5 rounded-xl border-2 transition-all ${
                                         isSelected
                                             ? 'border-blue-500 bg-blue-50 shadow-md'
                                             : 'border-gray-200 bg-gray-50 hover:border-blue-300 hover:bg-blue-50'
                                     }`}
                                 >
-                                    <div className="flex items-start gap-4">
+                                    <div className="flex items-center gap-4">
                                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
                                             isSelected ? 'bg-blue-500' : 'bg-gray-200'
                                         }`}>
                                             <IconComponent className={isSelected ? 'text-white' : 'text-gray-600'} size={20} />
                                         </div>
-
                                         <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-3 mb-2 flex-wrap">
-                                                <h3 className="text-xl font-bold text-gray-900">{phrase.gurmukhi}</h3>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        playAudio(phrase.audioFile, phrase.id);
-                                                    }}
-                                                    className={`p-2 rounded-lg transition-colors ${
-                                                        isPlaying
-                                                            ? 'bg-blue-600 text-white'
-                                                            : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-                                                    }`}
-                                                >
-                                                    {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-                                                </button>
+                                            <div className="flex items-center gap-3 mb-1 flex-wrap">
+                                                <h3 className="text-lg font-bold text-gray-900">{event.title}</h3>
+                                                <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full whitespace-nowrap">
+                                                    {event.period}
+                                                </span>
                                             </div>
-
-                                            <p className="text-blue-700 font-medium mb-1">{phrase.roman}</p>
-                                            <p className="text-lg text-gray-800 font-semibold mb-2">{phrase.english}</p>
-
                                             {isSelected && (
-                                                <>
-                                                    <p className="text-sm text-gray-700 mt-3 leading-relaxed">
-                                                        <span className="font-semibold">Usage:</span> {phrase.usage}
-                                                    </p>
-                                                    {phrase.context && (
-                                                        <p className="text-sm text-gray-600 mt-2 italic">
-                                                            {phrase.context}
-                                                        </p>
-                                                    )}
-                                                </>
+                                                <p className="text-sm text-gray-700 mt-2 leading-relaxed">
+                                                    {event.description}
+                                                </p>
                                             )}
                                         </div>
                                     </div>
@@ -432,12 +377,93 @@ export default function GreetingSteps() {
             );
         }
 
-        if (current.type === "scenario") {
+        if (current.type === "matching") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <Users className="text-orange-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-6">
+                        <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">Figures</h3>
+                            {current.pairs.map((pair, idx) => {
+                                const isAnswered = matchingAnswers[pair.term] !== undefined;
+                                const isCorrect = matchingAnswers[pair.term] === pair.definition;
+
+                                return (
+                                    <div
+                                        key={pair.term}
+                                        className={`p-4 rounded-xl font-semibold text-center transition-all ${
+                                            isCorrect
+                                                ? 'bg-green-100 border-2 border-green-500 text-green-800'
+                                                : isAnswered
+                                                    ? 'bg-red-100 border-2 border-red-500 text-red-800'
+                                                    : idx === Object.keys(matchingAnswers).length
+                                                        ? 'bg-blue-100 border-2 border-blue-500 text-blue-800 ring-2 ring-blue-200'
+                                                        : 'bg-gray-100 border-2 border-gray-300 text-gray-600'
+                                        }`}
+                                    >
+                                        {pair.term}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">Contributions</h3>
+                            {shuffledDefinitions.map((definition, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => handleMatchingSelect(definition)}
+                                    disabled={Object.values(matchingAnswers).includes(definition)}
+                                    className={`w-full p-4 rounded-xl font-medium text-center transition-all ${
+                                        Object.values(matchingAnswers).includes(definition)
+                                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed border-2 border-gray-300'
+                                            : 'bg-orange-50 border-2 border-orange-300 text-orange-800 hover:bg-orange-100 hover:border-orange-400'
+                                    }`}
+                                >
+                                    {definition}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {matchingComplete && (
+                        <div className="bg-green-50 border-2 border-green-500 rounded-xl p-4 text-center">
+                            <CheckCircle className="inline-block text-green-600 mb-2" size={32} />
+                            <p className="text-green-800 font-semibold">Perfect! All matches are correct!</p>
+                        </div>
+                    )}
+
+                    {Object.keys(matchingAnswers).length === current.pairs.length && !matchingComplete && (
+                        <div className="bg-red-50 border-2 border-red-500 rounded-xl p-4 text-center">
+                            <X className="inline-block text-red-600 mb-2" size={32} />
+                            <p className="text-red-800 font-semibold mb-3">Not quite right. Try again!</p>
+                            <button
+                                onClick={resetMatching}
+                                className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                            >
+                                Reset
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        if (current.type === "comparison") {
             return (
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
                     <div className="flex items-center gap-3 mb-3">
                         <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                            <MessageCircle className="text-purple-600" size={20} />
+                            <Globe className="text-purple-600" size={20} />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
@@ -445,175 +471,68 @@ export default function GreetingSteps() {
                         </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 mb-6 border-2 border-purple-200">
-                        <p className="text-purple-900 font-medium text-center">
-                            {current.scenario.setting}
-                        </p>
-                    </div>
-
-                    <div className="space-y-4">
-                        {current.scenario.dialogue.map((line, idx) => (
-                            <div
-                                key={idx}
-                                onClick={() => setSelectedDialogue(selectedDialogue === idx ? null : idx)}
-                                className={`cursor-pointer transition-all ${
-                                    line.speaker === "Amar" ? "mr-8" : "ml-8"
-                                }`}
-                            >
-                                <div className={`flex gap-3 ${line.speaker === "Grandma" ? "flex-row-reverse" : ""}`}>
-                                    <img
-                                        src={line.avatar}
-                                        alt={line.speaker}
-                                        className="w-10 h-10 rounded-full flex-shrink-0"
-                                    />
-                                    <div className={`flex-1 ${line.speaker === "Grandma" ? "text-right" : ""}`}>
-                                        <p className="text-xs font-semibold text-gray-600 mb-1">{line.speaker}</p>
-                                        <div className={`inline-block p-4 rounded-2xl ${
-                                            line.speaker === "Amar"
-                                                ? "bg-blue-500 text-white"
-                                                : "bg-gray-200 text-gray-900"
-                                        } ${selectedDialogue === idx ? "shadow-lg" : ""}`}>
-                                            <p className="font-semibold mb-1">{line.gurmukhi}</p>
-                                            <p className="text-sm opacity-90">{line.roman}</p>
-                                            {selectedDialogue === idx && (
-                                                <p className="text-sm mt-2 pt-2 border-t border-white/20">
-                                                    {line.english}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="mt-6 bg-blue-50 rounded-xl p-4 border border-blue-200">
-                        <p className="text-sm text-blue-900">
-                            <span className="font-semibold">Tip:</span> Click on each message to see the English translation!
-                        </p>
-                    </div>
-                </div>
-            );
-        }
-
-        if (current.type === "informal-section") {
-            const IconComponent = current.phrase.icon;
-
-            return (
-                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                            <IconComponent className="text-orange-600" size={20} />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
-                            <p className="text-sm text-gray-600">{current.subtitle}</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 mb-6 border-2 border-orange-200">
-                        <div className="flex items-center gap-4 mb-4">
-                            <h3 className="text-3xl font-bold text-gray-900">{current.phrase.gurmukhi}</h3>
-                            <button
-                                onClick={() => playAudio(current.phrase.audioFile, 'informal')}
-                                className={`p-3 rounded-xl transition-colors ${
-                                    playingAudio === 'informal'
-                                        ? 'bg-orange-600 text-white'
-                                        : 'bg-orange-200 text-orange-700 hover:bg-orange-300'
-                                }`}
-                            >
-                                {playingAudio === 'informal' ? <Pause size={20} /> : <Play size={20} />}
-                            </button>
-                        </div>
-                        <p className="text-orange-700 font-medium text-lg mb-2">{current.phrase.roman}</p>
-                        <p className="text-2xl text-gray-900 font-semibold mb-3">{current.phrase.english}</p>
-                        <p className="text-gray-700 mb-2">
-                            <span className="font-semibold">Usage:</span> {current.phrase.usage}
-                        </p>
-                        <p className="text-gray-600 italic text-sm">
-                            {current.phrase.note}
-                        </p>
+                    <div className="flex gap-2 mb-6 mt-6 flex-wrap">
+                        {current.categories.map((cat, idx) => {
+                            const IconComponent = cat.icon;
+                            return (
+                                <button
+                                    key={idx}
+                                    onClick={() => setSelectedCategory(idx)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                                        selectedCategory === idx
+                                            ? 'bg-gradient-to-r from-blue-500 to-orange-500 text-white shadow-md'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <IconComponent size={16} />
+                                    <span>{cat.title}</span>
+                                </button>
+                            );
+                        })}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
-                            <h4 className="text-sm font-bold text-blue-900 mb-2 uppercase tracking-wide">Formal</h4>
-                            <p className="text-lg font-bold text-blue-800 mb-2">{current.comparison.formal.phrase}</p>
-                            <p className="text-sm text-blue-700">{current.comparison.formal.use}</p>
+                        <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
+                            <h3 className="text-lg font-bold text-blue-900 mb-3">Panjabi</h3>
+                            <p className="text-blue-800 text-lg font-medium">
+                                {current.categories[selectedCategory].panjabi}
+                            </p>
                         </div>
-                        <div className="p-5 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-orange-200">
-                            <h4 className="text-sm font-bold text-orange-900 mb-2 uppercase tracking-wide">Informal</h4>
-                            <p className="text-lg font-bold text-orange-800 mb-2">{current.comparison.informal.phrase}</p>
-                            <p className="text-sm text-orange-700">{current.comparison.informal.use}</p>
+
+                        <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-orange-200">
+                            <h3 className="text-lg font-bold text-orange-900 mb-3">Hindi</h3>
+                            <p className="text-orange-800 text-lg font-medium">
+                                {current.categories[selectedCategory].hindi}
+                            </p>
                         </div>
                     </div>
                 </div>
             );
         }
 
-        if (current.type === "practice-scenarios") {
+        if (current.type === "insight") {
             return (
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                            <Sparkles className="text-green-600" size={20} />
+                            <Lightbulb className="text-green-600" size={20} />
                         </div>
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
-                            <p className="text-sm text-gray-600">{current.subtitle}</p>
-                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
                     </div>
 
-                    <div className="space-y-6">
-                        {current.scenarios.map((scenario, idx) => {
-                            const answered = practiceAnswers[scenario.id] !== undefined;
-                            const selectedOption = practiceAnswers[scenario.id];
-
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {current.cards.map((card, idx) => {
+                            const IconComponent = card.icon;
                             return (
-                                <div key={scenario.id} className="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border-2 border-green-200">
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                                            {idx + 1}
-                                        </div>
-                                        <p className="text-lg font-semibold text-gray-900">{scenario.situation}</p>
+                                <div
+                                    key={idx}
+                                    className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all"
+                                >
+                                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 shadow-sm">
+                                        <IconComponent className="text-blue-600" size={24} />
                                     </div>
-
-                                    <div className="space-y-2">
-                                        {scenario.options.map((option, oIdx) => {
-                                            const isSelected = selectedOption === oIdx;
-                                            const isCorrect = option.correct;
-
-                                            return (
-                                                <div key={oIdx}>
-                                                    <button
-                                                        onClick={() => handlePracticeAnswer(scenario.id, oIdx)}
-                                                        disabled={answered}
-                                                        className={`w-full p-4 rounded-lg text-left font-medium transition-all flex items-center gap-3 ${
-                                                            answered && isSelected && isCorrect
-                                                                ? 'bg-green-600 text-white'
-                                                                : answered && isSelected && !isCorrect
-                                                                    ? 'bg-red-100 border-2 border-red-500 text-red-800'
-                                                                    : answered && isCorrect
-                                                                        ? 'bg-green-100 border-2 border-green-500 text-green-800'
-                                                                        : 'bg-white border-2 border-gray-300 text-gray-800 hover:border-green-400 hover:bg-green-50'
-                                                        }`}
-                                                    >
-                                                        {answered && isCorrect && (
-                                                            <CheckCircle size={20} className="flex-shrink-0" />
-                                                        )}
-                                                        <span>{option.text}</span>
-                                                    </button>
-                                                    {answered && isSelected && (
-                                                        <p className={`mt-2 text-sm px-4 py-2 rounded ${
-                                                            isCorrect ? 'text-green-800 bg-green-50' : 'text-red-800 bg-red-50'
-                                                        }`}>
-                                                            {option.explanation}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+                                    <h3 className="text-lg font-bold text-gray-900 mb-2">{card.title}</h3>
+                                    <p className="text-gray-700 leading-relaxed">{card.content}</p>
                                 </div>
                             );
                         })}
@@ -673,6 +592,9 @@ export default function GreetingSteps() {
                                                 {showResult && isCorrect && (
                                                     <CheckCircle size={20} className="flex-shrink-0" />
                                                 )}
+                                                {showResult && isSelected && !isCorrect && (
+                                                    <X size={20} className="flex-shrink-0" />
+                                                )}
                                                 <span>{option.text}</span>
                                             </button>
                                         );
@@ -702,19 +624,22 @@ export default function GreetingSteps() {
 
         return (
             <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-green-500">
+                {/* Trophy Icon */}
                 <div className="flex justify-center mb-6">
                     <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
                         <Trophy size={40} className="text-white" />
                     </div>
                 </div>
 
+                {/* Title */}
                 <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
                     Lesson Complete!
                 </h2>
                 <p className="text-center text-gray-600 mb-8">
-                    You've mastered Panjabi greetings!
+                    You've learned the story of Panjabi
                 </p>
 
+                {/* Stats */}
                 <div className="grid grid-cols-3 gap-4 mb-6">
                     <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl text-center border-2 border-blue-200">
                         <div className="text-3xl font-bold text-blue-600 mb-1">{score}%</div>
@@ -730,6 +655,7 @@ export default function GreetingSteps() {
                     </div>
                 </div>
 
+                {/* Progress Saved Message */}
                 {supabase && userId && (
                     <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded-r mb-6">
                         <div className="flex items-center gap-2">
@@ -739,9 +665,10 @@ export default function GreetingSteps() {
                     </div>
                 )}
 
+                {/* Action Buttons */}
                 <div className="space-y-3">
                     <button
-                        onClick={() => router.push("/lessons/lesson3/1")}
+                        onClick={() => router.push("/lessons/lesson2/1")}
                         className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm shadow-md"
                     >
                         <span>Continue to Next Lesson</span>
@@ -750,11 +677,11 @@ export default function GreetingSteps() {
                     <button
                         onClick={() => {
                             setStep(0);
-                            setPlayingAudio(null);
-                            setSelectedPhrases([]);
-                            setSelectedDialogue(null);
-                            setPracticeAnswers({});
-                            setPracticeComplete(false);
+                            setSelectedEvent(null);
+                            setMatchingAnswers({});
+                            setMatchingComplete(false);
+                            setShuffledDefinitions([]);
+                            setSelectedCategory(0);
                             setQuizAnswers([]);
                             setQuizComplete(false);
                             setLessonCompleted(false);
@@ -789,6 +716,7 @@ export default function GreetingSteps() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-28 pb-12">
             <div className="max-w-3xl mx-auto">
+                {/* Back Button */}
                 <button
                     onClick={() => router.push("/learning/essential-punjabi")}
                     className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors text-sm"
@@ -797,19 +725,21 @@ export default function GreetingSteps() {
                     <span>Back to Lessons</span>
                 </button>
 
+                {/* Header */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
                     <div className="flex items-center gap-2 mb-2">
-                        <User size={18} />
-                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 2: Greetings</span>
+                        <Book size={18} />
+                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 1: Cultural Foundation</span>
                     </div>
                     <h1 className="text-3xl font-bold mb-2">
-                        Learn Panjabi Greetings
+                        What is Panjabi?
                     </h1>
                     <p className="text-base text-blue-100">
-                        Master essential greetings for different situations
+                        Discover the origins and development of the Panjabi language
                     </p>
                 </div>
 
+                {/* Progress Bar */}
                 <div className="bg-white rounded-xl shadow p-4 mb-6 border border-gray-200">
                     <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-semibold text-gray-700">Progress</span>
@@ -825,10 +755,12 @@ export default function GreetingSteps() {
                     </div>
                 </div>
 
+                {/* Main Content */}
                 <div className="mb-6">
                     {renderContent()}
                 </div>
 
+                {/* Progress Dots */}
                 <div className="flex justify-center gap-1.5 mb-6">
                     {lessonContent.map((_, idx) => (
                         <div
@@ -844,6 +776,7 @@ export default function GreetingSteps() {
                     ))}
                 </div>
 
+                {/* Navigation Buttons */}
                 <div className="flex gap-3">
                     <button
                         onClick={handlePrevious}
