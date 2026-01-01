@@ -17,7 +17,7 @@ export default function EssentialPunjabi() {
         { id: "lesson3", title: "Family And Friends", description: "Talk about your loved ones", link: "/lessons/lesson3/1", locked: false, },
         { id: "lesson4", title: "Back To Basics", description: "Master fundamental concepts", link: "/lessons/lesson4", locked: false, },
         { id: "lesson5", title: "Making It Easy & Top Tips", description: "Pro strategies for learning success", link: "/lessons/lesson5", locked: false,  },
-        { id: "lesson6", title: "pending update", description: "needs update", link: "/lessons/lesson14/1", locked: true,  },
+
     ];
 
     useEffect(() => {

@@ -5,19 +5,20 @@ import { useRouter } from "next/navigation";
 import {
     ArrowLeft,
     ArrowRight,
-    Volume2,
-    CheckCircle,
     User,
+    CheckCircle,
     RotateCcw,
     Trophy,
-    MessageCircle,
-    Users,
-    Hand,
-    Heart,
-    Sparkles,
-    BookOpen,
+    Volume2,
     Play,
-    Pause
+    Pause,
+    IdCard,
+    Calendar,
+    MapPin,
+    Briefcase,
+    Users,
+    Info,
+    Home
 } from "lucide-react";
 import { createClient } from '@supabase/supabase-js';
 
@@ -29,138 +30,221 @@ const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabase
 const lessonContent = [
     {
         type: "intro",
-        title: "Master Panjabi Greetings",
-        content: "Learn how to greet people in different settings from formal encounters with elders to casual meetups with friends.",
+        title: "Introduce Yourself",
+        content: "Learn the essentials of introducing yourself in Panjabi—from your name to your family.",
         points: [
-            "Formal greetings and farewells",
-            "How to ask 'How are you?'",
-            "Informal greetings with friends"
+            "Name and age",
+            "Where you're from and where you live",
+            "Work or studies",
+            "Family members"
         ]
     },
     {
-        type: "phrase-collection",
-        title: "Formal Greetings",
-        subtitle: "Click each phrase to hear pronunciation",
+        type: "phrase-tabs",
+        title: "Basic Introduction",
+        subtitle: "Choose male or female forms",
+        categories: [
+            {
+                id: "name",
+                title: "Name",
+                icon: IdCard,
+                phrases: [
+                    {
+                        gurmukhi: "ਮੇਰਾ ਨਾਮ [Name] ਹੈ",
+                        roman: "Mera naam [Name] hai",
+                        english: "My name is [Name]",
+                        note: "Replace [Name] with your actual name",
+                        audioFile: "mera-naam-priya-hai.mp3"
+                    }
+                ]
+            },
+            {
+                id: "age",
+                title: "Age",
+                icon: Calendar,
+                male: {
+                    gurmukhi: "ਮੈਂ 25 ਸਾਲਾਂ ਦਾ ਹਾਂ",
+                    roman: "Maiṁ 25 salān dā hān",
+                    english: "I am 25 years old (male)",
+                    audioFile: "main-25-saalan-da-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ 23 ਸਾਲਾਂ ਦੀ ਹਾਂ",
+                    roman: "Maiṁ 23 salān dī hān",
+                    english: "I am 23 years old (female)",
+                    audioFile: "main-23-saalan-di-haan.mp3"
+                },
+                tip: "Use 'ਦਾ' (dā) if you're male and 'ਦੀ' (dī) if you're female"
+            },
+            {
+                id: "origin",
+                title: "Origin",
+                icon: MapPin,
+                male: {
+                    gurmukhi: "ਮੈਂ London ਤੋਂ ਆਇਆ ਹਾਂ",
+                    roman: "Maiṁ London ton āiā hān",
+                    english: "I am from London (male)",
+                    audioFile: "main-london-ton-aaya-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ London ਤੋਂ ਆਈ ਹਾਂ",
+                    roman: "Maiṁ London ton āī hān",
+                    english: "I am from London (female)",
+                    audioFile: "main-london-ton-aayi-haan.mp3"
+                },
+                tip: "Notice: 'ਆਇਆ' (āiā) for males, 'ਆਈ' (āī) for females"
+            },
+            {
+                id: "residence",
+                title: "Where I Live",
+                icon: Home,
+                male: {
+                    gurmukhi: "ਮੈਂ Southall ਵਿੱਚ ਰਹਿੰਦਾ ਹਾਂ",
+                    roman: "Maiṁ Southall vich rahindā hān",
+                    english: "I live in Southall (male)",
+                    audioFile: "main-southall-vich-rahinda-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ Birmingham ਵਿੱਚ ਰਹਿੰਦੀ ਹਾਂ",
+                    roman: "Maiṁ Birmingham vich rahindī hān",
+                    english: "I live in Birmingham (female)",
+                    audioFile: "main-birmingham-vich-rahindi-haan.mp3"
+                },
+                tip: "'ਰਹਿੰਦਾ' (rahindā) changes to 'ਰਹਿੰਦੀ' (rahindī) for females"
+            }
+        ]
+    },
+    {
+        type: "work-study",
+        title: "Work & Study",
+        subtitle: "Talk about what you do",
+        icon: Briefcase,
         phrases: [
             {
+                type: "work",
+                male: {
+                    gurmukhi: "ਮੈਂ [Place] ਲਈ ਕੰਮ ਕਰਦਾ ਹਾਂ",
+                    roman: "Maiṁ [Place] laī kam kardā hān",
+                    english: "I work at [Place] (male)",
+                    audioFile: "main-heathrow-lai-kam-karda-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ [Place] ਲਈ ਕੰਮ ਕਰਦੀ ਹਾਂ",
+                    roman: "Maiṁ [Place] laī kam kardī hān",
+                    english: "I work at [Place] (female)",
+                    audioFile: "main-heathrow-lai-kam-kardi-haan.mp3"
+                }
+            },
+            {
+                type: "study",
+                male: {
+                    gurmukhi: "ਮੈਂ university ਪੜ੍ਹਦਾ ਹਾਂ",
+                    roman: "Maiṁ university paṛhdā hān",
+                    english: "I study at university (male)",
+                    audioFile: "main-university-parhda-haan.mp3"
+                },
+                female: {
+                    gurmukhi: "ਮੈਂ university ਪੜ੍ਹਦੀ ਹਾਂ",
+                    roman: "Maiṁ university paṛhdī hān",
+                    english: "I study at university (female)",
+                    audioFile: "main-university-parhdi-haan.mp3"
+                }
+            }
+        ],
+        vocabulary: [
+            { punjabi: "ਕੰਮ ਕਰਨਾ", roman: "kam karnā", english: "to work" },
+            { punjabi: "ਪੜ੍ਹਨਾ", roman: "paṛhnā", english: "to study" }
+        ]
+    },
+    {
+        type: "family",
+        title: "Your Family",
+        subtitle: "Talk about siblings",
+        icon: Users,
+        examples: [
+            {
+                gurmukhi: "ਮੇਰੇ 2 ਵੱਡੇ ਭਰਾ ਅਤੇ 1 ਛੋਟੀ ਭੈਣ ਹਨ",
+                roman: "Mere 2 vaḍḍe bhrā atē 1 chhoṭī bhaiṇ han",
+                english: "I have 2 older brothers and 1 younger sister"
+            },
+            {
+                gurmukhi: "ਮੇਰਾ 1 ਛੋਟਾ ਭਰਾ ਹੈ",
+                roman: "Merā 1 chhoṭā bhrā hai",
+                english: "I have 1 younger brother"
+            }
+        ],
+        vocabulary: [
+            {
+                punjabi: "ਭਰਾ",
+                roman: "bhrā",
+                english: "Brother",
+                icon: User
+            },
+            {
+                punjabi: "ਭੈਣ",
+                roman: "bhaiṇ",
+                english: "Sister",
+                icon: User
+            },
+            {
+                punjabi: "ਵੱਡਾ/ਵੱਡੀ",
+                roman: "vaḍḍā/vaḍḍī",
+                english: "Older/Bigger",
+                icon: ArrowRight
+            },
+            {
+                punjabi: "ਛੋਟਾ/ਛੋਟੀ",
+                roman: "chhoṭā/chhoṭī",
+                english: "Younger/Little",
+                icon: ArrowRight
+            }
+        ]
+    },
+    {
+        type: "practice-builder",
+        title: "Build Your Introduction",
+        subtitle: "Select the correct phrases to create a complete self-introduction",
+        scenario: "Simran is introducing herself to her new classmates",
+        steps: [
+            {
                 id: 1,
-                gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਜੀ",
-                roman: "Sat Sri Akaal Ji",
-                english: "Hello / Goodbye (Formal)",
-                usage: "Use with elders, family, or people you're meeting for the first time. Also used to say goodbye.",
-                context: "Literally means 'God is Truth'. Adding 'Ji' shows respect.",
-                audioFile: "sat-sri-akaal-ji.mp3",
-                icon: Hand
+                prompt: "How should Simran say her name?",
+                options: [
+                    { text: "Mera naam Simran hai", correct: true },
+                    { text: "Tera naam Simran hai", correct: false },
+                    { text: "Main Simran haan", correct: false }
+                ],
+                explanation: "'Mera naam [Name] hai' is the standard way to introduce your name"
             },
             {
                 id: 2,
-                gurmukhi: "ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
-                roman: "Tusi(n) kive(n) ho?",
-                english: "How are you?",
-                usage: "Formal way to ask about someone's wellbeing after greeting them.",
-                audioFile: "tusi-kiven-ho.mp3",
-                icon: MessageCircle
+                prompt: "Simran is 23 years old. What should she say?",
+                options: [
+                    { text: "Maiṁ 23 salān dā hān", correct: false },
+                    { text: "Maiṁ 23 salān dī hān", correct: true },
+                    { text: "Maiṁ 23 nām dī hān", correct: false }
+                ],
+                explanation: "Use 'dī' (ਦੀ) for females when stating age"
             },
             {
                 id: 3,
-                gurmukhi: "ਮੈਂ ਠੀਕ ਹਾਂ",
-                roman: "Mai(n) theek haa(n)",
-                english: "I am fine",
-                usage: "Response when someone asks how you are.",
-                audioFile: "main-theek-haan.mp3",
-                icon: Heart
+                prompt: "Simran is from Leicester. How does she say this?",
+                options: [
+                    { text: "Maiṁ Leicester ton āiā hān", correct: false },
+                    { text: "Maiṁ Leicester ton āī hān", correct: true },
+                    { text: "Maiṁ Leicester vich rahindī hān", correct: false }
+                ],
+                explanation: "Use 'āī' (ਆਈ) for females when saying where you're from"
             },
             {
                 id: 4,
-                gurmukhi: "ਅਪਨਾ ਖਿਆਲ ਰੱਖਣਾ",
-                roman: "Apana khay-aal rakh-naa",
-                english: "Take care",
-                usage: "A polite way to say goodbye, showing care for the person.",
-                audioFile: "apna-khyal-rakhna.mp3",
-                icon: Heart
-            }
-        ]
-    },
-    {
-        type: "scenario",
-        title: "Real-Life Scenario",
-        subtitle: "Watch how greetings work in practice",
-        scenario: {
-            setting: "Amar visits his grandparents' house",
-            characters: [
-                { name: "Amar", avatar: "/avatars/avatar6.png" },
-                { name: "Grandma", avatar: "/avatars/avatar5.png" }
-            ],
-            dialogue: [
-                {
-                    speaker: "Amar",
-                    gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਜੀ। ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?",
-                    roman: "Sat Sri Akaal Ji. Tusi(n) kive(n) ho?",
-                    english: "Hello. How are you?",
-                    avatar: "/avatars/avatar6.png"
-                },
-                {
-                    speaker: "Grandma",
-                    gurmukhi: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਅਮਰ। ਮੈਂ ਠੀਕ ਹਾਂ।",
-                    roman: "Sat Sri Akaal Amar. Mai(n) theek haa(n).",
-                    english: "Hello Amar. I am fine.",
-                    avatar: "/avatars/avatar5.png"
-                }
-            ]
-        }
-    },
-    {
-        type: "informal-section",
-        title: "Casual Greetings",
-        subtitle: "For friends and informal settings",
-        phrase: {
-            gurmukhi: "ਕਿੱਦਾਂ?",
-            roman: "Kiddā̃?",
-            english: "What's up? / How are you?",
-            usage: "Use this casual greeting when meeting friends in informal settings.",
-            note: "Think of this as the Panjabi equivalent of 'What's up?' or 'How's it going?'",
-            audioFile: "kiddan.mp3",
-            icon: Users
-        },
-        comparison: {
-            formal: {
-                phrase: "Sat Sri Akaal Ji",
-                use: "Uncle, Auntie, Elders"
-            },
-            informal: {
-                phrase: "Kiddā̃?",
-                use: "Friends, Peers"
-            }
-        }
-    },
-    {
-        type: "practice-scenarios",
-        title: "Practice Makes Perfect",
-        subtitle: "Choose the right greeting for each situation",
-        scenarios: [
-            {
-                id: 1,
-                situation: "Meeting your friend's parents for the first time",
+                prompt: "Simran studies at university. What should she say?",
                 options: [
-                    { text: "Sat Sri Akaal Ji", correct: true, explanation: "Perfect! This shows respect when meeting elders." },
-                    { text: "Kiddā̃?", correct: false, explanation: "Too casual for meeting elders for the first time." }
-                ]
-            },
-            {
-                id: 2,
-                situation: "Bumping into friends at a party",
-                options: [
-                    { text: "Sat Sri Akaal Ji", correct: false, explanation: "A bit too formal for friends in a casual setting." },
-                    { text: "Kiddā̃?", correct: true, explanation: "Perfect for a casual, friendly greeting!" }
-                ]
-            },
-            {
-                id: 3,
-                situation: "Leaving your grandmother's house",
-                options: [
-                    { text: "Say 'Sat Sri Akaal Ji' and 'Apana khay-aal rakh-naa'", correct: true, explanation: "Excellent! Respectful goodbye with care." },
-                    { text: "Just say 'Kiddā̃?'", correct: false, explanation: "Not appropriate when leaving elders." }
-                ]
+                    { text: "Maiṁ university paṛhdā hān", correct: false },
+                    { text: "Maiṁ university paṛhdī hān", correct: true },
+                    { text: "Maiṁ university kam kardī hān", correct: false }
+                ],
+                explanation: "'Paṛhdī' (ਪੜ੍ਹਦੀ) is the female form of 'to study'"
             }
         ]
     },
@@ -169,46 +253,63 @@ const lessonContent = [
         title: "Test Your Knowledge",
         questions: [
             {
-                question: "What does 'Mai(n) theek haa(n)' mean?",
+                question: "How do you say 'My name is Priya' in Panjabi?",
                 options: [
-                    { text: "I am unhappy", correct: false },
-                    { text: "I am fine", correct: true },
-                    { text: "I am excited", correct: false }
+                    { text: "Mera naam Priya hai", correct: true },
+                    { text: "Main Priya haan", correct: false },
+                    { text: "Tera naam Priya hai", correct: false }
                 ]
             },
             {
-                question: "Can 'Sat Sri Akaal' be used for both hello and goodbye?",
+                question: "Which is correct for a boy saying 'I am 25 years old'?",
                 options: [
-                    { text: "True", correct: true },
-                    { text: "False", correct: false }
+                    { text: "Maiṁ 25 salān dī hān", correct: false },
+                    { text: "Maiṁ 25 salān dā hān", correct: true },
+                    { text: "Maiṁ 25 nām dā hān", correct: false }
                 ]
             },
             {
-                question: "Complete the phrase: '_____ kive(n) ho?' (How are you?)",
+                question: "How does a girl say 'I am from London'?",
                 options: [
-                    { text: "Tuhāḍā", correct: false },
-                    { text: "Tusi(n)", correct: true },
-                    { text: "Kiddā̃", correct: false }
+                    { text: "Maiṁ London ton āī hān", correct: true },
+                    { text: "Maiṁ London ton āiā hān", correct: false },
+                    { text: "Maiṁ London vich rahindī hān", correct: false }
+                ]
+            },
+            {
+                question: "What does 'Maiṁ university paṛhdā hān' mean?",
+                options: [
+                    { text: "I work at university", correct: false },
+                    { text: "I study at university (male)", correct: true },
+                    { text: "I live at university", correct: false }
+                ]
+            },
+            {
+                question: "What is the difference between 'paṛhdā' and 'paṛhdī'?",
+                options: [
+                    { text: "Different meanings", correct: false },
+                    { text: "Male vs female form", correct: true },
+                    { text: "Different tenses", correct: false }
                 ]
             }
         ]
     }
 ];
 
-export default function GreetingSteps() {
+export default function IntroductionLesson() {
     const router = useRouter();
     const [step, setStep] = useState(0);
     const [userId, setUserId] = useState(null);
     const [lessonCompleted, setLessonCompleted] = useState(false);
 
+    // Phrase tabs state
+    const [selectedCategory, setSelectedCategory] = useState(0);
+    const [selectedGender, setSelectedGender] = useState("male");
+
     // Audio state
     const [playingAudio, setPlayingAudio] = useState(null);
-    const [selectedPhrases, setSelectedPhrases] = useState([]);
 
-    // Scenario state
-    const [selectedDialogue, setSelectedDialogue] = useState(null);
-
-    // Practice scenarios state
+    // Practice builder state
     const [practiceAnswers, setPracticeAnswers] = useState({});
     const [practiceComplete, setPracticeComplete] = useState(false);
 
@@ -232,8 +333,8 @@ export default function GreetingSteps() {
     }, []);
 
     // Play audio function
-    const playAudio = (audioFile, phraseId) => {
-        setPlayingAudio(phraseId);
+    const playAudio = (audioFile, id) => {
+        setPlayingAudio(id);
         const audio = new Audio(`/audio/${audioFile}`);
         audio.play();
         audio.onended = () => setPlayingAudio(null);
@@ -267,8 +368,8 @@ export default function GreetingSteps() {
                 .from('lesson_progress')
                 .upsert({
                     user_id: userId,
-                    lesson_id: 'lesson-2-greetings',
-                    lesson_name: 'Panjabi Greetings',
+                    lesson_id: 'lesson-3-introduction',
+                    lesson_name: 'Self Introduction',
                     completed: true,
                     quiz_score: score,
                     correct_answers: correct,
@@ -285,7 +386,7 @@ export default function GreetingSteps() {
     };
 
     const canProceed = () => {
-        if (current.type === 'practice-scenarios' && !practiceComplete) return false;
+        if (current.type === 'practice-builder' && !practiceComplete) return false;
         if (current.type === 'final-quiz' && !quizComplete) return false;
         return true;
     };
@@ -309,15 +410,14 @@ export default function GreetingSteps() {
         setLessonCompleted(true);
     };
 
-    // Practice scenarios logic
-    const handlePracticeAnswer = (scenarioId, optionIndex) => {
-        if (practiceAnswers[scenarioId] !== undefined) return;
+    // Practice builder logic
+    const handlePracticeAnswer = (stepId, optionIndex) => {
+        if (practiceAnswers[stepId] !== undefined) return;
 
-        const newAnswers = { ...practiceAnswers, [scenarioId]: optionIndex };
+        const newAnswers = { ...practiceAnswers, [stepId]: optionIndex };
         setPracticeAnswers(newAnswers);
 
-        // Check if all scenarios are answered
-        if (Object.keys(newAnswers).length === current.scenarios.length) {
+        if (Object.keys(newAnswers).length === current.steps.length) {
             setPracticeComplete(true);
         }
     };
@@ -328,7 +428,7 @@ export default function GreetingSteps() {
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-orange-500 rounded-xl flex items-center justify-center">
-                            <Hand className="text-white" size={24} />
+                            <User className="text-white" size={24} />
                         </div>
                         <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
                     </div>
@@ -347,12 +447,15 @@ export default function GreetingSteps() {
             );
         }
 
-        if (current.type === "phrase-collection") {
+        if (current.type === "phrase-tabs") {
+            const category = current.categories[selectedCategory];
+            const IconComponent = category.icon;
+
             return (
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
                     <div className="flex items-center gap-3 mb-3">
                         <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                            <BookOpen className="text-blue-600" size={20} />
+                            <IdCard className="text-blue-600" size={20} />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
@@ -360,84 +463,129 @@ export default function GreetingSteps() {
                         </div>
                     </div>
 
-                    <div className="space-y-4 mt-6">
-                        {current.phrases.map((phrase) => {
-                            const IconComponent = phrase.icon;
-                            const isSelected = selectedPhrases.includes(phrase.id);
-                            const isPlaying = playingAudio === phrase.id;
-
+                    {/* Category Tabs */}
+                    <div className="flex gap-2 mb-6 mt-6 overflow-x-auto pb-2">
+                        {current.categories.map((cat, idx) => {
+                            const TabIcon = cat.icon;
                             return (
-                                <div
-                                    key={phrase.id}
-                                    onClick={() => {
-                                        setSelectedPhrases(prev =>
-                                            prev.includes(phrase.id)
-                                                ? prev.filter(id => id !== phrase.id)
-                                                : [...prev, phrase.id]
-                                        );
-                                    }}
-                                    className={`cursor-pointer p-5 rounded-xl border-2 transition-all ${
-                                        isSelected
-                                            ? 'border-blue-500 bg-blue-50 shadow-md'
-                                            : 'border-gray-200 bg-gray-50 hover:border-blue-300 hover:bg-blue-50'
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(idx)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                                        selectedCategory === idx
+                                            ? 'bg-gradient-to-r from-blue-500 to-orange-500 text-white shadow-md'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                     }`}
                                 >
-                                    <div className="flex items-start gap-4">
-                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                                            isSelected ? 'bg-blue-500' : 'bg-gray-200'
-                                        }`}>
-                                            <IconComponent className={isSelected ? 'text-white' : 'text-gray-600'} size={20} />
-                                        </div>
-
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-3 mb-2 flex-wrap">
-                                                <h3 className="text-xl font-bold text-gray-900">{phrase.gurmukhi}</h3>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        playAudio(phrase.audioFile, phrase.id);
-                                                    }}
-                                                    className={`p-2 rounded-lg transition-colors ${
-                                                        isPlaying
-                                                            ? 'bg-blue-600 text-white'
-                                                            : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-                                                    }`}
-                                                >
-                                                    {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-                                                </button>
-                                            </div>
-
-                                            <p className="text-blue-700 font-medium mb-1">{phrase.roman}</p>
-                                            <p className="text-lg text-gray-800 font-semibold mb-2">{phrase.english}</p>
-
-                                            {isSelected && (
-                                                <>
-                                                    <p className="text-sm text-gray-700 mt-3 leading-relaxed">
-                                                        <span className="font-semibold">Usage:</span> {phrase.usage}
-                                                    </p>
-                                                    {phrase.context && (
-                                                        <p className="text-sm text-gray-600 mt-2 italic">
-                                                            {phrase.context}
-                                                        </p>
-                                                    )}
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                                    <TabIcon size={16} />
+                                    <span>{cat.title}</span>
+                                </button>
                             );
                         })}
+                    </div>
+
+                    {/* Gender Toggle (if applicable) */}
+                    {category.male && category.female && (
+                        <div className="flex gap-3 mb-6">
+                            <button
+                                onClick={() => setSelectedGender("male")}
+                                className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                    selectedGender === "male"
+                                        ? 'bg-blue-500 text-white shadow-md'
+                                        : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+                                }`}
+                            >
+                                Male
+                            </button>
+                            <button
+                                onClick={() => setSelectedGender("female")}
+                                className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                    selectedGender === "female"
+                                        ? 'bg-pink-500 text-white shadow-md'
+                                        : 'bg-pink-50 text-pink-700 hover:bg-pink-100'
+                                }`}
+                            >
+                                Female
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Phrase Display */}
+                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border-2 border-gray-200">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                                <IconComponent className="text-blue-600" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900">{category.title}</h3>
+                        </div>
+
+                        {category.phrases ? (
+                            // Name category (no gender)
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900 mb-2">{category.phrases[0].gurmukhi}</p>
+                                <p className="text-lg text-blue-700 font-medium mb-2">{category.phrases[0].roman}</p>
+                                <p className="text-lg text-gray-700 mb-3">{category.phrases[0].english}</p>
+                                {category.phrases[0].note && (
+                                    <p className="text-sm text-gray-600 italic">{category.phrases[0].note}</p>
+                                )}
+                                <button
+                                    onClick={() => playAudio(category.phrases[0].audioFile, category.id)}
+                                    className={`mt-4 flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                                        playingAudio === category.id
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                                    }`}
+                                >
+                                    {playingAudio === category.id ? <Pause size={18} /> : <Play size={18} />}
+                                    <span>Listen</span>
+                                </button>
+                            </div>
+                        ) : (
+                            // Categories with gender
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900 mb-2">
+                                    {category[selectedGender].gurmukhi}
+                                </p>
+                                <p className="text-lg text-blue-700 font-medium mb-2">
+                                    {category[selectedGender].roman}
+                                </p>
+                                <p className="text-lg text-gray-700 mb-3">
+                                    {category[selectedGender].english}
+                                </p>
+                                <button
+                                    onClick={() => playAudio(category[selectedGender].audioFile, `${category.id}-${selectedGender}`)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                                        playingAudio === `${category.id}-${selectedGender}`
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                                    }`}
+                                >
+                                    {playingAudio === `${category.id}-${selectedGender}` ? <Pause size={18} /> : <Play size={18} />}
+                                    <span>Listen</span>
+                                </button>
+                                {category.tip && (
+                                    <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r">
+                                        <div className="flex items-start gap-2">
+                                            <Info size={18} className="text-yellow-600 flex-shrink-0 mt-0.5" />
+                                            <p className="text-sm text-yellow-900">{category.tip}</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             );
         }
 
-        if (current.type === "scenario") {
+        if (current.type === "work-study") {
+            const IconComponent = current.icon;
+
             return (
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
-                    <div className="flex items-center gap-3 mb-3">
+                    <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                            <MessageCircle className="text-purple-600" size={20} />
+                            <IconComponent className="text-purple-600" size={20} />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
@@ -445,118 +593,86 @@ export default function GreetingSteps() {
                         </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 mb-6 border-2 border-purple-200">
-                        <p className="text-purple-900 font-medium text-center">
-                            {current.scenario.setting}
-                        </p>
+                    {/* Gender Toggle */}
+                    <div className="flex gap-3 mb-6">
+                        <button
+                            onClick={() => setSelectedGender("male")}
+                            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                selectedGender === "male"
+                                    ? 'bg-blue-500 text-white shadow-md'
+                                    : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+                            }`}
+                        >
+                            Male
+                        </button>
+                        <button
+                            onClick={() => setSelectedGender("female")}
+                            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                selectedGender === "female"
+                                    ? 'bg-pink-500 text-white shadow-md'
+                                    : 'bg-pink-50 text-pink-700 hover:bg-pink-100'
+                            }`}
+                        >
+                            Female
+                        </button>
                     </div>
 
-                    <div className="space-y-4">
-                        {current.scenario.dialogue.map((line, idx) => (
-                            <div
-                                key={idx}
-                                onClick={() => setSelectedDialogue(selectedDialogue === idx ? null : idx)}
-                                className={`cursor-pointer transition-all ${
-                                    line.speaker === "Amar" ? "mr-8" : "ml-8"
-                                }`}
-                            >
-                                <div className={`flex gap-3 ${line.speaker === "Grandma" ? "flex-row-reverse" : ""}`}>
-                                    <img
-                                        src={line.avatar}
-                                        alt={line.speaker}
-                                        className="w-10 h-10 rounded-full flex-shrink-0"
-                                    />
-                                    <div className={`flex-1 ${line.speaker === "Grandma" ? "text-right" : ""}`}>
-                                        <p className="text-xs font-semibold text-gray-600 mb-1">{line.speaker}</p>
-                                        <div className={`inline-block p-4 rounded-2xl ${
-                                            line.speaker === "Amar"
-                                                ? "bg-blue-500 text-white"
-                                                : "bg-gray-200 text-gray-900"
-                                        } ${selectedDialogue === idx ? "shadow-lg" : ""}`}>
-                                            <p className="font-semibold mb-1">{line.gurmukhi}</p>
-                                            <p className="text-sm opacity-90">{line.roman}</p>
-                                            {selectedDialogue === idx && (
-                                                <p className="text-sm mt-2 pt-2 border-t border-white/20">
-                                                    {line.english}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                    {/* Phrases */}
+                    <div className="space-y-4 mb-6">
+                        {current.phrases.map((phrase, idx) => (
+                            <div key={idx} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border-2 border-purple-200">
+                                <h3 className="text-sm font-bold text-purple-900 mb-3 uppercase tracking-wide">
+                                    {phrase.type === "work" ? "Work" : "Study"}
+                                </h3>
+                                <p className="text-2xl font-bold text-gray-900 mb-2">
+                                    {phrase[selectedGender].gurmukhi}
+                                </p>
+                                <p className="text-lg text-purple-700 font-medium mb-2">
+                                    {phrase[selectedGender].roman}
+                                </p>
+                                <p className="text-lg text-gray-700 mb-3">
+                                    {phrase[selectedGender].english}
+                                </p>
+                                <button
+                                    onClick={() => playAudio(phrase[selectedGender].audioFile, `work-${idx}-${selectedGender}`)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                                        playingAudio === `work-${idx}-${selectedGender}`
+                                            ? 'bg-purple-600 text-white'
+                                            : 'bg-purple-200 text-purple-700 hover:bg-purple-300'
+                                    }`}
+                                >
+                                    {playingAudio === `work-${idx}-${selectedGender}` ? <Pause size={18} /> : <Play size={18} />}
+                                    <span>Listen</span>
+                                </button>
                             </div>
                         ))}
                     </div>
 
-                    <div className="mt-6 bg-blue-50 rounded-xl p-4 border border-blue-200">
-                        <p className="text-sm text-blue-900">
-                            <span className="font-semibold">Tip:</span> Click on each message to see the English translation!
-                        </p>
-                    </div>
-                </div>
-            );
-        }
-
-        if (current.type === "informal-section") {
-            const IconComponent = current.phrase.icon;
-
-            return (
-                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                            <IconComponent className="text-orange-600" size={20} />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
-                            <p className="text-sm text-gray-600">{current.subtitle}</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 mb-6 border-2 border-orange-200">
-                        <div className="flex items-center gap-4 mb-4">
-                            <h3 className="text-3xl font-bold text-gray-900">{current.phrase.gurmukhi}</h3>
-                            <button
-                                onClick={() => playAudio(current.phrase.audioFile, 'informal')}
-                                className={`p-3 rounded-xl transition-colors ${
-                                    playingAudio === 'informal'
-                                        ? 'bg-orange-600 text-white'
-                                        : 'bg-orange-200 text-orange-700 hover:bg-orange-300'
-                                }`}
-                            >
-                                {playingAudio === 'informal' ? <Pause size={20} /> : <Play size={20} />}
-                            </button>
-                        </div>
-                        <p className="text-orange-700 font-medium text-lg mb-2">{current.phrase.roman}</p>
-                        <p className="text-2xl text-gray-900 font-semibold mb-3">{current.phrase.english}</p>
-                        <p className="text-gray-700 mb-2">
-                            <span className="font-semibold">Usage:</span> {current.phrase.usage}
-                        </p>
-                        <p className="text-gray-600 italic text-sm">
-                            {current.phrase.note}
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
-                            <h4 className="text-sm font-bold text-blue-900 mb-2 uppercase tracking-wide">Formal</h4>
-                            <p className="text-lg font-bold text-blue-800 mb-2">{current.comparison.formal.phrase}</p>
-                            <p className="text-sm text-blue-700">{current.comparison.formal.use}</p>
-                        </div>
-                        <div className="p-5 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-orange-200">
-                            <h4 className="text-sm font-bold text-orange-900 mb-2 uppercase tracking-wide">Informal</h4>
-                            <p className="text-lg font-bold text-orange-800 mb-2">{current.comparison.informal.phrase}</p>
-                            <p className="text-sm text-orange-700">{current.comparison.informal.use}</p>
+                    {/* Vocabulary */}
+                    <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                        <h3 className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">Key Verbs</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {current.vocabulary.map((word, idx) => (
+                                <div key={idx} className="flex items-center gap-3 p-3 bg-white rounded-lg">
+                                    <div className="text-lg font-bold text-gray-900">{word.punjabi}</div>
+                                    <div className="text-sm text-gray-600">{word.roman}</div>
+                                    <div className="text-sm text-gray-700 ml-auto font-medium">{word.english}</div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
             );
         }
 
-        if (current.type === "practice-scenarios") {
+        if (current.type === "family") {
+            const IconComponent = current.icon;
+
             return (
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                            <Sparkles className="text-green-600" size={20} />
+                            <IconComponent className="text-green-600" size={20} />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
@@ -564,29 +680,76 @@ export default function GreetingSteps() {
                         </div>
                     </div>
 
+                    {/* Examples */}
+                    <div className="space-y-4 mb-6">
+                        {current.examples.map((example, idx) => (
+                            <div key={idx} className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border-2 border-green-200">
+                                <p className="text-xl font-bold text-gray-900 mb-2">{example.gurmukhi}</p>
+                                <p className="text-base text-green-700 font-medium mb-1">{example.roman}</p>
+                                <p className="text-base text-gray-700">{example.english}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Vocabulary */}
+                    <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                        <h3 className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">Family Vocabulary</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {current.vocabulary.map((word, idx) => (
+                                <div key={idx} className="flex items-center gap-3 p-3 bg-white rounded-lg">
+                                    <div className="text-lg font-bold text-gray-900">{word.punjabi}</div>
+                                    <div className="text-sm text-gray-600">{word.roman}</div>
+                                    <div className="text-sm text-gray-700 ml-auto font-medium">{word.english}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        if (current.type === "practice-builder") {
+            return (
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <CheckCircle className="text-orange-600" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900">{current.title}</h2>
+                            <p className="text-sm text-gray-600">{current.subtitle}</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-5 mb-6 border-2 border-orange-200">
+                        <p className="text-orange-900 font-medium text-center">
+                            {current.scenario}
+                        </p>
+                    </div>
+
                     <div className="space-y-6">
-                        {current.scenarios.map((scenario, idx) => {
-                            const answered = practiceAnswers[scenario.id] !== undefined;
-                            const selectedOption = practiceAnswers[scenario.id];
+                        {current.steps.map((practiceStep, idx) => {
+                            const answered = practiceAnswers[practiceStep.id] !== undefined;
+                            const selectedOption = practiceAnswers[practiceStep.id];
 
                             return (
-                                <div key={scenario.id} className="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border-2 border-green-200">
+                                <div key={practiceStep.id} className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200">
                                     <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                                             {idx + 1}
                                         </div>
-                                        <p className="text-lg font-semibold text-gray-900">{scenario.situation}</p>
+                                        <p className="text-lg font-semibold text-gray-900">{practiceStep.prompt}</p>
                                     </div>
 
                                     <div className="space-y-2">
-                                        {scenario.options.map((option, oIdx) => {
+                                        {practiceStep.options.map((option, oIdx) => {
                                             const isSelected = selectedOption === oIdx;
                                             const isCorrect = option.correct;
 
                                             return (
                                                 <div key={oIdx}>
                                                     <button
-                                                        onClick={() => handlePracticeAnswer(scenario.id, oIdx)}
+                                                        onClick={() => handlePracticeAnswer(practiceStep.id, oIdx)}
                                                         disabled={answered}
                                                         className={`w-full p-4 rounded-lg text-left font-medium transition-all flex items-center gap-3 ${
                                                             answered && isSelected && isCorrect
@@ -595,7 +758,7 @@ export default function GreetingSteps() {
                                                                     ? 'bg-red-100 border-2 border-red-500 text-red-800'
                                                                     : answered && isCorrect
                                                                         ? 'bg-green-100 border-2 border-green-500 text-green-800'
-                                                                        : 'bg-white border-2 border-gray-300 text-gray-800 hover:border-green-400 hover:bg-green-50'
+                                                                        : 'bg-white border-2 border-gray-300 text-gray-800 hover:border-blue-400 hover:bg-blue-50'
                                                         }`}
                                                     >
                                                         {answered && isCorrect && (
@@ -607,7 +770,7 @@ export default function GreetingSteps() {
                                                         <p className={`mt-2 text-sm px-4 py-2 rounded ${
                                                             isCorrect ? 'text-green-800 bg-green-50' : 'text-red-800 bg-red-50'
                                                         }`}>
-                                                            {option.explanation}
+                                                            {practiceStep.explanation}
                                                         </p>
                                                     )}
                                                 </div>
@@ -712,7 +875,7 @@ export default function GreetingSteps() {
                     Lesson Complete!
                 </h2>
                 <p className="text-center text-gray-600 mb-8">
-                    You've mastered Panjabi greetings!
+                    You can now introduce yourself in Panjabi!
                 </p>
 
                 <div className="grid grid-cols-3 gap-4 mb-6">
@@ -741,7 +904,7 @@ export default function GreetingSteps() {
 
                 <div className="space-y-3">
                     <button
-                        onClick={() => router.push("/lessons/lesson3/1")}
+                        onClick={() => router.push("/lessons/lesson4/")}
                         className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-sm shadow-md"
                     >
                         <span>Continue to Next Lesson</span>
@@ -750,9 +913,9 @@ export default function GreetingSteps() {
                     <button
                         onClick={() => {
                             setStep(0);
+                            setSelectedCategory(0);
+                            setSelectedGender("male");
                             setPlayingAudio(null);
-                            setSelectedPhrases([]);
-                            setSelectedDialogue(null);
                             setPracticeAnswers({});
                             setPracticeComplete(false);
                             setQuizAnswers([]);
@@ -800,13 +963,13 @@ export default function GreetingSteps() {
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <User size={18} />
-                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 2: Greetings</span>
+                        <span className="text-xs font-semibold uppercase tracking-wide">Lesson 3: Self Introduction</span>
                     </div>
                     <h1 className="text-3xl font-bold mb-2">
-                        Learn Panjabi Greetings
+                        A Bit About Me
                     </h1>
                     <p className="text-base text-blue-100">
-                        Master essential greetings for different situations
+                        Learn how to introduce yourself in Panjabi
                     </p>
                 </div>
 
