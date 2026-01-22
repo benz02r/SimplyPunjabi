@@ -69,7 +69,7 @@ export default function Home() {
 
                         {/* CTA Section - Clear and Focused */}
                         <div className="flex flex-col items-center gap-4 mb-12">
-                            <a href="/key-functions/lessons/lesson1" className="w-full sm:w-auto">
+                            <a href="/key-functions/lessons/lesson1/1" className="w-full sm:w-auto">
                                 <button className="w-full sm:w-auto group relative bg-gradient-to-r from-blue-600 to-blue-700 text-white px-12 py-5 rounded-2xl text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                                     <span className="flex items-center justify-center gap-3">
                                         <FaPlay className="text-sm" />
