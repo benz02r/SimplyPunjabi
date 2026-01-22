@@ -22,7 +22,7 @@ export default function Home() {
         <>
             <Head>
                 <title>Learn Punjabi Online - Simply Punjabi | Free Language Learning for Diaspora</title>
-                <meta name="description" content="Learn Punjabi online with Simply Punjabi. The best free Punjabi language learning platform designed for diaspora learners. Start speaking Punjabi with your family today." />
+                <meta name="description" content="Learn Punjabi online with Simply Punjabi. The best free Punjabi language learning platform. Start speaking Punjabi with your family today. How to learn Punjabi?" />
                 <meta name="keywords" content="learn Punjabi, Punjabi language course, learn Punjabi online, Punjabi for diaspora, Gurmukhi script, speak Punjabi, Punjabi lessons, learn Punjabi free, Punjabi language app, how to learn Punjabi" />
                 <meta property="og:title" content="Learn Punjabi Online - Simply Punjabi" />
                 <meta property="og:description" content="The simple way to learn Punjabi. Reconnect with your heritage through family conversations and cultural insights." />
@@ -63,13 +63,13 @@ export default function Home() {
                                 The Simple Way To Learn Punjabi
                             </h1>
                             <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
-                                Join thousands of diaspora learners reconnecting with family, culture, and identity through the language of their heritage.
+                                Join us on our mission of reconnecting learners with family, culture, and identity through the language of their heritage.
                             </p>
                         </div>
 
                         {/* CTA Section - Clear and Focused */}
                         <div className="flex flex-col items-center gap-4 mb-12">
-                            <a href="/key-functions/signup" className="w-full sm:w-auto">
+                            <a href="/key-functions/lessons/lesson1" className="w-full sm:w-auto">
                                 <button className="w-full sm:w-auto group relative bg-gradient-to-r from-blue-600 to-blue-700 text-white px-12 py-5 rounded-2xl text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                                     <span className="flex items-center justify-center gap-3">
                                         <FaPlay className="text-sm" />
@@ -169,8 +169,8 @@ export default function Home() {
                                 Learning Punjabi Shouldn't Feel Impossible
                             </h2>
                             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                                Generic language apps don't understand diaspora learners. They teach vocabulary you'll never use
-                                and ignore the cultural context that makes conversations meaningful.
+                                Generic language apps don't understand rea; learners. They teach vocabulary you'll never use
+                                and ignore the context that makes conversations meaningful.
                             </p>
                         </div>
 

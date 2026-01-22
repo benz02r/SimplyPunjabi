@@ -16,7 +16,7 @@ export default function EssentialPunjabi() {
         { id: "lesson2", title: "A Bit About Me", description: "Introduce yourself in Punjabi", link: "/lessons/lesson2/1", locked: false, },
         { id: "lesson3", title: "Family And Friends", description: "Talk about your loved ones", link: "/lessons/lesson3/1", locked: false, },
         { id: "lesson4", title: "Back To Basics", description: "Master fundamental concepts", link: "/lessons/lesson4", locked: false, },
-        { id: "lesson5", title: "Making It Easy & Top Tips", description: "Pro strategies for learning success", link: "/lessons/lesson5", locked: false,  },
+        { id: "lesson5", title: "Daily Routines And Time", description: "Talk daily routines and time", link: "/lessons/lesson5", locked: false,  },
 
     ];
 

@@ -65,7 +65,7 @@ const lessonContent = [
             "Always use Ji with elders (parents, grandparents)",
             "Use Ji in formal situations (teachers, respected community members)",
             "Optional with friends, but shows extra politeness",
-            "Never wrong to add Ji—better to be more respectful"
+            "Never wrong to add Ji, better to be more respectful"
         ]
     },
     {
@@ -279,12 +279,16 @@ export default function Lesson5() {
         let total = 0;
 
         if (quizComplete) {
-            lessonContent[4].questions.forEach((q, idx) => {
-                total++;
-                if (quizAnswers[idx] !== undefined && q.options[quizAnswers[idx]]?.correct) {
-                    correct++;
-                }
-            });
+            // Find the final-quiz content (should be at index 5)
+            const quizContent = lessonContent.find(content => content.type === 'final-quiz');
+            if (quizContent && quizContent.questions) {
+                quizContent.questions.forEach((q, idx) => {
+                    total++;
+                    if (quizAnswers[idx] !== undefined && q.options[quizAnswers[idx]]?.correct) {
+                        correct++;
+                    }
+                });
+            }
         }
 
         return { correct, total, score: total > 0 ? Math.round((correct / total) * 100) : 0 };
