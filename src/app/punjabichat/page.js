@@ -337,7 +337,7 @@ export default function PunjabiChat() {
                                     </button>
                                     <div>
                                         <h1 className="text-base sm:text-lg font-bold text-gray-900">AI Punjabi Tutor</h1>
-                                        <p className="text-xs text-gray-500 hidden sm:block">Powered by Gemini 2.5</p>
+                                        <p className="text-xs text-gray-500 hidden sm:block">Powered by Simply Punjabi</p>
                                     </div>
                                 </div>
 
