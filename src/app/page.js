@@ -294,7 +294,7 @@ export default function Home() {
 
                         <div className="grid md:grid-cols-3 gap-8">
                             <TestimonialCard
-                                quote="I had my first full conversation with my grandmother in Punjabi last week. She cried tears of joy. This platform gave me the tools to connect with her in a way I never thought possible."
+                                quote="I had my first full conversation with my grandmother in Punjabi last week. This platform gave me the tools to connect with her in a way I never thought possible."
                                 name="Priya S."
                                 location="Birmingham, UK"
                                 avatar="from-blue-400 to-blue-600"
