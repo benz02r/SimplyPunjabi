@@ -44,7 +44,7 @@ export default function PunjabiChat() {
 
                 if (error || !user) {
                     // User not logged in - redirect to login page
-                    router.push('/login');
+                    router.push('/auth');
                     return;
                 }
 
