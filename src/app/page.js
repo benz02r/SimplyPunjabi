@@ -21,12 +21,47 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Learn Punjabi Online - Simply Punjabi | Free Language Learning for Diaspora</title>
-                <meta name="description" content="Learn Punjabi online with Simply Punjabi. The best free Punjabi language learning platform. Start speaking Punjabi with your family today. How to learn Punjabi?" />
-                <meta name="keywords" content="learn Punjabi, Punjabi language course, learn Punjabi online, Punjabi for diaspora, Gurmukhi script, speak Punjabi, Punjabi lessons, learn Punjabi free, Punjabi language app, how to learn Punjabi" />
-                <meta property="og:title" content="Learn Punjabi Online - Simply Punjabi" />
-                <meta property="og:description" content="The simple way to learn Punjabi. Reconnect with your heritage through family conversations and cultural insights." />
+                <title>Learn Punjabi Online Free | How to Learn Punjabi from English - Simply Punjabi</title>
+                <meta name="description" content="Learn Punjabi online free with Simply Punjabi. Best way to learn Punjabi from English for beginners. Interactive lessons, AI tutor, and dictionary help you speak Punjabi with your family in weeks, not years." />
+                <meta name="keywords" content="learn punjabi, learn punjabi online, how to learn punjabi, learn punjabi from english, learn punjabi free, punjabi language learning, punjabi for beginners, learn to speak punjabi, punjabi lessons online, punjabi course, gurmukhi script, punjabi dictionary, punjabi language app, punjabi for diaspora" />
+
+                {/* Open Graph */}
+                <meta property="og:title" content="Learn Punjabi Online Free | Simply Punjabi" />
+                <meta property="og:description" content="The easiest way to learn Punjabi from English. AI-powered lessons, interactive exercises, and instant translations help you speak Punjabi with your family." />
                 <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://simplypunjabi.com" />
+                <meta property="og:image" content="https://simplypunjabi.com/og-image.png" />
+
+                {/* Twitter Card */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Learn Punjabi Online Free | Simply Punjabi" />
+                <meta name="twitter:description" content="The easiest way to learn Punjabi from English. Start speaking Punjabi with your family today." />
+
+                {/* Structured Data for Rich Results */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "EducationalOrganization",
+                        "name": "Simply Punjabi",
+                        "description": "Learn Punjabi online free - Interactive lessons and AI tutor for English speakers",
+                        "url": "https://simplypunjabi.com",
+                        "logo": "https://simplypunjabi.com/logo.png",
+                        "sameAs": [
+
+                            "https://www.instagram.com/learnsimplypunjabi"
+                        ],
+                        "courseMode": "online",
+                        "teaches": "Punjabi Language",
+                        "availableLanguage": ["English", "Punjabi"],
+                        "offers": {
+                            "@type": "Offer",
+                            "category": "Language Learning",
+                            "price": "0",
+                            "priceCurrency": "GBP"
+                        }
+                    })}
+                </script>
+
                 <link rel="canonical" href="https://simplypunjabi.com" />
             </Head>
 
@@ -57,13 +92,13 @@ export default function Home() {
                             />
                         </div>
 
-                        {/* Emotional Headline - SMALLER */}
+                        {/* SEO-Optimized Headline */}
                         <div className="text-center max-w-4xl mx-auto mb-8">
-                            <h1 className="text-2xl sm:text-3xl font-semibold text-gray-700 mb-6 leading-tight">
-                                The Simple Way To Learn Punjabi
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                                Learn Punjabi Online Free from English
                             </h1>
                             <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
-                                Join us on our mission of reconnecting learners with family, culture, and identity through the language of their heritage.
+                                The easiest way to learn Punjabi. Start speaking with your family in weeks with interactive lessons, AI tutor, and instant translations.
                             </p>
                         </div>
 
@@ -87,7 +122,7 @@ export default function Home() {
                         <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-600">
                             <div className="flex items-center gap-2">
                                 <FaUsers className="text-blue-600" />
-                                <span className="font-medium">Trusted by diaspora learners worldwide</span>
+                                <span className="font-medium">Trusted by western learners worldwide</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <FaGlobe className="text-orange-600" />
@@ -116,12 +151,12 @@ export default function Home() {
                 <section className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
-                            <p className="text-blue-600 font-bold uppercase tracking-wider text-sm mb-4">Learning Paths</p>
+                            <p className="text-blue-600 font-bold uppercase tracking-wider text-sm mb-4">How to Learn Punjabi</p>
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                                Choose Your Starting Point
+                                Start Learning Punjabi from English
                             </h2>
                             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                                Structured courses that take you from complete beginner to confident speaker
+                                Structured Punjabi courses designed for English speakers. Go from complete beginner to confident speaker.
                             </p>
                         </div>
 
@@ -206,12 +241,12 @@ export default function Home() {
                 <section className="py-24 px-6 bg-white">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
-                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">Our Platform</p>
+                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">Why Learn Punjabi with Us</p>
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                                Everything You Need to Learn Punjabi
+                                The Best Way to Learn Punjabi Online
                             </h2>
                             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                                Three powerful tools designed specifically for diaspora learners
+                                Three powerful tools that make learning Punjabi from English easy and effective
                             </p>
                         </div>
 
@@ -275,6 +310,47 @@ export default function Home() {
                                 name="Simran K."
                                 location="Wolverhampton, UK"
                                 avatar="from-green-400 to-green-600"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* FAQ Section - Critical for SEO */}
+                <section className="py-24 px-6 bg-white">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                                Frequently Asked Questions
+                            </h2>
+                            <p className="text-lg text-gray-600">
+                                Everything you need to know about learning Punjabi online
+                            </p>
+                        </div>
+
+                        <div className="space-y-6">
+                            <FAQItem
+                                question="How to learn Punjabi from English?"
+                                answer="Simply Punjabi makes it easy to learn Punjabi from English with three powerful tools: interactive lessons that break down concepts for English speakers, an AI tutor that answers your questions in English, and a comprehensive dictionary with romanised pronunciations. Start with our Essential Punjabi course designed specifically for English-speaking beginners."
+                            />
+                            <FAQItem
+                                question="Is it possible to learn Punjabi online for free?"
+                                answer="Yes! Simply Punjabi offers free access to interactive Punjabi lessons, AI tutor conversations, and our complete Punjabi-English dictionary. You can start learning Punjabi online today without any credit card or payment required."
+                            />
+                            <FAQItem
+                                question="How long does it take to learn Punjabi?"
+                                answer="With Simply Punjabi's structured approach, most learners can have basic conversations with family members within 4-8 weeks of consistent practice. Our bite-sized lessons take just 10-15 minutes per day, making it easy to fit Punjabi learning into your schedule."
+                            />
+                            <FAQItem
+                                question="What is the best way to learn Punjabi for beginners?"
+                                answer="The best way to learn Punjabi as a beginner is to start with practical family conversations rather than formal grammar. Simply Punjabi's Essential Punjabi course teaches you greetings, introductions, and common phrases you'll actually use with your family. Our AI tutor provides instant help when you're stuck, and audio pronunciations ensure you sound natural."
+                            />
+                            <FAQItem
+                                question="Can I learn Punjabi if I don't know the Gurmukhi script?"
+                                answer="Absolutely! Simply Punjabi uses romanized Punjabi (Punjabi written in English letters) alongside Gurmukhi script. You can start speaking Punjabi immediately using romanisation, and gradually learn to read Gurmukhi at your own pace. All our lessons include both formats."
+                            />
+                            <FAQItem
+                                question="Is Simply Punjabi good for western learners?"
+                                answer="Yes, Simply Punjabi is specifically designed for second and third-generation diaspora learners in the UK, US, Canada, and Australia. Our lessons focus on family conversations and cultural context that matter most to heritage learners reconnecting with their roots."
                             />
                         </div>
                     </div>
@@ -422,5 +498,16 @@ function TestimonialCard({ quote, name, location, avatar }) {
                 </div>
             </div>
         </div>
+    );
+}
+function FAQItem({ question, answer }) {
+    return (
+        <details className="group bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl p-6 border border-blue-100 hover:border-blue-200 transition-colors">
+            <summary className="flex items-center justify-between cursor-pointer list-none">
+                <h3 className="text-lg font-bold text-gray-900 pr-4">{question}</h3>
+                <span className="text-blue-600 text-2xl group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p className="mt-4 text-gray-700 leading-relaxed">{answer}</p>
+        </details>
     );
 }
