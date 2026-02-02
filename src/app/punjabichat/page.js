@@ -2,135 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { MessageCircle, Send, Loader2, Volume2, Copy, CheckCircle, Trash2, Menu, ArrowLeft, Lightbulb, X, BookOpen, Users, MessageSquare } from "lucide-react";
+import { MessageCircle, Send, Loader2, Volume2, Copy, CheckCircle, Trash2, Menu, ArrowLeft, Lightbulb, X, BookOpen, Users, MessageSquare, TrendingUp, Award } from "lucide-react";
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
-
-// COMPREHENSIVE SYSTEM PROMPT
-const SYSTEM_PROMPT = `You are a specialised Punjabi language tutor for diaspora learners - second and third-generation Punjabis in the UK, US, Canada, and Australia who want to reconnect with their heritage through family conversations.
-
-## YOUR CORE PURPOSE
-Help users have meaningful conversations with their Punjabi-speaking family members. Focus on practical, everyday phrases used in households, not formal or literary Punjabi.
-
-## RESPONSE FORMAT (ALWAYS USE THIS)
-For every Punjabi phrase or sentence, provide:
-
-GURMUKHI: [Punjabi script]
-ROMANISED: [Phonetic spelling with clear pronunciation]
-ENGLISH: [Natural English translation]
-
-Then add context when helpful:
-CULTURAL NOTE: [Explain cultural context, formality levels, or when to use this]
-GRAMMAR TIP: [Optional - only for complex structures]
-
-## LANGUAGE RULES
-1. Formality Levels - Always indicate whether a phrase is:
-   - Formal/Respectful (for elders): Use ਤੁਸੀਂ (tuseen)
-   - Informal (for peers/younger): Use ਤੂੰ (toon)
-
-2. Regional Preferences: Default to conversational Punjabi common across diaspora families (Doabi/Majhi mix). Avoid overly rural or literary terms.
-
-3. Family Context - Prioritise vocabulary for:
-   - Talking with grandparents, parents, aunts/uncles
-   - Family gatherings and celebrations
-   - Food and meal conversations
-   - Expressing affection and respect
-   - Common household topics
-
-4. Cultural Sensitivity - Explain cultural nuances like:
-   - Respect terms (ji, bebe, baba)
-   - Gender considerations in language
-   - Generational communication styles
-
-## TEACHING STYLE
-- Patient and encouraging: Celebrate small wins
-- Practical: Focus on what they'll actually say
-- Relatable: Reference diaspora experiences (visiting Punjab, family weddings, learning from grandparents)
-- Interactive: Ask if they want to practise variations
-- Break down complex phrases: Show how sentences are built
-
-## EXAMPLE RESPONSES
-
-Example 1 - Basic Greeting:
-User: "How do I greet my grandmother?"
-
-GURMUKHI: ਸਤ ਸ੍ਰੀ ਅਕਾਲ, ਬੀਬੀ ਜੀ। ਤੁਸੀਂ ਕਿਵੇਂ ਹੋ?
-ROMANISED: Sat sri akaal, Bibi ji. Tuseen kivein ho?
-ENGLISH: Hello, Grandmother. How are you?
-
-CULTURAL NOTE: "Bibi ji" is a respectful term for elderly women. "Tuseen" is the formal "you" - always use this with elders. The response you'll likely hear is "ਠੀਕ ਹਾਂ" (theek haan - I'm fine).
-
-Would you like to learn how to respond when she asks how you are?
-
-Example 2 - Explaining Grammar:
-User: "Why does 'you' change?"
-
-Great question! Punjabi has two forms of "you":
-
-Informal (ਤੂੰ - toon): 
-- Use with: friends, younger siblings, children
-- Example: ਤੂੰ ਕਿੱਥੇ ਜਾ ਰਿਹਾ ਹੈਂ? (Toon kitthe ja riha hain? - Where are you going?)
-
-Formal/Respectful (ਤੁਸੀਂ - tuseen):
-- Use with: parents, grandparents, elders, strangers, showing respect
-- Example: ਤੁਸੀਂ ਕਿੱਥੇ ਜਾ ਰਹੇ ਹੋ? (Tuseen kitthe ja rahe ho? - Where are you going?)
-
-CULTURAL NOTE: When in doubt, use "tuseen" - it's better to be overly respectful than accidentally disrespectful!
-
-Example 3 - Family Conversation:
-User: "How do I tell my dad I'm hungry?"
-
-Informal (since it's your dad, but respectfully):
-GURMUKHI: ਪਾਪਾ ਜੀ, ਮੈਨੂੰ ਭੁੱਖ ਲੱਗੀ ਹੈ।
-ROMANISED: Papa ji, mainoo bhukh laggi hai.
-ENGLISH: Dad, I'm hungry.
-
-More casual version:
-GURMUKHI: ਪਾਪਾ, ਮੈਂ ਭੁੱਖਾ ਹਾਂ।
-ROMANISED: Papa, main bhukha haan.
-ENGLISH: Dad, I'm hungry.
-
-CULTURAL NOTE: Adding "ji" shows respect even to parents. The first version is more polite, the second is casual but still affectionate - both are fine!
-
-## WHAT NOT TO DO
-- Don't use overly formal/literary Punjabi unless specifically requested
-- Don't overwhelm with grammar rules - keep it conversational
-- Don't translate word-for-word - explain natural usage
-- Don't assume knowledge - explain even basic concepts
-- Don't skip the format (GURMUKHI/ROMANISED/ENGLISH)
-
-## ENCOURAGEMENT
-Celebrate their progress! Recognise that learning heritage languages as adults is meaningful work. Remind them that even small phrases help connect with family and culture.
-
-## ADDITIONAL CONTEXT - COMMON PATTERNS
-
-Asking Questions:
-- ਕੀ (kee) = what
-- ਕਿਵੇਂ (kivein) = how
-- ਕਿੱਥੇ (kitthe) = where
-- ਕਦੋਂ (kadon) = when
-- ਕਿਉਂ (kiun) = why
-
-Common Responses:
-- ਹਾਂ (haan) = yes
-- ਨਹੀਂ (nahin) = no
-- ਠੀਕ ਹੈ (theek hai) = okay/alright
-- ਪਤਾ ਨਹੀਂ (pata nahin) = I don't know
-- ਸ਼ਾਇਦ (shaaid) = maybe
-
-Family Terms:
-- ਬੀਬੀ/ਦਾਦੀ (Bibi/Dadi) = grandmother
-- ਬਾਬਾ/ਦਾਦਾ (Baba/Dada) = grandfather
-- ਮਾਤਾ ਜੀ/ਮੰਮੀ (Mata ji/Mammi) = mother
-- ਪਿਤਾ ਜੀ/ਪਾਪਾ (Pita ji/Papa) = father
-- ਭਰਾ/ਵੀਰ (Bhra/Veer) = brother
-- ਭੈਣ (Bhain) = sister
-
-Now, help this user with their Punjabi learning journey!`;
 
 export default function PunjabiChat() {
     const router = useRouter();
@@ -140,15 +18,20 @@ export default function PunjabiChat() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [copiedId, setCopiedId] = useState(null);
     const [userId, setUserId] = useState(null);
+    const [sessionVocabulary, setSessionVocabulary] = useState([]);
+    const [userLevel, setUserLevel] = useState('beginner');
+    const [isLoadingAudio, setIsLoadingAudio] = useState({});
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
+    // Fetch user and their learning context on mount
     useEffect(() => {
         const getUser = async () => {
             if (supabase) {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (user) {
                     setUserId(user.id);
+                    await loadUserContext(user.id);
                 }
             }
         };
@@ -163,148 +46,251 @@ export default function PunjabiChat() {
         scrollToBottom();
     }, [messages]);
 
-    const speakPunjabi = (text) => {
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'pa-IN';
-            window.speechSynthesis.speak(utterance);
+    // Load user's learning context from Supabase
+    const loadUserContext = async (uid) => {
+        try {
+            const { data: progressData } = await supabase
+                .from('user_progress')
+                .select('completed_lessons, known_vocabulary, learning_level')
+                .eq('user_id', uid)
+                .single();
+
+            if (progressData) {
+                setUserLevel(progressData.learning_level || 'beginner');
+            }
+        } catch (error) {
+            console.log('No existing progress data, starting fresh');
         }
     };
 
-    const copyToClipboard = (text, messageId) => {
-        navigator.clipboard.writeText(text);
-        setCopiedId(messageId);
-        setTimeout(() => setCopiedId(null), 2000);
-    };
+    // Build contextual prompt with user's learning history
+    const buildContextualPrompt = async (uid, userMessage) => {
+        if (!supabase) return userMessage;
 
-    const parseResponse = (text) => {
-        const gurmukhiMatch = text.match(/GURMUKHI:\s*(.+?)(?=\nROMANI[SZ]ED:|$)/s);
-        const romanizedMatch = text.match(/ROMANI[SZ]ED:\s*(.+?)(?=\nENGLISH:|$)/s);
-        const englishMatch = text.match(/ENGLISH:\s*(.+?)(?=\nCULTURAL NOTE:|GRAMMAR TIP:|$)/s);
-        const culturalNoteMatch = text.match(/CULTURAL NOTE:\s*(.+?)(?=\nGRAMMAR TIP:|$)/s);
-        const grammarTipMatch = text.match(/GRAMMAR TIP:\s*(.+?)$/s);
+        try {
+            // Fetch user progress
+            const { data: progressData } = await supabase
+                .from('user_progress')
+                .select('completed_lessons, known_vocabulary, learning_goals')
+                .eq('user_id', uid)
+                .single();
 
-        let additionalContext = '';
-        if (culturalNoteMatch || grammarTipMatch) {
-            additionalContext = (culturalNoteMatch ? culturalNoteMatch[1].trim() : '') +
-                (grammarTipMatch ? '\n\nGRAMMAR TIP: ' + grammarTipMatch[1].trim() : '');
+            // Fetch recent conversation topics
+            const { data: recentChats } = await supabase
+                .from('chat_history')
+                .select('topic, key_vocabulary')
+                .eq('user_id', uid)
+                .order('created_at', { ascending: false })
+                .limit(5);
+
+            if (!progressData && !recentChats?.length) {
+                return userMessage;
+            }
+
+            const contextualInfo = `
+USER LEARNING CONTEXT:
+${progressData?.completed_lessons?.length > 0 ? `- Completed Lessons: ${progressData.completed_lessons.slice(-5).join(', ')}` : '- Starting their Punjabi journey'}
+${progressData?.known_vocabulary?.length > 0 ? `- Known Vocabulary: ${progressData.known_vocabulary.slice(-30).join(', ')}` : '- Building foundational vocabulary'}
+${progressData?.learning_goals ? `- Learning Goals: ${progressData.learning_goals}` : '- Goal: Family conversations'}
+${recentChats?.length > 0 ? `- Recent Topics: ${recentChats.map(c => c.topic).filter(Boolean).join(', ')}` : ''}
+
+ADAPTATION INSTRUCTIONS:
+- Build on vocabulary they already know - don't re-teach basics
+- Reference their completed lessons when relevant
+- Create continuity with recent conversation topics
+- Adjust difficulty to match their progress
+- Celebrate milestones they've reached
+
+User Question: ${userMessage}`;
+
+            return contextualInfo;
+        } catch (error) {
+            console.error('Error building context:', error);
+            return userMessage;
         }
-
-        return {
-            gurmukhi: gurmukhiMatch ? gurmukhiMatch[1].trim() : 'ਜਵਾਬ ਉਪਲਬਧ ਨਹੀਂ',
-            romanized: romanizedMatch ? romanizedMatch[1].trim() : 'Response not available',
-            english: englishMatch ? englishMatch[1].trim() : text,
-            context: additionalContext
-        };
     };
 
+    // Track new vocabulary learned in this session
+    const trackVocabulary = async (uid, newVocab) => {
+        if (!supabase || !newVocab?.length) return;
+
+        try {
+            const { data: existing } = await supabase
+                .from('user_progress')
+                .select('known_vocabulary')
+                .eq('user_id', uid)
+                .single();
+
+            const currentVocab = existing?.known_vocabulary || [];
+            const updatedVocab = [...new Set([...currentVocab, ...newVocab.map(v => v.romanized)])];
+
+            await supabase
+                .from('user_progress')
+                .upsert({
+                    user_id: uid,
+                    known_vocabulary: updatedVocab,
+                    updated_at: new Date().toISOString()
+                });
+        } catch (error) {
+            console.error('Error tracking vocabulary:', error);
+        }
+    };
+
+    // Save conversation to database with metadata
+    const saveConversation = async (uid, userMsg, aiMsg) => {
+        if (!supabase) return;
+
+        try {
+            await supabase.from('chat_history').insert({
+                user_id: uid,
+                user_message: userMsg,
+                ai_response: aiMsg.content,
+                gurmukhi: aiMsg.gurmukhi,
+                romanized: aiMsg.romanized,
+                english: aiMsg.english,
+                vocabulary_taught: aiMsg.vocabulary_taught || [],
+                difficulty_level: aiMsg.difficulty_level || userLevel,
+                created_at: new Date().toISOString()
+            });
+        } catch (error) {
+            console.error('Error saving conversation:', error);
+        }
+    };
+
+    // Enhanced speak function using Google Cloud TTS
+    const speakPunjabi = async (text, messageId) => {
+        setIsLoadingAudio(prev => ({ ...prev, [messageId]: true }));
+
+        try {
+            const response = await fetch('/api/tts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    text: text,
+                    languageCode: 'pa-IN',
+                    voiceName: 'pa-IN-Wavenet-A',
+                    speakingRate: 0.85
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('TTS service unavailable');
+            }
+
+            const { audioContent } = await response.json();
+            const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
+
+            audio.onended = () => {
+                setIsLoadingAudio(prev => ({ ...prev, [messageId]: false }));
+            };
+
+            await audio.play();
+        } catch (error) {
+            console.error('Audio error:', error);
+            // Fallback to browser TTS
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'pa-IN';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+            setIsLoadingAudio(prev => ({ ...prev, [messageId]: false }));
+        }
+    };
+
+    // Enhanced sendMessage with structured output
     const sendMessage = async () => {
-        if (!inputMessage.trim() || isLoading) return;
+        if (!inputMessage.trim()) return;
 
-        const userMessage = {
-            id: Date.now(),
-            type: 'user',
-            text: inputMessage,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        const userMsg = {
+            role: 'user',
+            content: inputMessage,
+            timestamp: new Date().toLocaleTimeString('en-GB', {
+                hour: '2-digit',
+                minute: '2-digit'
+            })
         };
 
-        setMessages(prev => [...prev, userMessage]);
-        const currentInput = inputMessage;
+        setMessages(prev => [...prev, userMsg]);
         setInputMessage('');
         setIsLoading(true);
 
         try {
-            const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+            const contextualPrompt = userId
+                ? await buildContextualPrompt(userId, inputMessage)
+                : inputMessage;
 
-            if (!API_KEY) {
-                throw new Error('API key not found. Please add NEXT_PUBLIC_GEMINI_API_KEY to your .env.local file');
-            }
-
-            const conversationHistory = messages
-                .slice(-6)
-                .map(msg => {
-                    if (msg.type === 'user') return `User: ${msg.text}`;
-                    if (msg.type === 'ai') {
-                        return `Assistant: GURMUKHI: ${msg.gurmukhi}\nROMANISED: ${msg.romanized}\nENGLISH: ${msg.english}${msg.context ? '\n' + msg.context : ''}`;
-                    }
-                    return '';
+            const response = await fetch('/api/chat-gemini', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: contextualPrompt,
+                    conversationHistory: messages.slice(-10),
+                    responseFormat: 'structured',
+                    userLevel: userLevel
                 })
-                .filter(Boolean)
-                .join('\n\n');
-
-            const fullPrompt = `${SYSTEM_PROMPT}\n\n${conversationHistory ? '## CONVERSATION HISTORY:\n' + conversationHistory + '\n\n' : ''}## CURRENT USER MESSAGE:\n${currentInput}\n\nRemember to use the format (GURMUKHI/ROMANISED/ENGLISH) and add cultural context when helpful!`;
-
-            const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${API_KEY}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: fullPrompt
-                            }]
-                        }],
-                        generationConfig: {
-                            temperature: 0.7,
-                            maxOutputTokens: 800,
-                        }
-                    })
-                }
-            );
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('API Error:', errorData);
-                throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
-            }
+            });
 
             const data = await response.json();
-            const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received';
-            const parsed = parseResponse(aiText);
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to get response');
+            }
+
+            // Parse structured response
+            const structured = data.structured;
 
             const aiMessage = {
-                id: Date.now() + 1,
-                type: 'ai',
-                gurmukhi: parsed.gurmukhi,
-                romanized: parsed.romanized,
-                english: parsed.english,
-                context: parsed.context,
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                role: 'assistant',
+                content: data.response,
+                gurmukhi: structured?.gurmukhi || '',
+                romanized: structured?.romanized || '',
+                english: structured?.english || '',
+                context: structured?.cultural_note || '',
+                grammar_tip: structured?.grammar_tip || '',
+                difficulty_level: structured?.difficulty_level || userLevel,
+                vocabulary_taught: structured?.new_vocabulary || [],
+                follow_up: structured?.follow_up_suggestion || '',
+                timestamp: new Date().toLocaleTimeString('en-GB', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
             };
 
             setMessages(prev => [...prev, aiMessage]);
 
-            if (supabase && userId) {
-                try {
-                    await supabase.from('chat_history').insert({
-                        user_id: userId,
-                        user_message: currentInput,
-                        ai_response_gurmukhi: aiMessage.gurmukhi,
-                        ai_response_romanized: aiMessage.romanized,
-                        ai_response_english: aiMessage.english,
-                        created_at: new Date().toISOString()
-                    });
-                } catch (dbError) {
-                    console.log('Database save skipped:', dbError.message);
+            // Track new vocabulary
+            if (aiMessage.vocabulary_taught?.length > 0) {
+                setSessionVocabulary(prev => {
+                    const existing = new Set(prev.map(v => v.romanized));
+                    const newWords = aiMessage.vocabulary_taught.filter(v => !existing.has(v.romanized));
+                    return [...prev, ...newWords];
+                });
+
+                if (userId) {
+                    await trackVocabulary(userId, aiMessage.vocabulary_taught);
                 }
             }
+
+            // Save conversation
+            if (userId) {
+                await saveConversation(userId, inputMessage, aiMessage);
+            }
+
         } catch (error) {
-            console.error('Error:', error);
-
-            const errorMessage = {
-                id: Date.now() + 1,
-                type: 'error',
-                text: error.message || 'Sorry, something went wrong. Please try again.',
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            console.error('Error sending message:', error);
+            const errorMsg = {
+                role: 'assistant',
+                content: 'Sorry, I encountered an error. Please try again.',
+                timestamp: new Date().toLocaleTimeString('en-GB', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
             };
-
-            setMessages(prev => [...prev, errorMessage]);
-        } finally {
-            setIsLoading(false);
+            setMessages(prev => [...prev, errorMsg]);
         }
+
+        setIsLoading(false);
     };
 
     const handleKeyPress = (e) => {
@@ -314,253 +300,258 @@ export default function PunjabiChat() {
         }
     };
 
-    const clearChat = () => {
-        if (window.confirm('Are you sure you want to clear the chat history?')) {
-            setMessages([]);
-        }
+    const copyToClipboard = (text, id) => {
+        navigator.clipboard.writeText(text);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
     };
 
-    const sampleQuestions = [
-        "How do I greet my grandmother?",
-        "Introduce myself to my uncle",
-        "Formal vs informal Punjabi",
-        "Ask dad if he's eaten",
-        "Family relationship terms",
-        "Say 'I love you' to mum",
-        "Common family phrases",
-        "Ask about wellbeing"
-    ];
+    const clearChat = () => {
+        setMessages([]);
+        setSessionVocabulary([]);
+    };
 
-    const handleSampleQuestion = (question) => {
-        setInputMessage(question);
-        setIsSidebarOpen(false);
-        inputRef.current?.focus();
+    const startNewConversation = () => {
+        clearChat();
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
-            {/* Mobile Sidebar Overlay - Full Screen, Mobile Optimised */}
-            {isSidebarOpen && (
-                <>
-                    <div
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50"
-                        onClick={() => setIsSidebarOpen(false)}
-                    />
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl w-full max-w-md max-h-[80vh] overflow-hidden shadow-2xl flex flex-col">
-                            {/* Sidebar Header */}
-                            <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-orange-50">
-                                <div className="flex items-center gap-2">
-                                    <Lightbulb size={20} className="text-orange-600" />
-                                    <h3 className="text-lg font-bold text-gray-900">Sample Questions</h3>
-                                </div>
-                                <button
-                                    onClick={() => setIsSidebarOpen(false)}
-                                    className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-lg"
-                                >
-                                    <X size={20} />
-                                </button>
-                            </div>
-
-                            {/* Sidebar Content - Scrollable */}
-                            <div className="flex-1 overflow-y-auto p-4">
-                                <div className="space-y-3">
-                                    {sampleQuestions.map((question, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => handleSampleQuestion(question)}
-                                            className="w-full text-left p-4 bg-gradient-to-r from-blue-50 to-orange-50 border border-blue-100 rounded-xl text-sm text-gray-700 hover:from-blue-100 hover:to-orange-100 hover:border-blue-200 transition-all active:scale-98 font-medium"
-                                        >
-                                            {question}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Sidebar Footer */}
-                            <div className="p-4 border-t border-gray-200 bg-gray-50">
-                                <button
-                                    onClick={() => setIsSidebarOpen(false)}
-                                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all active:scale-98"
-                                >
-                                    Close
-                                </button>
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50">
+            {/* Header */}
+            <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+                <div className="max-w-4xl mx-auto px-4 py-3">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => router.push('/dashboard')}
+                                className="p-2 hover:bg-gray-100 rounded-lg transition-colors active:scale-95"
+                            >
+                                <ArrowLeft size={20} className="text-gray-700" />
+                            </button>
+                            <div>
+                                <h1 className="text-lg font-bold text-gray-900">AI Punjabi Tutor</h1>
+                                <p className="text-xs text-gray-600">Powered by Gemini 2.0</p>
                             </div>
                         </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                                className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden active:scale-95"
+                            >
+                                <Menu size={20} className="text-gray-700" />
+                            </button>
+                            {messages.length > 0 && (
+                                <button
+                                    onClick={clearChat}
+                                    className="hidden sm:flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium active:scale-95"
+                                >
+                                    <Trash2 size={16} />
+                                    <span className="hidden md:inline">Clear</span>
+                                </button>
+                            )}
+                        </div>
                     </div>
-                </>
+                </div>
+            </div>
+
+            {/* Mobile Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
             )}
 
-            {/* Main Container - Proper spacing for navbar */}
-            <div className="pt-24 sm:pt-28 pb-4 px-3 sm:px-6 max-w-6xl mx-auto">
-                {/* Back Button */}
-                <button
-                    onClick={() => router.push("/learning/essential-punjabi")}
-                    className="mb-4 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors text-sm"
-                >
-                    <ArrowLeft size={16} />
-                    <span>Back to Lessons</span>
-                </button>
-
-                {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white shadow-lg mb-4">
-                    <div className="flex items-center gap-2 mb-2">
-                        <MessageCircle size={16} className="sm:w-[18px] sm:h-[18px]" />
-                        <span className="text-xs font-semibold uppercase tracking-wide">Punjabi Language Assistant</span>
-                    </div>
-                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
-                        Chat with Simply Punjabi AI
-                    </h1>
-                    <p className="text-sm sm:text-base text-blue-100">
-                        Ask in English, learn in Punjabi with cultural context
-                    </p>
+            {/* Sidebar */}
+            <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+                    <h2 className="font-bold text-gray-900">Learning Stats</h2>
+                    <button
+                        onClick={() => setIsSidebarOpen(false)}
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                        <X size={20} />
+                    </button>
                 </div>
+                <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-73px)]">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Award size={18} className="text-blue-600" />
+                            <h3 className="font-bold text-sm text-gray-900">Current Level</h3>
+                        </div>
+                        <p className="text-2xl font-bold text-blue-600 capitalize">{userLevel}</p>
+                    </div>
 
-                {/* Chat Container */}
-                <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col"
-                     style={{ height: 'calc(100vh - 320px)', minHeight: '400px' }}>
-
-                    {/* Chat Header Bar */}
-                    <div className="bg-gradient-to-r from-blue-50 to-orange-50 p-3 border-b border-gray-200 flex-shrink-0">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-xs sm:text-sm font-semibold text-gray-700">AI Tutor Online</span>
+                    {sessionVocabulary.length > 0 && (
+                        <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200">
+                            <div className="flex items-center gap-2 mb-3">
+                                <BookOpen size={18} className="text-orange-600" />
+                                <h3 className="font-bold text-sm text-gray-900">Session Vocabulary</h3>
                             </div>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => setIsSidebarOpen(true)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all active:scale-95"
-                                >
-                                    <Menu size={14} />
-                                    <span className="hidden sm:inline">Examples</span>
-                                </button>
-                                {messages.length > 0 && (
-                                    <button
-                                        onClick={clearChat}
-                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500 text-white text-xs font-semibold rounded-lg hover:bg-red-600 transition-all active:scale-95"
-                                    >
-                                        <Trash2 size={14} />
-                                        <span className="hidden sm:inline">Clear</span>
-                                    </button>
-                                )}
+                            <div className="space-y-2 max-h-64 overflow-y-auto">
+                                {sessionVocabulary.map((word, idx) => (
+                                    <div key={idx} className="bg-white/60 rounded-lg p-2 text-xs">
+                                        <div className="font-semibold text-gray-900">{word.romanized}</div>
+                                        <div className="text-gray-600">{word.english}</div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                    </div>
+                    )}
 
-                    {/* Messages Area - Scrollable */}
-                    <div className="flex-1 overflow-y-auto p-3 sm:p-4" style={{
-                        WebkitOverflowScrolling: 'touch',
-                        overscrollBehavior: 'contain'
-                    }}>
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200">
+                        <div className="flex items-center gap-2 mb-2">
+                            <MessageSquare size={18} className="text-green-600" />
+                            <h3 className="font-bold text-sm text-gray-900">Messages Today</h3>
+                        </div>
+                        <p className="text-2xl font-bold text-green-600">{messages.filter(m => m.role === 'user').length}</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="max-w-4xl mx-auto px-4 py-6">
+                {/* Chat Container */}
+                <div className="bg-white rounded-2xl shadow-xl border border-gray-200 mb-4 flex flex-col" style={{ height: 'calc(100vh - 200px)' }}>
+                    {/* Messages Area */}
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
                         {messages.length === 0 ? (
-                            <div className="h-full flex flex-col items-center justify-center text-center px-4">
-                                <div className="bg-gradient-to-br from-blue-100 to-orange-100 p-6 rounded-full mb-4">
-                                    <MessageCircle size={40} className="text-blue-600" />
+                            <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                                <div className="bg-gradient-to-br from-blue-100 to-orange-100 rounded-full p-6 mb-4">
+                                    <MessageCircle size={48} className="text-blue-600" />
                                 </div>
-                                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
-                                    Welcome to Simply Punjabi AI
-                                </h2>
-                                <p className="text-sm text-gray-600 max-w-md mb-4">
-                                    Your personal tutor for family-focused Punjabi. Get Gurmukhi script, pronunciation, and cultural context.
+                                <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Your AI Punjabi Tutor!</h2>
+                                <p className="text-gray-600 max-w-md mb-6">
+                                    I'm here to help you reconnect with your heritage through family conversations. Ask me anything in English!
                                 </p>
-                                <div className="flex flex-wrap justify-center gap-4 text-xs text-gray-600 mb-6">
-                                    <div className="flex items-center gap-2">
-                                        <BookOpen size={16} className="text-blue-600" />
-                                        <span>Authentic</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Users size={16} className="text-blue-600" />
-                                        <span>Family-focused</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <MessageSquare size={16} className="text-blue-600" />
-                                        <span>Cultural</span>
-                                    </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl">
+                                    <button
+                                        onClick={() => setInputMessage("How do I greet my grandmother?")}
+                                        className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200 hover:border-blue-300 transition-all text-left active:scale-98"
+                                    >
+                                        <div className="font-semibold text-gray-900 mb-1">Family Greetings</div>
+                                        <div className="text-sm text-gray-600">"How do I greet my grandmother?"</div>
+                                    </button>
+                                    <button
+                                        onClick={() => setInputMessage("How do I say I'm hungry?")}
+                                        className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-2 border-orange-200 hover:border-orange-300 transition-all text-left active:scale-98"
+                                    >
+                                        <div className="font-semibold text-gray-900 mb-1">Daily Phrases</div>
+                                        <div className="text-sm text-gray-600">"How do I say I'm hungry?"</div>
+                                    </button>
+                                    <button
+                                        onClick={() => setInputMessage("Teach me family relationship words")}
+                                        className="p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border-2 border-green-200 hover:border-green-300 transition-all text-left active:scale-98"
+                                    >
+                                        <div className="font-semibold text-gray-900 mb-1">Family Terms</div>
+                                        <div className="text-sm text-gray-600">"Teach me family relationship words"</div>
+                                    </button>
+                                    <button
+                                        onClick={() => setInputMessage("Explain formality in Punjabi")}
+                                        className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border-2 border-purple-200 hover:border-purple-300 transition-all text-left active:scale-98"
+                                    >
+                                        <div className="font-semibold text-gray-900 mb-1">Cultural Tips</div>
+                                        <div className="text-sm text-gray-600">"Explain formality in Punjabi"</div>
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={() => setIsSidebarOpen(true)}
-                                    className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg active:scale-95"
-                                >
-                                    <Lightbulb size={18} />
-                                    View Sample Questions
-                                </button>
                             </div>
                         ) : (
-                            <div className="space-y-3 pb-2">
-                                {messages.map((message) => (
-                                    <div
-                                        key={message.id}
-                                        className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-                                    >
-                                        {message.type === 'user' ? (
-                                            <div className="max-w-[85%] sm:max-w-[75%]">
-                                                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-3 sm:p-4 rounded-2xl rounded-br-none shadow-md">
-                                                    <p className="text-sm leading-relaxed break-words">{message.text}</p>
-                                                    <p className="text-[10px] text-blue-100 mt-2 text-right">{message.timestamp}</p>
-                                                </div>
-                                            </div>
-                                        ) : message.type === 'error' ? (
-                                            <div className="max-w-[85%] sm:max-w-[75%]">
-                                                <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded-lg">
-                                                    <p className="text-sm text-red-800 break-words">{message.text}</p>
-                                                    <p className="text-[10px] text-red-600 mt-2">{message.timestamp}</p>
-                                                </div>
+                            <div className="space-y-4">
+                                {messages.map((message, index) => (
+                                    <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                        {message.role === 'user' ? (
+                                            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-2xl rounded-br-none shadow-md max-w-[85%]">
+                                                <p className="text-sm break-words">{message.content}</p>
+                                                <p className="text-[10px] text-blue-100 mt-2">{message.timestamp}</p>
                                             </div>
                                         ) : (
-                                            <div className="max-w-[85%] sm:max-w-[75%]">
-                                                <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-100 p-4 rounded-2xl rounded-bl-none shadow-md">
-                                                    {/* Gurmukhi */}
-                                                    <div className="mb-3">
-                                                        <div className="flex items-center justify-between mb-2">
-                                                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Gurmukhi</span>
-                                                            <div className="flex gap-2">
+                                            <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-100 p-4 rounded-2xl rounded-bl-none shadow-md max-w-[85%]">
+                                                {message.gurmukhi && message.romanized && message.english ? (
+                                                    <div>
+                                                        {/* Gurmukhi with Audio */}
+                                                        <div className="mb-3 pb-3 border-b border-gray-200">
+                                                            <div className="flex items-center justify-between mb-2">
+                                                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Gurmukhi</span>
+                                                                <div className="flex gap-2">
+                                                                    <button
+                                                                        onClick={() => speakPunjabi(message.gurmukhi, index)}
+                                                                        disabled={isLoadingAudio[index]}
+                                                                        className="p-1.5 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors text-blue-600 active:scale-95"
+                                                                        title="Listen to pronunciation"
+                                                                    >
+                                                                        {isLoadingAudio[index] ? (
+                                                                            <Loader2 size={16} className="animate-spin" />
+                                                                        ) : (
+                                                                            <Volume2 size={16} />
+                                                                        )}
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => copyToClipboard(message.gurmukhi, `gurmukhi-${index}`)}
+                                                                        className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors active:scale-95"
+                                                                        title="Copy Gurmukhi"
+                                                                    >
+                                                                        {copiedId === `gurmukhi-${index}` ? (
+                                                                            <CheckCircle size={16} className="text-green-600" />
+                                                                        ) : (
+                                                                            <Copy size={16} />
+                                                                        )}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <p className="text-2xl font-semibold text-gray-900 leading-relaxed break-words">
+                                                                {message.gurmukhi}
+                                                            </p>
+                                                        </div>
+
+                                                        {/* Romanised */}
+                                                        <div className="mb-3 pb-3 border-b border-gray-200">
+                                                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-2 block">Romanised</span>
+                                                            <p className="text-base text-gray-700 italic break-words">{message.romanized}</p>
+                                                        </div>
+
+                                                        {/* English */}
+                                                        <div className={message.context || message.grammar_tip ? "mb-3 pb-3 border-b border-gray-200" : ""}>
+                                                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-2 block">English</span>
+                                                            <p className="text-sm text-gray-600 break-words">{message.english}</p>
+                                                        </div>
+
+                                                        {/* Cultural Note */}
+                                                        {message.context && (
+                                                            <div className={message.grammar_tip ? "mb-3 pb-3 border-b border-gray-200" : "mb-3"}>
+                                                                <div className="bg-white/60 rounded-lg p-3">
+                                                                    <div className="text-[10px] font-bold text-orange-600 uppercase tracking-wide mb-1">Cultural Note</div>
+                                                                    <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line break-words">{message.context}</p>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                        {/* Grammar Tip */}
+                                                        {message.grammar_tip && (
+                                                            <div className="mb-3">
+                                                                <div className="bg-blue-50 rounded-lg p-3">
+                                                                    <div className="text-[10px] font-bold text-blue-600 uppercase tracking-wide mb-1">Grammar Tip</div>
+                                                                    <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line break-words">{message.grammar_tip}</p>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                        {/* Follow-up Suggestion */}
+                                                        {message.follow_up && (
+                                                            <div className="mt-3 pt-3 border-t border-gray-200">
                                                                 <button
-                                                                    onClick={() => speakPunjabi(message.gurmukhi)}
-                                                                    className="text-blue-600 hover:text-blue-700 transition-colors p-1 active:scale-90"
-                                                                    title="Listen"
+                                                                    onClick={() => setInputMessage(message.follow_up)}
+                                                                    className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
                                                                 >
-                                                                    <Volume2 size={16} />
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => copyToClipboard(message.gurmukhi, `${message.id}-gurmukhi`)}
-                                                                    className="text-blue-600 hover:text-blue-700 transition-colors p-1 active:scale-90"
-                                                                    title="Copy"
-                                                                >
-                                                                    {copiedId === `${message.id}-gurmukhi` ? (
-                                                                        <CheckCircle size={16} />
-                                                                    ) : (
-                                                                        <Copy size={16} />
-                                                                    )}
+                                                                    <TrendingUp size={12} />
+                                                                    {message.follow_up}
                                                                 </button>
                                                             </div>
-                                                        </div>
-                                                        <p className="text-2xl font-semibold text-gray-900 leading-relaxed break-words">
-                                                            {message.gurmukhi}
-                                                        </p>
+                                                        )}
                                                     </div>
-
-                                                    {/* Romanised */}
-                                                    <div className="mb-3 pb-3 border-b border-gray-200">
-                                                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-2 block">Romanised</span>
-                                                        <p className="text-base text-gray-700 italic break-words">{message.romanized}</p>
-                                                    </div>
-
-                                                    {/* English */}
-                                                    <div className={message.context ? "mb-3 pb-3 border-b border-gray-200" : ""}>
-                                                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-2 block">English</span>
-                                                        <p className="text-sm text-gray-600 break-words">{message.english}</p>
-                                                    </div>
-
-                                                    {/* Context */}
-                                                    {message.context && (
-                                                        <div className="bg-white/60 rounded-lg p-3">
-                                                            <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line break-words">{message.context}</p>
-                                                        </div>
-                                                    )}
-
-                                                    <p className="text-[10px] text-gray-400 mt-2">{message.timestamp}</p>
-                                                </div>
+                                                ) : (
+                                                    <p className="text-sm text-gray-700 break-words whitespace-pre-line">{message.content}</p>
+                                                )}
+                                                <p className="text-[10px] text-gray-400 mt-2">{message.timestamp}</p>
                                             </div>
                                         )}
                                     </div>
@@ -626,14 +617,32 @@ export default function PunjabiChat() {
                     </div>
                 </div>
 
+                {/* Session Vocabulary Panel (Desktop Only) */}
+                {sessionVocabulary.length > 0 && (
+                    <div className="hidden lg:block bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200 mb-4">
+                        <div className="flex items-center gap-2 mb-3">
+                            <BookOpen size={18} className="text-orange-600" />
+                            <h3 className="font-bold text-sm text-gray-900">New Words This Session</h3>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {sessionVocabulary.map((word, idx) => (
+                                <div key={idx} className="bg-white/60 rounded-lg p-2 text-xs">
+                                    <div className="font-semibold text-gray-900">{word.romanized}</div>
+                                    <div className="text-gray-600">{word.english}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Pro Tip */}
-                <div className="mt-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
                     <div className="flex items-start gap-3">
-                        <Lightbulb size={20} className="text-orange-600 flex-shrink-0 mt-0.5" />
+                        <Lightbulb size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
                         <div>
-                            <h3 className="font-bold text-gray-900 mb-1 text-sm">Pro Tip</h3>
+                            <h3 className="font-bold text-gray-900 mb-1 text-sm">Enhanced AI Tutor</h3>
                             <p className="text-sm text-gray-700">
-                                Use the audio button on each response to hear authentic Punjabi pronunciation. Our AI tutor provides cultural context for every phrase.
+                                I remember your progress and adapt lessons to your level. Each response includes authentic audio pronunciation using Google Cloud TTS.
                             </p>
                         </div>
                     </div>
@@ -645,7 +654,7 @@ export default function PunjabiChat() {
                         <div className="flex items-center gap-2">
                             <CheckCircle size={16} className="text-green-600" />
                             <p className="text-sm text-gray-800 font-medium">
-                                Conversation history saved to your profile
+                                Progress automatically saved • Building your vocabulary
                             </p>
                         </div>
                     </div>
