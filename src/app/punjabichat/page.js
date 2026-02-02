@@ -43,8 +43,9 @@ export default function PunjabiChat() {
                 const { data: { user }, error } = await supabase.auth.getUser();
 
                 if (error || !user) {
-                    // User not logged in - redirect to login page
-                    router.push('/auth');
+                    // User not logged in - show message (don't redirect)
+                    setUserId(null);
+                    setIsCheckingAuth(false);
                     return;
                 }
 
@@ -53,7 +54,8 @@ export default function PunjabiChat() {
                 setIsCheckingAuth(false);
             } catch (error) {
                 console.error('Auth check error:', error);
-                router.push('/login');
+                setUserId(null);
+                setIsCheckingAuth(false);
             }
         };
 
@@ -202,17 +204,125 @@ export default function PunjabiChat() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50 pt-24 sm:pt-28">
-            {/* Loading screen while checking auth */}
             {isCheckingAuth ? (
+                // Loading state while checking auth
                 <div className="flex items-center justify-center min-h-screen">
                     <div className="text-center">
                         <Loader2 size={48} className="animate-spin text-blue-600 mx-auto mb-4" />
-                        <p className="text-gray-600">Checking authentication...</p>
+                        <p className="text-gray-600">Loading...</p>
+                    </div>
+                </div>
+            ) : !userId ? (
+                // Not logged in - show beautiful message on same page
+                <div className="max-w-4xl mx-auto px-4 py-12">
+                    <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+                        {/* Header */}
+                        <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-8 text-center">
+                            <div className="bg-white/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                                <MessageCircle size={40} className="text-white" />
+                            </div>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                                AI Punjabi Tutor
+                            </h1>
+                            <p className="text-blue-100 text-sm sm:text-base">
+                                Your personal guide to learning Punjabi
+                            </p>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-8 sm:p-12">
+                            <div className="text-center mb-8">
+                                <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4">
+                                    <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                </div>
+                                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                                    Login Required
+                                </h2>
+                                <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                                    The AI Punjabi Tutor is available to registered users. Create a free account to start learning Punjabi with personalised lessons and cultural context.
+                                </p>
+                            </div>
+
+                            {/* Features */}
+                            <div className="grid sm:grid-cols-2 gap-4 mb-8">
+                                <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-xl">
+                                    <div className="flex-shrink-0">
+                                        <CheckCircle size={20} className="text-blue-600 mt-0.5" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900 text-sm mb-1">Personalised Learning</h3>
+                                        <p className="text-xs text-gray-600">AI that adapts to your level and remembers your progress</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3 p-4 bg-orange-50 rounded-xl">
+                                    <div className="flex-shrink-0">
+                                        <CheckCircle size={20} className="text-orange-600 mt-0.5" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900 text-sm mb-1">Cultural Context</h3>
+                                        <p className="text-xs text-gray-600">Learn with real family scenarios and cultural notes</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3 p-4 bg-green-50 rounded-xl">
+                                    <div className="flex-shrink-0">
+                                        <CheckCircle size={20} className="text-green-600 mt-0.5" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900 text-sm mb-1">Audio Pronunciation</h3>
+                                        <p className="text-xs text-gray-600">Hear authentic Punjabi pronunciation for every phrase</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3 p-4 bg-purple-50 rounded-xl">
+                                    <div className="flex-shrink-0">
+                                        <CheckCircle size={20} className="text-purple-600 mt-0.5" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900 text-sm mb-1">Progress Tracking</h3>
+                                        <p className="text-xs text-gray-600">Save your conversations and track vocabulary learned</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                                <button
+                                    onClick={() => router.push('/key-functions/auth')}
+                                    className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl active:scale-95 text-base"
+                                >
+                                    Log In to Continue
+                                </button>
+                                <button
+                                    onClick={() => router.push('/key-functions/signup')}
+                                    className="px-8 py-4 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-blue-500 hover:text-blue-600 transition-all active:scale-95 text-base"
+                                >
+                                    Create Free Account
+                                </button>
+                            </div>
+
+                            {/* Back Link */}
+                            <div className="text-center mt-6">
+                                <button
+                                    onClick={() => router.push('/dashboard')}
+                                    className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mx-auto"
+                                >
+                                    <ArrowLeft size={14} />
+                                    Back to Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Additional Info */}
+                    <div className="mt-6 text-center text-sm text-gray-600">
+                        <p>Free to use • No credit card required • Start learning immediately</p>
                     </div>
                 </div>
             ) : (
+                // Logged in - show chat interface
                 <>
-                    {/* Fixed Header - Clean & Minimal */}
+                    {/* Header - Clean & Minimal (Not Fixed) */}
                     <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
                         <div className="max-w-6xl mx-auto px-4 py-3">
                             <div className="flex items-center justify-between">

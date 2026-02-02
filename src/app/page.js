@@ -1,7 +1,7 @@
 "use client";
 
 import Head from 'next/head';
-import { FaComments, FaMicrophone, FaAward, FaBullseye, FaCheckCircle, FaGlobe, FaUsers, FaRocket, FaHeart, FaStar, FaPlay, FaClock, FaMobile, FaHeadphones, FaBook, FaLanguage, FaGraduationCap } from 'react-icons/fa';
+import { FaComments, FaMicrophone, FaAward, FaBullseye, FaCheckCircle, FaGlobe, FaUsers, FaRocket, FaHeart, FaStar, FaPlay, FaClock, FaMobile, FaHeadphones, FaBook, FaLanguage, FaGraduationCap, FaRobot, FaBookOpen } from 'react-icons/fa';
 
 export default function Home() {
     const punjabiDays = [
@@ -38,13 +38,13 @@ export default function Home() {
                     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-orange-100/30 to-blue-100/30 rounded-full blur-3xl -z-10"></div>
 
                     <div className="max-w-6xl mx-auto">
-                        {/* Beta Badge */}
+                        {/* Trust Badge */}
                         <div className="flex justify-center mb-8">
-                            <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-blue-100">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-sm font-semibold text-gray-700">Beta Access Open</span>
-                                <span className="text-sm text-gray-500">•</span>
-                                <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">Beta Access Free</span>
+                            <div className="inline-flex items-center gap-2 bg-white px-5 py-2.5 rounded-full shadow-md border border-blue-100">
+                                <FaCheckCircle className="text-green-500 text-sm" />
+                                <span className="text-sm font-semibold text-gray-800">Free to Start</span>
+                                <span className="text-sm text-gray-400">•</span>
+                                <span className="text-sm text-gray-600">No Credit Card Required</span>
                             </div>
                         </div>
 
@@ -69,31 +69,29 @@ export default function Home() {
 
                         {/* CTA Section - Clear and Focused */}
                         <div className="flex flex-col items-center gap-4 mb-12">
-                            <a href="/key-functions/lessons/lesson1/1" className="w-full sm:w-auto">
+                            <a href="/key-functions/signup" className="w-full sm:w-auto">
                                 <button className="w-full sm:w-auto group relative bg-gradient-to-r from-blue-600 to-blue-700 text-white px-12 py-5 rounded-2xl text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                                     <span className="flex items-center justify-center gap-3">
-                                        <FaPlay className="text-sm" />
-                                        Start Learning Free
+                                        <FaRocket className="text-sm" />
+                                        Get Started Free
                                     </span>
                                 </button>
                             </a>
                             <p className="text-sm text-gray-500 flex items-center gap-2">
-                                <FaCheckCircle className="text-green-500" />
-                                No credit card required
+                                <FaClock className="text-blue-500" />
+                                Start learning in under 2 minutes
                             </p>
                         </div>
 
-                        {/* Social Proof - Minimal and Credible */}
+                        {/* Social Proof - Credible and Specific */}
                         <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-600">
                             <div className="flex items-center gap-2">
-                                <FaGlobe className="text-blue-600" />
-                                <span className="font-medium">Learners in 7+ countries</span>
+                                <FaUsers className="text-blue-600" />
+                                <span className="font-medium">Trusted by diaspora learners worldwide</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                                {[...Array(5)].map((_, i) => (
-                                    <FaStar key={i} className="text-yellow-400 text-sm" />
-                                ))}
-                                <span className="ml-2 font-medium">5.0 from beta users</span>
+                            <div className="flex items-center gap-2">
+                                <FaGlobe className="text-orange-600" />
+                                <span className="font-medium">Active in UK, US, Canada & Australia</span>
                             </div>
                         </div>
 
@@ -204,45 +202,45 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* How It Works - Process Flow */}
+                {/* How It Works - Main Features */}
                 <section className="py-24 px-6 bg-white">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
-                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">How It Works</p>
+                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">Our Platform</p>
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                                Your Journey to Fluency
+                                Everything You Need to Learn Punjabi
                             </h2>
                             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                                A proven, step-by-step approach designed specifically for diaspora learners
+                                Three powerful tools designed specifically for diaspora learners
                             </p>
                         </div>
 
                         <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
                             <ProcessStep
                                 number="01"
-                                title="Start with Essentials"
-                                description="Learn greetings, introductions, and basic phrases to start conversations today"
-                                icon={<FaBook className="text-4xl text-blue-600" />}
+                                title="AI Punjabi Tutor"
+                                description="Get personalised lessons with our AI tutor. Ask questions in English, learn in Punjabi with cultural context and authentic pronunciation"
+                                icon={<FaRobot className="text-4xl text-purple-600" />}
                             />
                             <ProcessStep
                                 number="02"
-                                title="Build Confidence"
-                                description="Practice real scenarios with interactive exercises and authentic pronunciation"
-                                icon={<FaMicrophone className="text-4xl text-orange-600" />}
+                                title="Interactive Lessons"
+                                description="Structured learning path with bite-sized lessons covering greetings, family conversations, and everyday phrases"
+                                icon={<FaGraduationCap className="text-4xl text-blue-600" />}
                             />
                             <ProcessStep
                                 number="03"
-                                title="Connect with Family"
-                                description="Have meaningful conversations and preserve your cultural connection"
-                                icon={<FaHeart className="text-4xl text-green-600" />}
+                                title="Punjabi Dictionary"
+                                description="Instant Punjabi-English translations with Gurmukhi script, romanised pronunciation, and audio for every word"
+                                icon={<FaBookOpen className="text-4xl text-orange-600" />}
                             />
                         </div>
 
                         {/* Secondary CTA */}
                         <div className="text-center mt-16">
-                            <a href="/lessons/lesson2/1">
+                            <a href="/key-functions/signup">
                                 <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-10 py-4 rounded-2xl text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                                    Try Your First Lesson Now
+                                    Get Started Free
                                 </button>
                             </a>
                         </div>
@@ -293,7 +291,7 @@ export default function Home() {
                             Start Speaking Punjabi with Your Family Today
                         </h2>
                         <p className="text-lg sm:text-xl text-blue-100 mb-10 leading-relaxed max-w-2xl mx-auto">
-                            Join our beta program and get <span className="font-bold text-white"> complete access for free.</span> No credit card required. Cancel anytime.
+                            Join thousands of learners reconnecting with their heritage. Start your journey with full platform access at no cost.
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -301,15 +299,11 @@ export default function Home() {
                                 <button className="bg-white text-blue-600 px-12 py-5 rounded-2xl text-lg font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
                                     <span className="flex items-center gap-3">
                                         <FaRocket />
-                                        Start for free today!
+                                        Get Started Free
                                     </span>
                                 </button>
                             </a>
                         </div>
-
-                        <p className="text-sm text-blue-200">
-                            Then just <span className="font-bold text-white">£4.99/month</span> after your free period
-                        </p>
 
                         {/* Trust indicators */}
                         <div className="mt-16 flex flex-wrap items-center justify-center gap-8 text-sm text-blue-100">

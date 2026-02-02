@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { FaGraduationCap, FaUser, FaTrophy, FaFire, FaChartLine, FaBook } from "react-icons/fa";
+import { FaGraduationCap, FaUser, FaTrophy, FaFire, FaChartLine, FaBook, FaRobot, FaBookOpen, FaArrowRight } from "react-icons/fa";
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -60,7 +60,7 @@ export default function Dashboard() {
 
                         <div className="relative z-10 text-center">
                             <h1 className="text-4xl sm:text-5xl font-bold mb-3">
-                                Welcome back, {userName}! 👋
+                                Welcome back, {userName}!
                             </h1>
                             <p className="text-xl text-blue-50">
                                 Ready to continue your Punjabi learning journey?
@@ -98,16 +98,16 @@ export default function Dashboard() {
                 {/* Secondary Options Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <SmallCard
-                        icon={<FaTrophy className="text-3xl text-orange-500" />}
-                        title="Achievements"
-                        description="View your progress and badges"
-                        link="/achievements"
+                        icon={<FaRobot className="text-3xl text-purple-500" />}
+                        title="AI Punjabi Tutor"
+                        description="Chat with AI for personalised lessons"
+                        link="/punjabichat"
                     />
                     <SmallCard
-                        icon={<FaChartLine className="text-3xl text-blue-500" />}
-                        title="Progress Stats"
-                        description="Detailed learning analytics"
-                        link="/progress"
+                        icon={<FaBookOpen className="text-3xl text-blue-500" />}
+                        title="Dictionary"
+                        description="Search Punjabi-English translations"
+                        link="/dictionary"
                     />
                     <SmallCard
                         icon={<FaBook className="text-3xl text-green-500" />}
@@ -168,7 +168,7 @@ function DashboardCard({ icon, title, description, link, gradient, featured = fa
 
                     <div className="flex items-center text-white font-semibold group-hover:gap-3 gap-2 transition-all">
                         <span>Get Started</span>
-                        <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+                        <FaArrowRight className="transform group-hover:translate-x-1 transition-transform" />
                     </div>
                 </div>
 
