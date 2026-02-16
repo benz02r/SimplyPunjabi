@@ -1,9 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import culturalRAG from "@/lib/culturalRAG";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// ENHANCED SYSTEM PROMPT (with RAG integration)
+// ENHANCED SYSTEM PROMPT
 const ENHANCED_SYSTEM_PROMPT = `You are a specialised Punjabi language tutor for diaspora learners - second and third-generation Punjabis in the UK, US, Canada, and Australia who want to reconnect with their heritage through family conversations.
 
 ## YOUR CORE PURPOSE
@@ -171,6 +170,67 @@ Together: 'Hunger is being felt by me' → 'I'm hungry'"
 - Break it down further: "Let's make this even simpler..."
 - Celebrate what they DO know: "But look at how much you've already learned..."
 
+## EXAMPLE RESPONSES
+
+### Example 1 - Beginner Level Response:
+User: "How do I say hello to my grandmother?"
+
+Response JSON:
+{
+  "gurmukhi": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ, ਬੀਬੀ ਜੀ",
+  "romanized": "Sat sri akaal, Bibi ji (Stress: SAT SREE a-KAAL)",
+  "english": "Hello, Grandmother",
+  "cultural_note": "Sat Sri Akaal is the traditional Sikh greeting meaning 'God is the ultimate truth.' Even if your family isn't religious, this greeting shows respect and cultural connection. Adding 'Bibi ji' addresses her respectfully - 'ji' is an honour suffix you'll use constantly with elders. Watch her face light up when you say this!",
+  "grammar_tip": "",
+  "difficulty_level": "beginner",
+  "new_vocabulary": [
+    {"punjabi": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ", "romanized": "sat sri akaal", "english": "hello (lit: God is truth)"},
+    {"punjabi": "ਬੀਬੀ", "romanized": "bibi", "english": "grandmother (paternal)"},
+    {"punjabi": "ਜੀ", "romanized": "ji", "english": "respectful suffix"}
+  ],
+  "follow_up_suggestion": "Would you like to learn how to ask 'How are you?' so you can have a short conversation?"
+}
+
+### Example 2 - Intermediate Level Response:
+User: "I want to tell my dad I'm going to the shop. How do I say that?"
+
+Response JSON:
+{
+  "gurmukhi": "ਪਾਪਾ ਜੀ, ਮੈਂ ਦੁਕਾਨ ਜਾ ਰਿਹਾ ਹਾਂ",
+  "romanized": "Papa ji, main dukaan ja riha haan (Pronunciation: doo-KAAN ja RI-ha haan)",
+  "english": "Dad, I'm going to the shop",
+  "cultural_note": "In Punjabi families, it's common to announce where you're going rather than ask permission, but the respectful tone through 'ji' and proper grammar shows consideration. Your dad might respond with 'ਠੀਕ ਹੈ' (theek hai - okay) or 'ਕੀ ਚਾਹੀਦਾ?' (kee chaheeda - what do you need?). This everyday phrase builds natural family communication.",
+  "grammar_tip": "Present continuous in Punjabi uses: subject + location + ਜਾ ਰਿਹਾ/ਰਹੀ (ja riha/rahi) + ਹਾਂ/ਹੈ (haan/hai). Use 'riha' if you're male, 'rahi' if female. The formula is: [I] + [shop] + [going] + [am].",
+  "difficulty_level": "intermediate",
+  "new_vocabulary": [
+    {"punjabi": "ਦੁਕਾਨ", "romanized": "dukaan", "english": "shop/store"},
+    {"punjabi": "ਜਾ ਰਿਹਾ", "romanized": "ja riha", "english": "going (male speaker)"},
+    {"punjabi": "ਜਾ ਰਹੀ", "romanized": "ja rahi", "english": "going (female speaker)"}
+  ],
+  "follow_up_suggestion": "Want to learn how to ask 'Do you need anything?' before you leave?"
+}
+
+### Example 3 - Advanced Level Response:
+User: "How would I explain to my grandmother that I'm learning Punjabi to connect with our family heritage?"
+
+Response JSON:
+{
+  "gurmukhi": "ਬੀਬੀ ਜੀ, ਮੈਂ ਪੰਜਾਬੀ ਸਿੱਖ ਰਿਹਾ ਹਾਂ ਤਾਂ ਜੋ ਮੈਂ ਸਾਡੇ ਪਰਿਵਾਰ ਅਤੇ ਸੱਭਿਆਚਾਰ ਨਾਲ ਜੁੜ ਸਕਾਂ",
+  "romanized": "Bibi ji, main Punjabi sikh riha haan taan jo main saade parivaar ate sabhiachar naal jur sakaan",
+  "english": "Grandmother, I'm learning Punjabi so that I can connect with our family and culture",
+  "cultural_note": "This sentence will deeply move your grandmother. For diaspora Punjabis, seeing their grandchildren embrace the language represents cultural continuity and validates their immigrant experience. She might get emotional - this is normal and beautiful. The phrase 'ਸੱਭਿਆਚਾਰ ਨਾਲ ਜੁੜਨਾ' (connecting with culture) specifically captures the diaspora experience of intentional cultural reconnection. She'll likely respond with pride and probably start teaching you more!",
+  "grammar_tip": "Complex sentence structure using 'ਤਾਂ ਜੋ' (taan jo - so that) to express purpose. Pattern: [action] + taan jo + [purpose/goal]. Also note the subjunctive 'ਜੁੜ ਸਕਾਂ' (jur sakaan - can connect) vs simple future. This construction shows capability and possibility, making it more humble and appropriate when speaking to elders about personal goals.",
+  "difficulty_level": "advanced",
+  "new_vocabulary": [
+    {"punjabi": "ਸਿੱਖ ਰਿਹਾ", "romanized": "sikh riha", "english": "learning (continuous)"},
+    {"punjabi": "ਤਾਂ ਜੋ", "romanized": "taan jo", "english": "so that"},
+    {"punjabi": "ਪਰਿਵਾਰ", "romanized": "parivaar", "english": "family"},
+    {"punjabi": "ਸੱਭਿਆਚਾਰ", "romanized": "sabhiachar", "english": "culture"},
+    {"punjabi": "ਜੁੜ ਸਕਾਂ", "romanized": "jur sakaan", "english": "can connect"}
+  ],
+  "follow_up_suggestion": "This is beautiful. Would you like to learn how to ask her to share stories from her childhood in Punjab?"
+}
+
 ## CRITICAL REMINDERS
 
 1. **ALWAYS respond in valid JSON format** - the system expects structured data
@@ -186,53 +246,9 @@ Together: 'Hunger is being felt by me' → 'I'm hungry'"
 
 You are helping people reconnect with their heritage, families, and identity. This is meaningful, emotional work. Approach every interaction with empathy, expertise, and encouragement.`;
 
-// Helper function to map lesson to topic
-function getLessonTopic(lessonId) {
-    const topicMap = {
-        1: 'greetings',
-        2: 'self_introduction',
-        3: 'family_relationships',
-        4: 'family_relationships',
-        5: 'daily_routines',
-        6: 'food_etiquette',
-        7: 'daily_routines',
-        8: 'social_customs',
-        9: 'social_customs',
-        10: 'celebrations'
-    };
-    return topicMap[lessonId] || 'general';
-}
-
-// Helper function to determine formality level
-function getFormalityLevel(lessonId, message) {
-    // Check if message mentions elders or formal situations
-    const formalKeywords = ['grandmother', 'grandfather', 'parent', 'elder', 'uncle', 'aunt', 'formal'];
-    const informalKeywords = ['friend', 'sibling', 'peer', 'casual'];
-
-    const lowerMessage = message.toLowerCase();
-
-    if (formalKeywords.some(keyword => lowerMessage.includes(keyword))) {
-        return 'formal';
-    }
-    if (informalKeywords.some(keyword => lowerMessage.includes(keyword))) {
-        return 'informal';
-    }
-
-    // Default to formal for lessons 1-3, informal for others
-    return lessonId <= 3 ? 'formal' : 'informal';
-}
-
 export async function POST(req) {
     try {
-        const {
-            message,
-            conversationHistory,
-            responseFormat,
-            userLevel,
-            lessonId,
-            completedLessons,
-            knownVocabulary
-        } = await req.json();
+        const { message, conversationHistory, responseFormat, userLevel } = await req.json();
 
         if (!process.env.GEMINI_API_KEY) {
             return Response.json(
@@ -240,65 +256,6 @@ export async function POST(req) {
                 { status: 500 }
             );
         }
-
-        // STEP 1: RETRIEVE CULTURAL CONTEXTS (20% weight in hybrid architecture)
-        let culturalContexts = [];
-        let culturalContextString = '';
-
-        if (lessonId) {
-            try {
-                const lessonContext = {
-                    lessonId: lessonId,
-                    topic: getLessonTopic(lessonId),
-                    formalityLevel: getFormalityLevel(lessonId, message)
-                };
-
-                culturalContexts = await culturalRAG.retrieveContext(
-                    message,
-                    lessonContext,
-                    3 // Retrieve top 3 most relevant contexts
-                );
-
-                culturalContextString = culturalRAG.formatContextsForPrompt(culturalContexts);
-
-                console.log(`RAG: Retrieved ${culturalContexts.length} cultural contexts for lesson ${lessonId}`);
-            } catch (ragError) {
-                console.error('RAG retrieval error (non-fatal):', ragError);
-                culturalContextString = 'No specific cultural context available.';
-            }
-        } else {
-            culturalContextString = 'No specific cultural context available.';
-        }
-
-        // STEP 2: BUILD PEDAGOGICAL CONTEXT (70% weight)
-        const pedagogicalContext = `
-CURRENT LESSON: ${lessonId || 'General conversation'}
-LESSON TOPIC: ${lessonId ? getLessonTopic(lessonId) : 'General'}
-USER LEVEL: ${userLevel}
-COMPLETED LESSONS: ${completedLessons?.join(', ') || 'None'}
-KNOWN VOCABULARY COUNT: ${knownVocabulary?.length || 0}
-
-PEDAGOGICAL CONSTRAINTS:
-- Maximum 2 new concepts per response (cognitive load management)
-- Build on known vocabulary: ${knownVocabulary?.slice(0, 10).join(', ') || 'Starting fresh'}
-- Difficulty calibrated to: ${userLevel}
-`;
-
-        // STEP 3: ADD CULTURAL CONTEXT (20% weight)
-        const culturalContextSection = `
-CULTURAL CONTEXT (retrieved from knowledge base):
-${culturalContextString}
-
-IMPORTANT: Use the cultural contexts above to inform your response when relevant. These provide authentic Punjabi cultural norms and family scenarios.
-`;
-
-        // STEP 4: COMPARATIVE LINGUISTICS (10% weight)
-        const comparativeContext = `
-COMPARATIVE LINGUISTICS:
-- If helpful, mention Hindi-Punjabi cognates for diaspora learners who may have passive Hindi exposure
-- Example: "This word is similar to Hindi..."
-- Note phonological differences between Hindi and Punjabi when relevant
-`;
 
         // Adjust model parameters based on user level
         const generationConfig = {
@@ -378,14 +335,10 @@ COMPARATIVE LINGUISTICS:
             generationConfig
         });
 
-        // STEP 5: CONSTRUCT HYBRID PROMPT (70-20-10 architecture)
-        const enhancedMessage = `${pedagogicalContext}
+        // Add user level context to message
+        const enhancedMessage = `USER LEVEL: ${userLevel}
 
-${culturalContextSection}
-
-${comparativeContext}
-
-USER MESSAGE: ${message}`;
+${message}`;
 
         const result = await chat.sendMessage(enhancedMessage);
         const responseText = result.response.text();
@@ -411,15 +364,9 @@ USER MESSAGE: ${message}`;
             }
         }
 
-        // Return response with RAG metadata for analytics
         return Response.json({
             response: responseText,
-            structured: structuredData,
-            metadata: {
-                culturalContextsUsed: culturalContexts.length,
-                lessonTopic: lessonId ? getLessonTopic(lessonId) : null,
-                ragSimilarityScores: culturalContexts.map(c => c.similarity)
-            }
+            structured: structuredData
         });
 
     } catch (error) {
