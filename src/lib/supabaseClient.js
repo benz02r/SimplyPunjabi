@@ -6,7 +6,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 /**
- * ✅ Sign Up a New User with Email
+ *  Sign Up a New User with Email
  * Redirects users to "/auth-callback" after clicking the verification link.
  */
 export const signUpWithEmail = async (email, password) => {
@@ -19,16 +19,16 @@ export const signUpWithEmail = async (email, password) => {
     });
 
     if (error) {
-        console.error("❌ Error signing up:", error.message);
+        console.error(" Error signing up:", error.message);
         return { error };
     }
 
-    console.log("✅ Signup successful! Check email for confirmation.");
+    console.log(" Signup successful! Check email for confirmation.");
     return { success: true };
 };
 
 /**
- * ✅ Sign In a User with OTP (Magic Link)
+ *  Sign In a User with OTP (Magic Link)
  * Redirects users to "/auth-callback" to auto-login after clicking the email link.
  */
 export const signInWithMagicLink = async (email) => {
@@ -40,16 +40,16 @@ export const signInWithMagicLink = async (email) => {
     });
 
     if (error) {
-        console.error("❌ Error sending authentication email:", error.message);
+        console.error(" Error sending authentication email:", error.message);
         return { error };
     }
 
-    console.log("✅ Authentication email sent!");
+    console.log(" Authentication email sent!");
     return { success: true };
 };
 
 /**
- * ✅ Sends a password reset email
+ *  Sends a password reset email
  * Note: Users will be redirected to /auth-callback first to establish session,
  * then can be redirected to /reset-password from there
  */
@@ -59,25 +59,25 @@ export const sendPasswordResetEmail = async (email) => {
     });
 
     if (error) {
-        console.error("❌ Error sending password reset email:", error.message);
+        console.error(" Error sending password reset email:", error.message);
         return { error };
     }
 
-    console.log("✅ Password reset email sent!");
+    console.log(" Password reset email sent!");
     return { success: true };
 };
 
 /**
- * ✅ Updates user's password after they click the reset link
+ *  Updates user's password after they click the reset link
  */
 export const updatePassword = async (newPassword) => {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
 
     if (error) {
-        console.error("❌ Error updating password:", error.message);
+        console.error(" Error updating password:", error.message);
         return { error };
     }
 
-    console.log("✅ Password updated successfully!");
+    console.log(" Password updated successfully!");
     return { success: true };
 };
