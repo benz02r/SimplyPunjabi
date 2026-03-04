@@ -1,26 +1,30 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createClient } from '@supabase/supabase-js';
-import { pipeline } from '@xenova/transformers';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Supabase client is initialised inside the POST handler (not at module level)
 // to prevent "supabaseKey is required" errors during Next.js build time
 
-// Singleton embedding pipeline to avoid reloading on every request
-let embedder = null;
-async function getEmbedder() {
-    if (!embedder) {
-        embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
-    }
-    return embedder;
-}
-
-// Generate 384-dimensional embedding for a query string
+// Generate embedding using Gemini embedding API (replaces @xenova/transformers
+// which requires native binaries unavailable on Vercel serverless)
 async function generateEmbedding(text) {
-    const embed = await getEmbedder();
-    const output = await embed(text, { pooling: 'mean', normalize: true });
-    return Array.from(output.data);
+    const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${process.env.GEMINI_API_KEY}`,
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'models/text-embedding-004',
+                content: { parts: [{ text }] }
+            })
+        }
+    );
+    if (!response.ok) {
+        throw new Error(`Embedding API error: ${response.status} ${await response.text()}`);
+    }
+    const data = await response.json();
+    return data.embedding.values;
 }
 
 // -------------------------------------------------------------------
