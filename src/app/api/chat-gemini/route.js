@@ -2,8 +2,13 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createClient } from '@supabase/supabase-js';
 import { pipeline } from '@xenova/transformers';
 
-// genAI and supabase are initialised lazily inside the POST handler
-// to avoid instantiation at build time (which causes missing env var errors)
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Supabase admin client for RAG queries (server-side only)
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 // Singleton embedding pipeline to avoid reloading on every request
 let embedder = null;
@@ -25,7 +30,7 @@ async function generateEmbedding(text) {
 // HYBRID RAG RETRIEVAL
 // Weights: 70% pedagogical/lesson context, 20% cultural scenarios, 10% comparative linguistics
 // -------------------------------------------------------------------
-async function retrieveRAGContext(userMessage, userLevel, supabase) {
+async function retrieveRAGContext(userMessage, userLevel) {
     const results = {
         culturalScenarios: [],
         lessonContext: [],
@@ -321,24 +326,10 @@ export async function POST(req) {
             );
         }
 
-        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-            return Response.json(
-                { error: 'Supabase environment variables not configured' },
-                { status: 500 }
-            );
-        }
-
-        // Initialise clients at request time, not module load time
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL,
-            process.env.SUPABASE_SERVICE_ROLE_KEY
-        );
-
         // -----------------------------------------------------------
         // STEP 1: Run hybrid RAG retrieval against Supabase
         // -----------------------------------------------------------
-        const ragResults = await retrieveRAGContext(message, userLevel, supabase);
+        const ragResults = await retrieveRAGContext(message, userLevel);
         const ragContextBlock = buildRAGContextBlock(ragResults);
 
         // Log RAG retrieval summary for debugging/evaluation
@@ -415,7 +406,7 @@ export async function POST(req) {
         }
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.5-flash-preview-04-17",
+            model: "gemini-2.5-flash",
             systemInstruction: ENHANCED_SYSTEM_PROMPT,
             generationConfig
         });
@@ -428,10 +419,9 @@ export async function POST(req) {
             parts: [{ text: msg.content }]
         })) || [];
 
-        // generationConfig is NOT passed here — already set on the model above.
-        // Passing it twice (especially with responseSchema) can cause SDK conflicts.
         const chat = model.startChat({
             history: chatHistory,
+            generationConfig
         });
 
         // -----------------------------------------------------------
