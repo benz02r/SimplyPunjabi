@@ -72,8 +72,16 @@ export default function Home() {
                     <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-100/40 to-orange-100/40 rounded-full blur-3xl -z-10"></div>
                     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-orange-100/30 to-blue-100/30 rounded-full blur-3xl -z-10"></div>
 
-
-
+                    <div className="max-w-6xl mx-auto">
+                        {/* Trust Badge */}
+                        <div className="flex justify-center mb-8">
+                            <div className="inline-flex items-center gap-2 bg-white px-5 py-2.5 rounded-full shadow-md border border-blue-100">
+                                <FaCheckCircle className="text-green-500 text-sm" />
+                                <span className="text-sm font-semibold text-gray-800">Free to Start</span>
+                                <span className="text-sm text-gray-400">•</span>
+                                <span className="text-sm text-gray-600">No Credit Card Required</span>
+                            </div>
+                        </div>
 
                         {/* Logo - LARGER */}
                         <div className="flex justify-center mb-6">
