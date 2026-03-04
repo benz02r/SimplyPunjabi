@@ -415,7 +415,7 @@ export async function POST(req) {
         }
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.5-flash",
+            model: "gemini-2.5-flash-preview-04-17",
             systemInstruction: ENHANCED_SYSTEM_PROMPT,
             generationConfig
         });
@@ -428,9 +428,10 @@ export async function POST(req) {
             parts: [{ text: msg.content }]
         })) || [];
 
+        // generationConfig is NOT passed here — already set on the model above.
+        // Passing it twice (especially with responseSchema) can cause SDK conflicts.
         const chat = model.startChat({
             history: chatHistory,
-            generationConfig
         });
 
         // -----------------------------------------------------------
