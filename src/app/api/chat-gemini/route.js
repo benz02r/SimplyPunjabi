@@ -16,7 +16,8 @@ async function generateEmbedding(text) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 model: 'models/gemini-embedding-001',
-                content: { parts: [{ text }] }
+                content: { parts: [{ text }] },
+                outputDimensionality: 768
             })
         }
     );
@@ -47,7 +48,7 @@ async function retrieveRAGContext(userMessage, userLevel, supabase) {
             'match_cultural_contexts',
             {
                 query_embedding: queryEmbedding,
-                match_threshold: 0.5,
+                match_threshold: 0.2,
                 match_count: 3
             }
         );
@@ -142,7 +143,7 @@ Help users have meaningful conversations with their Punjabi-speaking family memb
 ## HYBRID RAG ARCHITECTURE
 Your responses are grounded in a three-source retrieval system:
 - **70% Pedagogical context** from structured lesson curriculum — prioritise this for accuracy
-- **20% Cultural context** from 47 hand-curated diaspora scenarios — use for authentic cultural depth  
+- **20% Cultural context** from 81 hand-curated diaspora scenarios — use for authentic cultural depth  
 - **10% Comparative linguistics** connecting Hindi-Punjabi relationships — use sparingly to aid comprehension
 
 When retrieved context is provided below, you MUST use it to ground your response. Do not ignore it in favour of generic LLM knowledge.

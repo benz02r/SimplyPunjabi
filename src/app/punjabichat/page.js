@@ -20,16 +20,21 @@ export default function PunjabiChat() {
     const [userId, setUserId] = useState(null);
     const [isLoadingAudio, setIsLoadingAudio] = useState({});
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+    const [userLevel, setUserLevel] = useState('beginner');
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
     const sampleQuestions = [
-        "How do I greet my grandmother?",
-        "How do I say I'm hungry?",
-        "Teach me family relationship words",
-        "How do I ask 'How are you?'",
-        "What's the difference between formal and informal speech?",
-        "How do I thank someone respectfully?",
+        "How do I greet my grandmother respectfully?",
+        "What is the difference between tusi and tu?",
+        "Teach me paternal and maternal family words",
+        "How do I say well done or congratulations in Punjabi?",
+        "What should I say when visiting someone who is unwell?",
+        "How do I compliment my relative's cooking?",
+        "What does Sat Sri Akal mean and when do I use it?",
+        "How do I say I am learning Punjabi to my relatives?",
+        "Teach me phrases for a family gathering",
+        "What is pairi paina and when should I do it?",
     ];
 
     useEffect(() => {
@@ -134,7 +139,7 @@ export default function PunjabiChat() {
                     message: inputMessage,
                     conversationHistory: messages.slice(-10),
                     responseFormat: 'structured',
-                    userLevel: 'beginner'
+                    userLevel: userLevel
                 })
             });
 
@@ -154,6 +159,7 @@ export default function PunjabiChat() {
                 english: structured?.english || '',
                 context: structured?.cultural_note || '',
                 grammar_tip: structured?.grammar_tip || '',
+                new_vocabulary: structured?.new_vocabulary || [],
                 follow_up: structured?.follow_up_suggestion || '',
                 timestamp: new Date().toLocaleTimeString('en-GB', {
                     hour: '2-digit',
@@ -343,6 +349,15 @@ export default function PunjabiChat() {
 
                                 {/* Right side - Action buttons */}
                                 <div className="flex items-center gap-2">
+                                    <select
+                                        value={userLevel}
+                                        onChange={(e) => setUserLevel(e.target.value)}
+                                        className="px-2 py-2 border border-gray-200 rounded-lg text-xs font-medium text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="beginner">Beginner</option>
+                                        <option value="intermediate">Intermediate</option>
+                                        <option value="advanced">Advanced</option>
+                                    </select>
                                     <button
                                         onClick={() => setIsSidebarOpen(true)}
                                         className="flex items-center gap-1.5 px-3 py-2 bg-blue-500 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-blue-600 transition-all active:scale-95"
@@ -499,6 +514,32 @@ export default function PunjabiChat() {
                                                                     <div className="bg-white/60 rounded-lg p-3 mb-3">
                                                                         <div className="text-[10px] font-bold text-orange-600 uppercase tracking-wide mb-1">Cultural Note</div>
                                                                         <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line break-words">{message.context}</p>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Grammar Tip */}
+                                                                {message.grammar_tip && (
+                                                                    <div className="bg-blue-50 rounded-lg p-3 mb-3">
+                                                                        <div className="text-[10px] font-bold text-blue-600 uppercase tracking-wide mb-1">Grammar Tip</div>
+                                                                        <p className="text-xs text-gray-700 leading-relaxed break-words">{message.grammar_tip}</p>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* New Vocabulary */}
+                                                                {message.new_vocabulary && message.new_vocabulary.length > 0 && (
+                                                                    <div className="mb-3">
+                                                                        <div className="text-[10px] font-bold text-green-600 uppercase tracking-wide mb-2">New Vocabulary</div>
+                                                                        <div className="flex flex-wrap gap-2">
+                                                                            {message.new_vocabulary.map((word, i) => (
+                                                                                <div key={i} className="bg-green-50 border border-green-100 rounded-lg px-2 py-1.5 text-xs">
+                                                                                    <span className="font-semibold text-gray-900">{word.punjabi}</span>
+                                                                                    <span className="text-gray-400 mx-1">·</span>
+                                                                                    <span className="text-gray-600 italic">{word.romanized}</span>
+                                                                                    <span className="text-gray-400 mx-1">·</span>
+                                                                                    <span className="text-gray-500">{word.english}</span>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
                                                                     </div>
                                                                 )}
 
