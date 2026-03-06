@@ -1,15 +1,22 @@
 "use client";
 
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import { FaComments, FaMicrophone, FaAward, FaCheckCircle, FaGlobe, FaUsers, FaRocket, FaHeart, FaStar, FaClock, FaHeadphones, FaBook, FaGraduationCap, FaRobot, FaBookOpen, FaLock, FaArrowRight, FaVolumeUp, FaSpinner } from 'react-icons/fa';
+import { useState, useEffect, useRef } from 'react';
+import {
+    FaComments, FaMicrophone, FaAward, FaCheckCircle,
+    FaUsers, FaRocket, FaHeart, FaStar, FaClock,
+    FaHeadphones, FaBook, FaGraduationCap, FaRobot,
+    FaBookOpen, FaArrowRight, FaVolumeUp, FaSpinner
+} from 'react-icons/fa';
 
-// ─── Chat Spotlight Component ─────────────────────────────────────────────────
-function ChatSpotlight({ compact = false }) {
+/* ═══════════════════════════════════════════════════════════════════
+   Chat Spotlight Component (preserved from original — functional logic intact)
+   ═══════════════════════════════════════════════════════════════════ */
+function ChatSpotlight({ inPopup = false }) {
     const [messages, setMessages] = useState([
         {
             role: 'assistant',
-            text: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! Ask me anything in English — greetings, family phrases, cultural context.',
+            text: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! Ask me anything in English: greetings, family phrases, cultural context.',
             structured: null
         }
     ]);
@@ -91,11 +98,11 @@ function ChatSpotlight({ compact = false }) {
             const structured = data.structured;
             let replyText = data.response || '';
             if (structured?.romanized && structured?.english) {
-                replyText = structured.romanized + ' — ' + structured.english;
+                replyText = structured.romanized + ' · ' + structured.english;
             }
             setMessages(prev => [...prev, { role: 'assistant', text: replyText, structured }]);
         } catch {
-            setMessages(prev => [...prev, { role: 'assistant', text: 'Something went wrong — please try again.', structured: null }]);
+            setMessages(prev => [...prev, { role: 'assistant', text: 'Something went wrong. Please try again.', structured: null }]);
         } finally {
             setIsTyping(false);
             setLoading(false);
@@ -107,31 +114,22 @@ function ChatSpotlight({ compact = false }) {
     };
 
     return (
-        <div className="flex flex-col h-full bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
-            {/* Chat header */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3 flex items-center gap-3 flex-shrink-0">
-                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                    <FaRobot className="text-white text-sm" />
-                </div>
-                <div className="flex-1 min-w-0">
-                    <p className="text-white font-bold text-sm leading-tight">Simply Punjabi Tutor</p>
+        <div className="flex flex-col h-full bg-white overflow-hidden">
+            {!inPopup && usesLeft !== null && (
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 flex items-center justify-between flex-shrink-0">
                     <div className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
-                        <p className="text-blue-200 text-xs">Online now</p>
+                        <p className="text-blue-200 text-xs font-medium">Simply Punjabi Tutor</p>
                     </div>
-                </div>
-                {/* Uses dots */}
-                {usesLeft !== null && (
-                    <div className="flex items-center gap-1 flex-shrink-0">
+                    <div className="flex items-center gap-1">
                         {[...Array(MAX_FREE_USES)].map((_, i) => (
                             <div key={i} className={`w-2 h-2 rounded-full transition-colors ${i < usesLeft ? 'bg-green-400' : 'bg-white/20'}`} />
                         ))}
                         <span className="text-xs text-blue-200 ml-1">free</span>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50/50 min-h-0">
                 {messages.map((msg, i) => (
                     <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -205,14 +203,13 @@ function ChatSpotlight({ compact = false }) {
                 )}
             </div>
 
-            {/* Input */}
             <div className="p-3 bg-white border-t border-gray-100 flex-shrink-0">
                 {usesLeft === 0 ? (
                     <div className="space-y-2">
                         <p className="text-xs text-gray-500 text-center">You've used your 3 free messages</p>
                         <a href="/key-functions/signup" className="block">
                             <button className="w-full bg-gradient-to-r from-blue-600 to-orange-500 text-white py-2.5 rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-[1.02]">
-                                Sign Up Free — Unlimited Chat
+                                Sign Up Free · Unlimited Chat
                             </button>
                         </a>
                     </div>
@@ -244,7 +241,6 @@ function ChatSpotlight({ compact = false }) {
                                 {usesLeft} of {MAX_FREE_USES} free messages · <a href="/key-functions/signup" className="text-blue-500 hover:underline">Sign up for unlimited</a>
                             </p>
                         )}
-                        {/* Suggestion chips — only on first message */}
                         {messages.length <= 1 && (
                             <div className="flex flex-wrap gap-1.5 mt-2">
                                 {["How do I greet my nani?", "What does Sat Sri Akal mean?", "Teach me family words"].map((q, i) => (
@@ -262,7 +258,73 @@ function ChatSpotlight({ compact = false }) {
     );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+
+/* ═══════════════════════════════════════════════════════════════════
+   Animated counter hook
+   ═══════════════════════════════════════════════════════════════════ */
+function useCountUp(end, duration = 2000, startOnView = true) {
+    const [count, setCount] = useState(0);
+    const ref = useRef(null);
+    const started = useRef(false);
+
+    useEffect(() => {
+        if (!startOnView) return;
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && !started.current) {
+                started.current = true;
+                const startTime = performance.now();
+                const animate = (now) => {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    setCount(Math.round(eased * end));
+                    if (progress < 1) requestAnimationFrame(animate);
+                };
+                requestAnimationFrame(animate);
+            }
+        }, { threshold: 0.3 });
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [end, duration, startOnView]);
+
+    return [count, ref];
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   Fade-in-on-scroll wrapper
+   ═══════════════════════════════════════════════════════════════════ */
+function FadeIn({ children, className = '', delay = 0 }) {
+    const ref = useRef(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) setVisible(true);
+        }, { threshold: 0.15 });
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            className={className}
+            style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(24px)',
+                transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+            }}
+        >
+            {children}
+        </div>
+    );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   MAIN PAGE
+   ═══════════════════════════════════════════════════════════════════ */
 export default function Home() {
     const punjabiDays = [
         { en: "Sunday", pa: "ਐਤਵਾਰ", pron: "Aitvaar" },
@@ -275,6 +337,21 @@ export default function Home() {
     ];
     const today = new Date();
     const currentDay = punjabiDays[today.getDay()];
+
+    const [chatOpen, setChatOpen] = useState(false);
+    const [chatDismissed, setChatDismissed] = useState(false);
+    const [openFaq, setOpenFaq] = useState(null);
+
+    useEffect(() => {
+        try {
+            if (sessionStorage.getItem('sp_chat_shown')) return;
+        } catch { }
+        const timer = setTimeout(() => {
+            setChatOpen(true);
+            try { sessionStorage.setItem('sp_chat_shown', '1'); } catch { }
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <>
@@ -299,344 +376,511 @@ export default function Home() {
                     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }
                 })}</script>
                 <link rel="canonical" href="https://simplypunjabi.com" />
+                {/* Google Fonts — refined pairing */}
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&display=swap" rel="stylesheet" />
             </Head>
 
-            <div className="min-h-screen bg-white">
+            {/* Global styles */}
+            <style jsx global>{`
+                :root {
+                    --color-saffron: #E67E22;
+                    --color-saffron-light: #FDF2E9;
+                    --color-navy: #1B2A4A;
+                    --color-navy-light: #2C3E6B;
+                    --color-cream: #FDFBF7;
+                    --color-warm-gray: #F7F5F2;
+                    --font-display: 'DM Serif Display', Georgia, serif;
+                    --font-body: 'DM Sans', system-ui, sans-serif;
+                }
+                body {
+                    font-family: var(--font-body);
+                    -webkit-font-smoothing: antialiased;
+                }
+                .font-display {
+                    font-family: var(--font-display);
+                }
+                .text-saffron { color: var(--color-saffron); }
+                .bg-saffron { background-color: var(--color-saffron); }
+                .bg-cream { background-color: var(--color-cream); }
+                .bg-warm-gray { background-color: var(--color-warm-gray); }
+                .text-navy { color: var(--color-navy); }
+                .bg-navy { background-color: var(--color-navy); }
+                .border-saffron { border-color: var(--color-saffron); }
 
-                {/* ── ABOVE THE FOLD — Z-PATTERN HERO ──────────────────────────
-                    Desktop: left col (Z-start) = headline + CTA
-                             right col (Z-end)   = live chat demo
-                             bottom strip        = course cards
-                    Mobile:  stacks as title → chat → course cards
-                ─────────────────────────────────────────────────────────────── */}
-                <section className="relative min-h-screen flex flex-col overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/40 to-orange-50/30">
+                @keyframes float {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-8px); }
+                }
+                .animate-float { animation: float 6s ease-in-out infinite; }
 
-                    {/* Decorative background blobs */}
-                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-blue-100/50 to-orange-100/30 rounded-full blur-3xl -z-10 translate-x-1/4 -translate-y-1/4" />
-                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-orange-100/30 to-blue-100/20 rounded-full blur-3xl -z-10 -translate-x-1/4 translate-y-1/4" />
-                    {/* Subtle grain texture overlay */}
-                    <div className="absolute inset-0 opacity-[0.025] -z-10" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-                        backgroundRepeat: 'repeat',
-                        backgroundSize: '128px'
-                    }} />
+                @keyframes shimmer {
+                    0% { background-position: -200% 0; }
+                    100% { background-position: 200% 0; }
+                }
+                .animate-shimmer {
+                    background: linear-gradient(90deg, transparent 0%, rgba(230,126,34,0.08) 50%, transparent 100%);
+                    background-size: 200% 100%;
+                    animation: shimmer 3s linear infinite;
+                }
+            `}</style>
 
-                    {/* Main content — flex-1 to fill screen */}
-                    <div className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-6 pt-28 pb-6 sm:pt-32">
+            <div className="min-h-screen" style={{ backgroundColor: 'var(--color-cream)' }}>
 
-                        {/* ── Z-START + Z-END: Two column grid ── */}
-                        <div className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-start">
+                {/* ═══════════════════════════════════════════════════════
+                    HERO SECTION — Clean, editorial, confident
+                   ═══════════════════════════════════════════════════════ */}
+                <section className="relative min-h-screen flex flex-col overflow-hidden">
+                    {/* Subtle decorative elements */}
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-30 -z-10"
+                         style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.12) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-20 -z-10"
+                         style={{ background: 'radial-gradient(circle, rgba(27,42,74,0.08) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
 
-                            {/* LEFT COL — Z-start: headline, subheading, CTA */}
-                            <div className="flex flex-col justify-center">
+                    {/* Gurmukhi watermark — large, faded decorative text */}
+                    <div className="absolute top-1/2 right-8 -translate-y-1/2 text-[12rem] lg:text-[18rem] font-bold opacity-[0.025] text-navy select-none pointer-events-none leading-none hidden lg:block"
+                         style={{ fontFamily: 'serif' }}>
+                        ੴ
+                    </div>
 
-                                {/* Logo */}
-                                <div className="mb-6">
-                                    <img
-                                        src="/Website Banner(shadowing)- Simply Punjabi, Ryan.png"
-                                        alt="Simply Punjabi"
-                                        className="w-full max-w-[520px] drop-shadow-lg"
-                                    />
-                                </div>
+                    <div className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-6 sm:px-10 pt-32 sm:pt-28 pb-12">
 
-                                {/* Word of the Day badge */}
-                                <div className="inline-flex items-center gap-2.5 bg-white border border-orange-200 rounded-full px-4 py-2 shadow-sm mb-6 self-start">
-                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Today</span>
-                                    <span className="text-orange-500 font-bold text-base">{currentDay.pa}</span>
-                                    <span className="text-gray-300">·</span>
-                                    <span className="text-gray-700 font-medium text-sm">{currentDay.pron}</span>
-                                    <span className="text-gray-400 text-xs">({currentDay.en})</span>
-                                </div>
+                        {/* Top bar — word of the day + login */}
+                        <div className="flex items-center justify-between mb-16 sm:mb-20">
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-1 rounded-full bg-saffron" />
+                                <span className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-400">Today's word</span>
+                                <span className="text-saffron font-bold text-lg font-display">{currentDay.pa}</span>
+                                <span className="text-gray-400 text-sm">({currentDay.pron}, {currentDay.en})</span>
+                            </div>
+                            <a href="/key-functions/auth" className="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-navy transition-colors">
+                                Log in <FaArrowRight className="text-[10px]" />
+                            </a>
+                        </div>
 
-                                {/* Headline */}
-                                <h1 className="text-3xl sm:text-4xl xl:text-5xl font-bold text-gray-900 leading-[1.1] mb-4 tracking-tight">
-                                    Learn Punjabi<br />
-                                    <span className="bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
-                                        your family will notice
-                                    </span>
-                                </h1>
+                        {/* Hero content — two-column */}
+                        <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center flex-1">
 
-                                <p className="text-base text-gray-600 leading-relaxed mb-6 max-w-md">
-                                    The only Punjabi platform built for diaspora learners. Real family phrases, cultural context, AI-powered tutor — try it free below.
-                                </p>
-
-                                {/* Scroll hint — CTA is at bottom-right of Z */}
-                                <div className="flex items-center gap-2 mb-5 text-sm text-gray-500">
-                                    <FaClock className="text-blue-500 text-xs" />
-                                    Try the AI tutor free — no sign-up needed
-                                </div>
-
-                                {/* Social proof */}
-                                <div className="flex flex-wrap gap-6 text-sm text-gray-500">
-                                    <div className="flex items-center gap-2">
-                                        <FaUsers className="text-blue-500 text-xs" />
-                                        <span>Trusted by UK, US, Canada & Australia</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <FaCheckCircle className="text-green-500 text-xs" />
-                                        <span>No credit card required</span>
-                                    </div>
-                                </div>
+                            {/* Logo image — shown first on mobile, right on desktop */}
+                            <div className="relative flex items-center justify-center lg:order-last">
+                                <img
+                                    src="/Website Banner(shadowing)- Simply Punjabi, Ryan.png"
+                                    alt="Simply Punjabi"
+                                    className="w-full max-w-[520px] drop-shadow-xl relative z-10"
+                                />
+                                {/* Decorative floating Gurmukhi characters */}
+                                <div className="absolute -top-4 -left-4 text-4xl text-saffron opacity-20 animate-float font-display select-none" style={{ animationDelay: '0s' }}>ੳ</div>
+                                <div className="absolute -bottom-2 -right-2 text-5xl text-navy opacity-10 animate-float font-display select-none" style={{ animationDelay: '2s' }}>ਅ</div>
+                                <div className="absolute top-1/4 -right-6 text-3xl text-saffron opacity-15 animate-float font-display select-none" style={{ animationDelay: '4s' }}>ੲ</div>
                             </div>
 
-                            {/* RIGHT COL — Z-end: live chat demo */}
-                            <div className="flex flex-col lg:py-4">
-                                {/* Label */}
-                                <div className="flex items-center justify-between mb-3">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Live AI Tutor — try it now</span>
-                                    </div>
-                                    <span className="text-xs text-gray-400">No sign-up needed</span>
+                            {/* Headline + CTA */}
+                            <div className="max-w-xl lg:order-first">
+                                <h1 className="font-display text-navy leading-[1.08] mb-6" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.25rem)' }}>
+                                    Learn the Punjabi<br />
+                                    <span className="text-saffron">your family speaks</span>
+                                </h1>
+
+                                <p className="text-lg text-gray-500 leading-relaxed mb-10 max-w-md">
+                                    The only language platform that teaches real family conversations, cultural context, and the respect registers that matter at home.
+                                </p>
+
+                                {/* CTA group */}
+                                <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                                    <a href="/key-functions/signup">
+                                        <button className="group flex items-center justify-center gap-3 bg-navy text-white px-8 py-4 rounded-xl font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 w-full sm:w-auto">
+                                            Start Learning Free
+                                            <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
+                                        </button>
+                                    </a>
+                                    <button
+                                        onClick={() => { setChatOpen(true); setChatDismissed(false); }}
+                                        className="flex items-center justify-center gap-3 bg-white text-navy border-2 border-gray-200 px-8 py-4 rounded-xl font-semibold text-base hover:border-saffron hover:text-saffron transition-all duration-300 w-full sm:w-auto"
+                                    >
+                                        <FaRobot className="text-saffron" />
+                                        Try AI Tutor
+                                    </button>
                                 </div>
-                                <div className="h-[440px] lg:h-[420px]">
-                                    <ChatSpotlight />
-                                </div>
+
+                                <p className="text-xs text-gray-400 flex items-center gap-4">
+                                    <span className="flex items-center gap-1.5"><FaCheckCircle className="text-green-400" /> No credit card</span>
+                                    <span className="flex items-center gap-1.5"><FaClock className="text-gray-300" /> Ready in 2 minutes</span>
+                                </p>
                             </div>
                         </div>
 
-                        {/* ── BOTTOM STRIP: Course cards + Z-end CTA ── */}
-                        <div className="mt-6 pt-5 border-t border-gray-200/60">
-                            <div className="flex items-center justify-between mb-3">
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Choose your learning path</p>
-                                <a href="/key-functions/signup" className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-blue-600 to-orange-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                                    <FaRocket className="text-xs" />Get Started Free
-                                </a>
+                        {/* ── COURSE CARDS ────────────────────────────────────── */}
+                        <div className="mt-16 pt-12 border-t border-gray-200/60">
+                            <div className="flex items-end justify-between mb-8">
+                                <div>
+                                    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-1">Learning Paths</p>
+                                    <h2 className="text-2xl font-display text-navy">Choose where to begin</h2>
+                                </div>
+                                <span className="text-sm text-gray-400 hidden sm:block">3 courses · All free</span>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                                 {[
                                     {
                                         level: "Beginner",
                                         title: "Essential Punjabi",
-                                        desc: "Greetings, introductions, basic family vocabulary",
+                                        desc: "Greetings, family vocabulary, basic introductions",
                                         lessons: "5 lessons",
+                                        duration: "~2 hrs",
                                         link: "/learning/essential-punjabi",
-                                        gradient: "from-blue-500 to-blue-600",
-                                        border: "border-blue-100",
-                                        bg: "bg-blue-50",
-                                        icon: <FaComments className="text-blue-500 text-lg" />
+                                        accent: "#3B82F6",
+                                        icon: <FaComments />
                                     },
                                     {
                                         level: "Intermediate",
                                         title: "Speak with Confidence",
                                         desc: "Everyday conversations with family members",
                                         lessons: "6 lessons",
+                                        duration: "~3 hrs",
                                         link: "/learning/speak-with-confidence",
-                                        gradient: "from-orange-500 to-orange-600",
-                                        border: "border-orange-200",
-                                        bg: "bg-orange-50",
+                                        accent: "#E67E22",
                                         featured: true,
-                                        icon: <FaMicrophone className="text-orange-500 text-lg" />
+                                        icon: <FaMicrophone />
                                     },
                                     {
                                         level: "Advanced",
                                         title: "Master Punjabi",
                                         desc: "Fluency, cultural nuance, natural conversation",
                                         lessons: "6 lessons",
+                                        duration: "~4 hrs",
                                         link: "/learning/master-punjabi",
-                                        gradient: "from-green-500 to-green-600",
-                                        border: "border-green-100",
-                                        bg: "bg-green-50",
-                                        icon: <FaAward className="text-green-500 text-lg" />
+                                        accent: "#059669",
+                                        icon: <FaAward />
                                     }
                                 ].map((course, i) => (
                                     <a key={i} href={course.link} className="block group">
-                                        <div className={`relative flex items-center gap-4 bg-white rounded-2xl px-5 py-4 border-2 ${course.featured ? 'border-orange-200 shadow-lg' : course.border + ' shadow-sm'} hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}>
+                                        <div className={`relative bg-white rounded-2xl p-6 border ${course.featured ? 'border-2 shadow-lg' : 'border-gray-200 shadow-sm'} hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}
+                                             style={course.featured ? { borderColor: course.accent } : {}}>
                                             {course.featured && (
-                                                <div className="absolute -top-2.5 left-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow">
-                                                    Popular
+                                                <div className="absolute -top-3 left-5 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md"
+                                                     style={{ backgroundColor: course.accent }}>
+                                                    Most Popular
                                                 </div>
                                             )}
-                                            <div className={`w-10 h-10 rounded-xl ${course.bg} flex items-center justify-center flex-shrink-0`}>
-                                                {course.icon}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center gap-2 mb-0.5">
-                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{course.level}</span>
-                                                    <span className="text-[10px] text-gray-300">·</span>
-                                                    <span className="text-[10px] text-gray-400">{course.lessons}</span>
+                                            <div className="flex items-start justify-between mb-4">
+                                                <div className="w-11 h-11 rounded-xl flex items-center justify-center text-white text-base"
+                                                     style={{ backgroundColor: course.accent }}>
+                                                    {course.icon}
                                                 </div>
-                                                <p className="font-bold text-gray-900 text-sm truncate">{course.title}</p>
-                                                <p className="text-xs text-gray-500 truncate">{course.desc}</p>
+                                                <FaArrowRight className="text-sm mt-1 opacity-0 group-hover:opacity-60 group-hover:translate-x-1 transition-all text-gray-400" />
                                             </div>
-                                            <FaArrowRight className="text-gray-300 group-hover:text-gray-500 text-xs flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                                            <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: course.accent }}>{course.level}</p>
+                                            <h3 className="font-bold text-navy text-base mb-1">{course.title}</h3>
+                                            <p className="text-sm text-gray-500 leading-relaxed mb-4">{course.desc}</p>
+                                            <div className="flex items-center gap-3 text-xs text-gray-400 border-t border-gray-100 pt-3">
+                                                <span className="flex items-center gap-1"><FaBook className="text-[10px]" />{course.lessons}</span>
+                                                <span>·</span>
+                                                <span className="flex items-center gap-1"><FaClock className="text-[10px]" />{course.duration}</span>
+                                            </div>
                                         </div>
                                     </a>
                                 ))}
                             </div>
-                            {/* Mobile Z-end CTA */}
-                            <div className="sm:hidden mt-4">
-                                <a href="/key-functions/signup">
-                                    <button className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-orange-500 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg">
-                                        <FaRocket className="text-xs" />Get Started Free — No Sign-up Needed
-                                    </button>
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </section>
 
-                {/* ── BELOW THE FOLD ────────────────────────────────────────── */}
 
-                {/* Problem / Solution */}
-                <section className="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
+                {/* ═══════════════════════════════════════════════════════
+                    PROBLEM / SOLUTION — Refined contrast cards
+                   ═══════════════════════════════════════════════════════ */}
+                <section className="py-24 sm:py-32 px-6 sm:px-10 bg-white">
                     <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <p className="text-blue-600 font-bold uppercase tracking-wider text-sm mb-4">The Problem We're Solving</p>
-                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-                                Learning Punjabi Shouldn't Feel Impossible
-                            </h2>
-                            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                                Generic apps don't understand diaspora learners. They teach vocabulary you'll never use and ignore the cultural context that makes conversations meaningful.
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                        <FadeIn>
+                            <div className="max-w-2xl mb-16">
+                                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-3">The Problem</p>
+                                <h2 className="text-3xl sm:text-4xl font-display text-navy mb-5 leading-tight">
+                                    Generic language apps weren't built for you
+                                </h2>
+                                <p className="text-gray-500 text-lg leading-relaxed">
+                                    They teach textbook phrases to tourists. You need to speak with your grandparents, understand cultural nuance, and feel at home in your own language.
+                                </p>
+                            </div>
+                        </FadeIn>
+
+                        <div className="grid md:grid-cols-2 gap-5 max-w-4xl">
                             {[
-                                { problem: "Generic apps teach textbook phrases", solution: "We teach real family conversations", icon: <FaComments className="text-2xl" />, color: "blue" },
-                                { problem: "No cultural context or connection", solution: "Every lesson includes cultural insights", icon: <FaHeart className="text-2xl" />, color: "orange" },
-                                { problem: "Pronunciation guides don't help", solution: "Native speaker audio on every word", icon: <FaHeadphones className="text-2xl" />, color: "green" },
-                                { problem: "Long, overwhelming lessons", solution: "10-minute lessons that fit your life", icon: <FaClock className="text-2xl" />, color: "purple" },
-                            ].map((item, i) => {
-                                const colors = { blue: 'from-blue-500 to-blue-600', orange: 'from-orange-500 to-orange-600', green: 'from-green-500 to-green-600', purple: 'from-purple-500 to-purple-600' };
-                                return (
-                                    <div key={i} className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
-                                        <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${colors[item.color]} text-white mb-5`}>
+                                { problem: "Generic apps teach textbook phrases", solution: "We teach real family conversations", icon: <FaComments className="text-xl" />, color: "#3B82F6" },
+                                { problem: "No cultural context or respect registers", solution: "Every lesson includes cultural insights", icon: <FaHeart className="text-xl" />, color: "#E67E22" },
+                                { problem: "Pronunciation guides don't help", solution: "Native speaker audio on every word", icon: <FaHeadphones className="text-xl" />, color: "#059669" },
+                                { problem: "Long, overwhelming lessons", solution: "10-minute lessons that fit your life", icon: <FaClock className="text-xl" />, color: "#8B5CF6" },
+                            ].map((item, i) => (
+                                <FadeIn key={i} delay={i * 100}>
+                                    <div className="bg-warm-gray rounded-2xl p-7 hover:shadow-md transition-all duration-300 group">
+                                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-5 transition-transform group-hover:scale-105"
+                                             style={{ backgroundColor: item.color }}>
                                             {item.icon}
                                         </div>
                                         <p className="text-gray-400 line-through text-sm mb-2">{item.problem}</p>
-                                        <p className="text-gray-900 font-semibold text-lg">{item.solution}</p>
+                                        <p className="text-navy font-semibold text-lg">{item.solution}</p>
                                     </div>
-                                );
-                            })}
+                                </FadeIn>
+                            ))}
                         </div>
                     </div>
                 </section>
 
-                {/* How It Works */}
-                <section className="py-24 px-6 bg-white">
+
+                {/* ═══════════════════════════════════════════════════════
+                    THREE TOOLS — Horizontal feature showcase
+                   ═══════════════════════════════════════════════════════ */}
+                <section className="py-24 sm:py-32 px-6 sm:px-10" style={{ backgroundColor: 'var(--color-cream)' }}>
                     <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">Why Simply Punjabi</p>
-                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">Three tools. One goal.</h2>
-                            <p className="text-lg text-gray-600 max-w-xl mx-auto">Everything you need to go from silent at family dinners to speaking with confidence.</p>
-                        </div>
-                        <div className="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto">
+                        <FadeIn>
+                            <div className="text-center mb-16">
+                                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-3">Platform</p>
+                                <h2 className="text-3xl sm:text-4xl font-display text-navy mb-4">Three tools, one goal</h2>
+                                <p className="text-gray-500 text-lg max-w-lg mx-auto">Everything you need to go from silent at family dinners to speaking with confidence.</p>
+                            </div>
+                        </FadeIn>
+
+                        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                             {[
-                                { n: "01", title: "AI Punjabi Tutor", desc: "Ask anything in English. Get culturally grounded answers with pronunciation guides and family context.", icon: <FaRobot className="text-4xl text-purple-500" /> },
-                                { n: "02", title: "Interactive Lessons", desc: "Structured bite-sized lessons covering greetings, family words, and everyday phrases.", icon: <FaGraduationCap className="text-4xl text-blue-500" /> },
-                                { n: "03", title: "Punjabi Dictionary", desc: "Instant translations with Gurmukhi script, romanised pronunciation, and audio for every word.", icon: <FaBookOpen className="text-4xl text-orange-500" /> },
+                                {
+                                    n: "01",
+                                    title: "AI Punjabi Tutor",
+                                    desc: "Ask anything in English. Get culturally grounded answers with pronunciation guides and family context.",
+                                    icon: <FaRobot className="text-2xl" />,
+                                    color: "#8B5CF6"
+                                },
+                                {
+                                    n: "02",
+                                    title: "Interactive Lessons",
+                                    desc: "Structured bite-sized lessons covering greetings, family words, and everyday phrases with audio.",
+                                    icon: <FaGraduationCap className="text-2xl" />,
+                                    color: "#3B82F6"
+                                },
+                                {
+                                    n: "03",
+                                    title: "Punjabi Dictionary",
+                                    desc: "Instant translations with Gurmukhi script, romanised pronunciation, and native speaker audio.",
+                                    icon: <FaBookOpen className="text-2xl" />,
+                                    color: "#E67E22"
+                                },
                             ].map((step, i) => (
-                                <div key={i} className="text-center">
-                                    <div className="flex justify-center mb-6">
-                                        <div className="relative">
-                                            <div className="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center border-2 border-gray-100">
+                                <FadeIn key={i} delay={i * 120}>
+                                    <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 group h-full">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white transition-transform group-hover:scale-105"
+                                                 style={{ backgroundColor: step.color }}>
                                                 {step.icon}
                                             </div>
-                                            <div className="absolute -top-2 -right-2 w-7 h-7 bg-gradient-to-br from-blue-600 to-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                                {step.n.replace('0', '')}
+                                            <span className="text-3xl font-display text-gray-200">{step.n}</span>
+                                        </div>
+                                        <h3 className="text-xl font-bold text-navy mb-3">{step.title}</h3>
+                                        <p className="text-gray-500 leading-relaxed text-sm">{step.desc}</p>
+                                    </div>
+                                </FadeIn>
+                            ))}
+                        </div>
+
+                        <FadeIn delay={400}>
+                            <div className="text-center mt-14">
+                                <a href="/key-functions/signup">
+                                    <button className="bg-saffron text-white px-10 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
+                                        Get Started Free
+                                    </button>
+                                </a>
+                            </div>
+                        </FadeIn>
+                    </div>
+                </section>
+
+
+                {/* ═══════════════════════════════════════════════════════
+                    TESTIMONIALS — Clean editorial cards
+                   ═══════════════════════════════════════════════════════ */}
+                <section className="py-24 sm:py-32 px-6 sm:px-10 bg-white">
+                    <div className="max-w-6xl mx-auto">
+                        <FadeIn>
+                            <div className="text-center mb-16">
+                                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-3">Community</p>
+                                <h2 className="text-3xl sm:text-4xl font-display text-navy">What learners are saying</h2>
+                            </div>
+                        </FadeIn>
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {[
+                                { quote: "I had my first full conversation with my grandmother in Punjabi last week. This platform gave me the tools to connect with her in a way I never thought possible.", name: "Priya S.", location: "Birmingham, UK" },
+                                { quote: "Six months ago I couldn't say a single sentence. Now I'm translating for my younger cousins at family gatherings. The bite-sized lessons made it achievable.", name: "Raj M.", location: "Vancouver, Canada" },
+                                { quote: "Finally a platform that gets it. The cultural context helped me understand not just what to say, but why. It's helped me feel more connected to my roots.", name: "Simran K.", location: "Wolverhampton, UK" },
+                            ].map((t, i) => (
+                                <FadeIn key={i} delay={i * 120}>
+                                    <div className="bg-warm-gray rounded-2xl p-8 hover:shadow-md transition-all duration-300 h-full flex flex-col">
+                                        {/* Star rating */}
+                                        <div className="flex gap-1 mb-5">
+                                            {[...Array(5)].map((_, j) => (
+                                                <FaStar key={j} className="text-saffron text-xs" />
+                                            ))}
+                                        </div>
+                                        <p className="text-navy leading-relaxed text-sm flex-1 mb-6">"{t.quote}"</p>
+                                        <div className="flex items-center gap-3 pt-5 border-t border-gray-200/70">
+                                            <div className="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-white text-sm font-bold">
+                                                {t.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-navy text-sm">{t.name}</p>
+                                                <p className="text-xs text-gray-400">{t.location}</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                                    <p className="text-gray-600 leading-relaxed text-sm">{step.desc}</p>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="text-center mt-14">
-                            <a href="/key-functions/signup">
-                                <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-10 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                                    Get Started Free
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Testimonials */}
-                <section className="py-24 px-6 bg-gray-50">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="text-center mb-16">
-                            <p className="text-orange-600 font-bold uppercase tracking-wider text-sm mb-4">Success Stories</p>
-                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Real People. Real Results.</h2>
-                        </div>
-                        <div className="grid md:grid-cols-3 gap-6">
-                            {[
-                                { quote: "I had my first full conversation with my grandmother in Punjabi last week. This platform gave me the tools to connect with her in a way I never thought possible.", name: "Priya S.", location: "Birmingham, UK", avatar: "from-blue-400 to-blue-600" },
-                                { quote: "Six months ago I couldn't say a single sentence. Now I'm translating for my younger cousins at family gatherings. The bite-sized lessons made it achievable.", name: "Raj M.", location: "Vancouver, Canada", avatar: "from-orange-400 to-orange-600" },
-                                { quote: "Finally a platform that gets it. The cultural context helped me understand not just what to say, but why. It's helped me feel more connected to my roots.", name: "Simran K.", location: "Wolverhampton, UK", avatar: "from-green-400 to-green-600" },
-                            ].map((t, i) => (
-                                <div key={i} className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300">
-                                    <div className="flex gap-1 mb-4">
-                                        {[...Array(5)].map((_, j) => <FaStar key={j} className="text-yellow-400 text-xs" />)}
-                                    </div>
-                                    <p className="text-gray-700 mb-5 leading-relaxed italic text-sm">"{t.quote}"</p>
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.avatar}`} />
-                                        <div>
-                                            <p className="font-bold text-gray-900 text-sm">{t.name}</p>
-                                            <p className="text-xs text-gray-500">{t.location}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                </FadeIn>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* FAQ */}
-                <section className="py-24 px-6 bg-white">
+
+                {/* ═══════════════════════════════════════════════════════
+                    FAQ — Accordion with controlled open state
+                   ═══════════════════════════════════════════════════════ */}
+                <section className="py-24 sm:py-32 px-6 sm:px-10" style={{ backgroundColor: 'var(--color-cream)' }}>
                     <div className="max-w-3xl mx-auto">
-                        <div className="text-center mb-14">
-                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-                            <p className="text-gray-600">Everything you need to know about learning Punjabi online</p>
-                        </div>
-                        <div className="space-y-4">
+                        <FadeIn>
+                            <div className="text-center mb-14">
+                                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-3">FAQ</p>
+                                <h2 className="text-3xl sm:text-4xl font-display text-navy">Commonly asked questions</h2>
+                            </div>
+                        </FadeIn>
+
+                        <div className="space-y-3">
                             {[
                                 { q: "How to learn Punjabi from English?", a: "Simply Punjabi makes it easy with three tools: interactive lessons designed for English speakers, an AI tutor that answers in English, and a dictionary with romanised pronunciations. Start with Essential Punjabi for complete beginners." },
-                                { q: "Is it possible to learn Punjabi online for free?", a: "Yes — Simply Punjabi offers free access to lessons, AI tutor conversations, and the full Punjabi-English dictionary. No credit card required." },
-                                { q: "How long does it take to learn Punjabi?", a: "Most learners can have basic family conversations within 4-8 weeks of consistent practice. Our lessons take 10-15 minutes per day." },
+                                { q: "Is it possible to learn Punjabi online for free?", a: "Yes. Simply Punjabi offers free access to lessons, AI tutor conversations, and the full Punjabi-English dictionary. No credit card required." },
+                                { q: "How long does it take to learn Punjabi?", a: "Most learners can have basic family conversations within 4–8 weeks of consistent practice. Our lessons take 10–15 minutes per day." },
                                 { q: "Can I learn Punjabi without knowing Gurmukhi script?", a: "Absolutely. Simply Punjabi uses romanised Punjabi alongside Gurmukhi. You can speak immediately using romanisation and learn the script gradually." },
-                                { q: "Is Simply Punjabi good for western diaspora learners?", a: "Yes — it's specifically designed for second and third-generation learners in the UK, US, Canada, and Australia. Lessons focus on family conversations and cultural context that matter most to heritage learners." },
+                                { q: "Is Simply Punjabi good for diaspora learners?", a: "Yes, it's specifically designed for second and third-generation learners in the UK, US, Canada, and Australia. Lessons focus on family conversations and cultural context that matter most to heritage learners." },
                             ].map((item, i) => (
-                                <details key={i} className="group bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl p-5 border border-blue-100 hover:border-blue-200 transition-colors">
-                                    <summary className="flex items-center justify-between cursor-pointer list-none">
-                                        <h3 className="font-bold text-gray-900 pr-4 text-sm sm:text-base">{item.q}</h3>
-                                        <span className="text-blue-600 text-xl flex-shrink-0 group-open:rotate-45 transition-transform">+</span>
-                                    </summary>
-                                    <p className="mt-3 text-gray-700 leading-relaxed text-sm">{item.a}</p>
-                                </details>
+                                <FadeIn key={i} delay={i * 60}>
+                                    <button
+                                        onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                                        className="w-full text-left bg-white rounded-xl p-5 border border-gray-200 hover:border-gray-300 transition-all duration-200 group"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="font-semibold text-navy pr-4 text-sm sm:text-base">{item.q}</h3>
+                                            <span className={`text-saffron text-lg flex-shrink-0 transition-transform duration-300 ${openFaq === i ? 'rotate-45' : ''}`}>+</span>
+                                        </div>
+                                        <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? 'max-h-40 mt-3 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                            <p className="text-gray-500 leading-relaxed text-sm">{item.a}</p>
+                                        </div>
+                                    </button>
+                                </FadeIn>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* Final CTA */}
-                <section className="py-28 px-6 bg-gradient-to-br from-blue-600 via-blue-700 to-orange-600 text-white relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl" />
-                    <div className="max-w-4xl mx-auto text-center relative z-10">
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-                            Start Speaking Punjabi with Your Family Today
-                        </h2>
-                        <p className="text-lg text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
-                            Join thousands of learners reconnecting with their heritage. Full platform access, no cost.
-                        </p>
-                        <a href="/key-functions/signup">
-                            <button className="bg-white text-blue-600 px-12 py-5 rounded-2xl text-lg font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
-                                <span className="flex items-center gap-3">
-                                    <FaRocket />Get Started Free
-                                </span>
-                            </button>
-                        </a>
-                        <div className="mt-10 flex flex-wrap items-center justify-center gap-8 text-sm text-blue-100">
-                            <div className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /><span>No credit card required</span></div>
-                            <div className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /><span>Learn at your own pace</span></div>
-                            <div className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /><span>Cancel anytime</span></div>
-                        </div>
+
+                {/* ═══════════════════════════════════════════════════════
+                    FINAL CTA — Bold, clean, confident
+                   ═══════════════════════════════════════════════════════ */}
+                <section className="py-28 sm:py-36 px-6 sm:px-10 bg-navy text-white relative overflow-hidden">
+                    {/* Decorative blobs */}
+                    <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-10"
+                         style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.5) 0%, transparent 70%)', transform: 'translate(-40%, -40%)' }} />
+                    <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full opacity-10"
+                         style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.4) 0%, transparent 70%)', transform: 'translate(40%, 40%)' }} />
+
+                    {/* Gurmukhi watermark */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[16rem] font-bold opacity-[0.03] text-white select-none pointer-events-none leading-none"
+                         style={{ fontFamily: 'serif' }}>
+                        ਪੰ
                     </div>
+
+                    <FadeIn>
+                        <div className="max-w-3xl mx-auto text-center relative z-10">
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display leading-tight mb-6">
+                                Start Speaking Punjabi<br />
+                                <span className="text-saffron">with Your Family Today</span>
+                            </h2>
+                            <p className="text-lg text-gray-300 mb-10 max-w-xl mx-auto leading-relaxed">
+                                Join learners across the UK, US, Canada, and Australia who are reconnecting with their heritage through language.
+                            </p>
+                            <a href="/key-functions/signup">
+                                <button className="group bg-saffron text-white px-12 py-5 rounded-xl text-lg font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:-translate-y-0.5 mb-8">
+                                    <span className="flex items-center gap-3">
+                                        Get Started Free
+                                        <FaArrowRight className="text-sm group-hover:translate-x-1 transition-transform" />
+                                    </span>
+                                </button>
+                            </a>
+                            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400">
+                                <span className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /> No credit card required</span>
+                                <span className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /> Learn at your own pace</span>
+                                <span className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /> Free to use</span>
+                            </div>
+                        </div>
+                    </FadeIn>
                 </section>
 
+                {/* ── Minimal footer ──────────────────────────────────── */}
+                <footer className="py-8 px-6 sm:px-10 bg-navy border-t border-white/10">
+                    <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+                        <span>&copy; {new Date().getFullYear()} Simply Punjabi</span>
+                        <div className="flex items-center gap-6">
+                            <a href="/key-functions/signup" className="hover:text-white transition-colors">Get Started</a>
+                            <a href="/key-functions/auth" className="hover:text-white transition-colors">Log In</a>
+                        </div>
+                    </div>
+                </footer>
             </div>
+
+
+            {/* ═══════════════════════════════════════════════════════
+                FLOATING CHAT POPUP (preserved from original)
+               ═══════════════════════════════════════════════════════ */}
+            <div
+                className={`fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] transition-all duration-500 ease-out ${
+                    chatOpen && !chatDismissed
+                        ? 'translate-y-0 opacity-100 pointer-events-auto'
+                        : 'translate-y-8 opacity-0 pointer-events-none'
+                }`}
+            >
+                <div className="rounded-2xl shadow-2xl overflow-hidden border border-gray-200" style={{ height: '480px', display: 'flex', flexDirection: 'column' }}>
+                    <div className="px-4 py-3 flex items-center gap-3 flex-shrink-0 text-white" style={{ backgroundColor: 'var(--color-navy)' }}>
+                        <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+                            <FaRobot className="text-white text-xs" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-white font-bold text-sm leading-tight">Simply Punjabi Tutor</p>
+                            <div className="flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                                <p className="text-gray-300 text-xs">Online · 3 free messages</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => { setChatOpen(false); setChatDismissed(true); }}
+                            className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors flex-shrink-0"
+                            aria-label="Close chat"
+                        >
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                <path d="M1 1l8 8M9 1L1 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div className="flex-1 min-h-0">
+                        <ChatSpotlight inPopup />
+                    </div>
+                </div>
+            </div>
+
+            {/* Floating bubble */}
+            <button
+                onClick={() => { setChatOpen(true); setChatDismissed(false); }}
+                className={`fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 ${
+                    chatOpen && !chatDismissed ? 'opacity-0 pointer-events-none scale-75' : 'opacity-100 scale-100'
+                }`}
+                style={{ backgroundColor: 'var(--color-navy)' }}
+                aria-label="Open AI tutor"
+            >
+                <FaComments className="text-white text-xl" />
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse" />
+            </button>
         </>
     );
 }
