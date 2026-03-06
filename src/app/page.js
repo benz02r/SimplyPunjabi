@@ -1,8 +1,382 @@
 "use client";
 
 import Head from 'next/head';
-import { FaComments, FaMicrophone, FaAward, FaBullseye, FaCheckCircle, FaGlobe, FaUsers, FaRocket, FaHeart, FaStar, FaPlay, FaClock, FaMobile, FaHeadphones, FaBook, FaLanguage, FaGraduationCap, FaRobot, FaBookOpen } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FaComments, FaMicrophone, FaAward, FaBullseye, FaCheckCircle, FaGlobe, FaUsers, FaRocket, FaHeart, FaStar, FaPlay, FaClock, FaMobile, FaHeadphones, FaBook, FaLanguage, FaGraduationCap, FaRobot, FaBookOpen, FaLock, FaStar as FaStarSolid, FaArrowRight } from 'react-icons/fa';
 
+// ─── Chat Spotlight Component ────────────────────────────────────────────────
+function ChatSpotlight() {
+    const [messages, setMessages] = useState([
+        {
+            role: 'assistant',
+            text: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! (Sat Sri Akal!) I\'m your Punjabi tutor. Ask me anything — greetings, family words, or how to say something to your relatives. What would you like to learn today?',
+            structured: null
+        }
+    ]);
+    const [input, setInput] = useState('');
+    const [usesLeft, setUsesLeft] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
+
+    const MAX_FREE_USES = 3;
+    const STORAGE_KEY = 'sp_chat_uses';
+
+    useEffect(() => {
+        try {
+            const stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+            setUsesLeft(Math.max(0, MAX_FREE_USES - stored));
+        } catch {
+            setUsesLeft(MAX_FREE_USES);
+        }
+    }, []);
+
+    const incrementUses = () => {
+        try {
+            const stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+            const next = stored + 1;
+            localStorage.setItem(STORAGE_KEY, String(next));
+            setUsesLeft(Math.max(0, MAX_FREE_USES - next));
+        } catch { /* ignore */ }
+    };
+
+    const handleSend = async () => {
+        const trimmed = input.trim();
+        if (!trimmed || loading) return;
+
+        if (usesLeft <= 0) return;
+
+        // Build conversation history in the format the route expects
+        const conversationHistory = messages.map(m => ({
+            role: m.role,
+            content: m.text
+        }));
+
+        const userMsg = { role: 'user', text: trimmed, structured: null };
+        setMessages(prev => [...prev, userMsg]);
+        setInput('');
+        setIsTyping(true);
+        setLoading(true);
+        incrementUses();
+
+        try {
+            const response = await fetch('/api/chat-gemini', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: trimmed,
+                    conversationHistory,
+                    responseFormat: 'structured',
+                    userLevel: 'beginner'
+                })
+            });
+
+            const data = await response.json();
+            const structured = data.structured;
+
+            // Build a readable fallback text from structured data
+            let replyText = data.response || '';
+            if (structured?.romanized && structured?.english) {
+                replyText = structured.romanized + ' — ' + structured.english;
+            }
+
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                text: replyText,
+                structured
+            }]);
+        } catch {
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                text: 'Something went wrong — please try again in a moment.',
+                structured: null
+            }]);
+        } finally {
+            setIsTyping(false);
+            setLoading(false);
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+        }
+    };
+
+    return (
+        <section className="py-24 px-6 bg-gradient-to-b from-white to-blue-50/40 relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100/30 to-orange-100/20 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-orange-100/20 to-blue-100/20 rounded-full blur-3xl -z-10"></div>
+
+            <div className="max-w-6xl mx-auto">
+                {/* Section header */}
+                <div className="text-center mb-16">
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-orange-500 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6 shadow-lg">
+                        <FaRobot className="text-xs" />
+                        AI Punjabi Tutor
+                    </div>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                        Chat with Your Personal<br />
+                        <span className="bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">Punjabi Tutor</span>
+                    </h2>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Ask anything in English! family phrases, pronunciations, cultural context. Get instant answers rooted in real Punjabi.
+                    </p>
+                </div>
+
+                {/* Two-column layout: features + chat demo */}
+                <div className="grid lg:grid-cols-2 gap-12 items-start">
+
+                    {/* Left: Feature bullets */}
+                    <div className="space-y-6 lg:pt-4">
+                        {[
+                            {
+                                icon: <FaGlobe className="text-blue-600 text-xl" />,
+                                title: "Culturally grounded answers",
+                                desc: "Trained on diaspora scenarios; family gatherings, respect registers, and everyday conversations."
+                            },
+                            {
+                                icon: <FaBookOpen className="text-orange-500 text-xl" />,
+                                title: "English + Gurmukhi + Roman script",
+                                desc: "Every response includes pronunciation guides so you can speak with confidence."
+                            },
+                            {
+                                icon: <FaHeart className="text-red-500 text-xl" />,
+                                title: "Built for heritage learners",
+                                desc: "Not Duolingo. Not a textbook. Real phrases for real family moments."
+                            },
+                            {
+                                icon: <FaGraduationCap className="text-green-600 text-xl" />,
+                                title: "Curriculum-guided AI",
+                                desc: "Responses are grounded in our lesson content not random internet data."
+                            }
+                        ].map((f, i) => (
+                            <div key={i} className="flex items-start gap-4 bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    {f.icon}
+                                </div>
+                                <div>
+                                    <p className="font-bold text-gray-900 mb-1">{f.title}</p>
+                                    <p className="text-sm text-gray-600 leading-relaxed">{f.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+
+                        <div className="mt-2">
+                            <a href="/key-functions/signup">
+                                <button className="group flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                                    <FaRocket className="text-sm" />
+                                    Get Unlimited Access Free
+                                    <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Right: Live chat demo */}
+                    <div className="relative">
+                        {/* Usage indicator */}
+                        {usesLeft !== null && (
+                            <div className="mb-3 flex items-center justify-between">
+                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Try it now — no sign-up needed</p>
+                                <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${usesLeft > 1 ? 'bg-green-100 text-green-700' : usesLeft === 1 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>
+                                    {usesLeft > 0 ? (
+                                        <>
+                                            <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
+                                            {usesLeft} free {usesLeft === 1 ? 'message' : 'messages'} left
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaLock className="text-xs" />
+                                            Free limit reached
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Chat window */}
+                        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+                            {/* Chat header */}
+                            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                    <FaRobot className="text-white text-lg" />
+                                </div>
+                                <div>
+                                    <p className="text-white font-bold text-sm">Simply Punjabi Tutor</p>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                                        <p className="text-blue-200 text-xs">Online</p>
+                                    </div>
+                                </div>
+                                {/* Free uses dots */}
+                                {usesLeft !== null && (
+                                    <div className="ml-auto flex items-center gap-1">
+                                        {[...Array(MAX_FREE_USES)].map((_, i) => (
+                                            <div
+                                                key={i}
+                                                className={`w-2 h-2 rounded-full transition-colors ${i < usesLeft ? 'bg-green-400' : 'bg-white/20'}`}
+                                            />
+                                        ))}
+                                        <span className="text-xs text-blue-200 ml-1">free</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Messages */}
+                            <div className="h-72 overflow-y-auto p-5 space-y-4 bg-gray-50/50">
+                                {messages.map((msg, i) => (
+                                    <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                        {msg.role === 'assistant' && (
+                                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">
+                                                <FaRobot className="text-white text-xs" />
+                                            </div>
+                                        )}
+                                        <div className={`max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                                            msg.role === 'user'
+                                                ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-tr-sm'
+                                                : 'bg-white text-gray-800 shadow-sm border border-gray-100 rounded-tl-sm'
+                                        }`}>
+                                            {msg.role === 'assistant' && msg.structured?.gurmukhi ? (
+                                                <div>
+                                                    {/* Gurmukhi */}
+                                                    <p className="text-lg font-bold text-gray-900 mb-1">{msg.structured.gurmukhi}</p>
+                                                    {/* Romanised */}
+                                                    <p className="text-sm italic text-gray-600 mb-1">{msg.structured.romanized}</p>
+                                                    {/* English */}
+                                                    <p className="text-xs text-gray-500 mb-2">{msg.structured.english}</p>
+                                                    {/* Cultural note */}
+                                                    {msg.structured.cultural_note && (
+                                                        <div className="mt-2 pt-2 border-t border-gray-100">
+                                                            <p className="text-[10px] font-bold text-orange-500 uppercase tracking-wide mb-0.5">Cultural Note</p>
+                                                            <p className="text-xs text-gray-600 leading-relaxed">{msg.structured.cultural_note}</p>
+                                                        </div>
+                                                    )}
+                                                    {/* Vocabulary pills */}
+                                                    {msg.structured.new_vocabulary?.length > 0 && (
+                                                        <div className="mt-2 pt-2 border-t border-gray-100">
+                                                            <p className="text-[10px] font-bold text-green-600 uppercase tracking-wide mb-1">New Words</p>
+                                                            <div className="flex flex-wrap gap-1">
+                                                                {msg.structured.new_vocabulary.slice(0, 3).map((w, wi) => (
+                                                                    <span key={wi} className="text-[10px] bg-green-50 border border-green-100 rounded px-1.5 py-0.5 text-gray-700">
+                                                                        {w.romanized} · {w.english}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {/* Follow-up suggestion */}
+                                                    {msg.structured.follow_up_suggestion && (
+                                                        <button
+                                                            onClick={() => setInput(msg.structured.follow_up_suggestion)}
+                                                            className="mt-2 text-[10px] text-blue-500 hover:text-blue-700 flex items-center gap-1 font-medium"
+                                                        >
+                                                            <FaArrowRight className="text-[8px]" />
+                                                            {msg.structured.follow_up_suggestion}
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                msg.text
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                                {isTyping && (
+                                    <div className="flex justify-start">
+                                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">
+                                            <FaRobot className="text-white text-xs" />
+                                        </div>
+                                        <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100">
+                                            <div className="flex gap-1 items-center h-4">
+                                                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Input area */}
+                            <div className="p-4 bg-white border-t border-gray-100">
+                                {usesLeft === 0 ? (
+                                    /* Paywall input state */
+                                    <div className="flex flex-col items-center gap-3 py-2">
+                                        <p className="text-sm text-gray-600 font-medium text-center">
+                                            You've used your 3 free messages — sign up to continue for free.
+                                        </p>
+                                        <a href="/key-functions/signup" className="w-full">
+                                            <button className="w-full bg-gradient-to-r from-blue-600 to-orange-500 text-white py-3 rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-[1.02]">
+                                                Create Free Account — Unlimited Chat
+                                            </button>
+                                        </a>
+                                    </div>
+                                ) : (
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={input}
+                                            onChange={e => setInput(e.target.value)}
+                                            onKeyDown={handleKeyDown}
+                                            placeholder="Ask e.g. 'How do I greet my nani?'"
+                                            disabled={loading}
+                                            className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 transition"
+                                        />
+                                        <button
+                                            onClick={handleSend}
+                                            disabled={loading || !input.trim()}
+                                            className="bg-gradient-to-r from-blue-600 to-blue-700 text-white w-11 h-11 rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 flex-shrink-0"
+                                        >
+                                            {loading ? (
+                                                <svg className="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                                </svg>
+                                            ) : (
+                                                <FaArrowRight className="text-sm" />
+                                            )}
+                                        </button>
+                                    </div>
+                                )}
+                                {usesLeft !== null && usesLeft > 0 && (
+                                    <p className="text-xs text-gray-400 text-center mt-2">
+                                        {usesLeft} of {MAX_FREE_USES} free messages remaining · <a href="/key-functions/signup" className="text-blue-500 hover:underline">Sign up for unlimited</a>
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Floating "popular question" chips */}
+                        {usesLeft !== null && usesLeft > 0 && messages.length <= 1 && (
+                            <div className="mt-4">
+                                <p className="text-xs text-gray-400 mb-2 font-medium">Try asking:</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {[
+                                        "How do I say 'I love you' to my mum?",
+                                        "Teach me how to greet elders",
+                                        "What does 'vadhāī hovey' mean?"
+                                    ].map((q, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setInput(q)}
+                                            className="text-xs bg-white border border-gray-200 text-gray-600 px-3 py-1.5 rounded-full hover:border-blue-400 hover:text-blue-600 transition-colors shadow-sm"
+                                        >
+                                            {q}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function Home() {
     const punjabiDays = [
         { en: "Sunday", pa: "ਐਤਵਾਰ", pron: "Aitvaar" },
@@ -24,20 +398,14 @@ export default function Home() {
                 <title>Learn Punjabi Online Free | How to Learn Punjabi from English - Simply Punjabi</title>
                 <meta name="description" content="Learn Punjabi online free with Simply Punjabi. Best way to learn Punjabi from English for beginners. Interactive lessons, AI tutor, and dictionary help you speak Punjabi with your family in weeks, not years." />
                 <meta name="keywords" content="learn punjabi, learn punjabi online, how to learn punjabi, learn punjabi from english, learn punjabi free, punjabi language learning, punjabi for beginners, learn to speak punjabi, punjabi lessons online, punjabi course, gurmukhi script, punjabi dictionary, punjabi language app, punjabi for diaspora" />
-
-                {/* Open Graph */}
                 <meta property="og:title" content="Learn Punjabi Online Free | Simply Punjabi" />
                 <meta property="og:description" content="The easiest way to learn Punjabi from English. AI-powered lessons, interactive exercises, and instant translations help you speak Punjabi with your family." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://simplypunjabi.com" />
                 <meta property="og:image" content="https://simplypunjabi.com/og-image.png" />
-
-                {/* Twitter Card */}
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Learn Punjabi Online Free | Simply Punjabi" />
                 <meta name="twitter:description" content="The easiest way to learn Punjabi from English. Start speaking Punjabi with your family today." />
-
-                {/* Structured Data for Rich Results */}
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",
@@ -46,10 +414,7 @@ export default function Home() {
                         "description": "Learn Punjabi online free - Interactive lessons and AI tutor for English speakers",
                         "url": "https://simplypunjabi.com",
                         "logo": "https://simplypunjabi.com/logo.png",
-                        "sameAs": [
-
-                            "https://www.instagram.com/learnsimplypunjabi"
-                        ],
+                        "sameAs": ["https://www.instagram.com/learnsimplypunjabi"],
                         "courseMode": "online",
                         "teaches": "Punjabi Language",
                         "availableLanguage": ["English", "Punjabi"],
@@ -61,19 +426,17 @@ export default function Home() {
                         }
                     })}
                 </script>
-
                 <link rel="canonical" href="https://simplypunjabi.com" />
             </Head>
 
             <div className="min-h-screen bg-white">
-                {/* Hero Section - Emotional Connection First */}
+
+                {/* ── Hero ──────────────────────────────────────────────── */}
                 <section className="relative px-6 pt-32 pb-32 sm:pt-40 sm:pb-40 overflow-hidden bg-gradient-to-br from-blue-50 via-orange-50/30 to-white">
-                    {/* Subtle background decoration */}
                     <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-100/40 to-orange-100/40 rounded-full blur-3xl -z-10"></div>
                     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-orange-100/30 to-blue-100/30 rounded-full blur-3xl -z-10"></div>
 
                     <div className="max-w-6xl mx-auto">
-                        {/* Logo - LARGER */}
                         <div className="flex justify-center mb-6">
                             <img
                                 src="/Website Banner(shadowing)- Simply Punjabi, Ryan.png"
@@ -82,7 +445,6 @@ export default function Home() {
                             />
                         </div>
 
-                        {/* SEO-Optimized Headline */}
                         <div className="text-center max-w-4xl mx-auto mb-8">
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                                 Learn Punjabi Online Free from English
@@ -92,7 +454,6 @@ export default function Home() {
                             </p>
                         </div>
 
-                        {/* CTA Section - Clear and Focused */}
                         <div className="flex flex-col items-center gap-4 mb-12">
                             <a href="/key-functions/signup" className="w-full sm:w-auto">
                                 <button className="w-full sm:w-auto group relative bg-gradient-to-r from-blue-600 to-blue-700 text-white px-12 py-5 rounded-2xl text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
@@ -108,7 +469,6 @@ export default function Home() {
                             </p>
                         </div>
 
-                        {/* Social Proof - Credible and Specific */}
                         <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-600">
                             <div className="flex items-center gap-2">
                                 <FaUsers className="text-blue-600" />
@@ -120,7 +480,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                        {/* Word of the Day - Interactive Element */}
+                        {/* Word of the Day */}
                         <div className="mt-16 flex justify-center">
                             <div className="bg-white rounded-3xl shadow-lg border border-gray-100 px-10 py-8 hover:shadow-xl transition-all duration-300 max-w-md">
                                 <p className="text-xs uppercase tracking-widest text-gray-400 mb-3 text-center font-bold">Today's Word</p>
@@ -137,7 +497,10 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* Course Paths - MOVED UP */}
+                {/* ── AI Chat Spotlight ─────────────────────────────────── */}
+                <ChatSpotlight />
+
+                {/* ── Course Paths ──────────────────────────────────────── */}
                 <section className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
@@ -183,7 +546,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* Problem-Solution Section - Emotional Resonance */}
+                {/* ── Problem / Solution ────────────────────────────────── */}
                 <section className="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
@@ -192,12 +555,11 @@ export default function Home() {
                                 Learning Punjabi Shouldn't Feel Impossible
                             </h2>
                             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                                Generic language apps don't understand rea; learners. They teach vocabulary you'll never use
+                                Generic language apps don't understand real learners. They teach vocabulary you'll never use
                                 and ignore the context that makes conversations meaningful.
                             </p>
                         </div>
 
-                        {/* Pain Points vs Solutions */}
                         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                             <ProblemSolutionCard
                                 problem="Generic apps teach textbook phrases"
@@ -227,7 +589,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* How It Works - Main Features */}
+                {/* ── How It Works ──────────────────────────────────────── */}
                 <section className="py-24 px-6 bg-white">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
@@ -261,7 +623,6 @@ export default function Home() {
                             />
                         </div>
 
-                        {/* Secondary CTA */}
                         <div className="text-center mt-16">
                             <a href="/key-functions/signup">
                                 <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-10 py-4 rounded-2xl text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
@@ -272,7 +633,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* Testimonials - Emotional Stories */}
+                {/* ── Testimonials ──────────────────────────────────────── */}
                 <section className="py-24 px-6 bg-white">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center mb-20">
@@ -305,7 +666,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* FAQ Section - Critical for SEO */}
+                {/* ── FAQ ───────────────────────────────────────────────── */}
                 <section className="py-24 px-6 bg-white">
                     <div className="max-w-4xl mx-auto">
                         <div className="text-center mb-16">
@@ -346,9 +707,8 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* Final CTA - Conversion Focused */}
+                {/* ── Final CTA ─────────────────────────────────────────── */}
                 <section className="py-32 px-6 bg-gradient-to-br from-blue-600 via-blue-700 to-orange-600 text-white relative overflow-hidden">
-                    {/* Decorative elements */}
                     <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl"></div>
 
@@ -371,7 +731,6 @@ export default function Home() {
                             </a>
                         </div>
 
-                        {/* Trust indicators */}
                         <div className="mt-16 flex flex-wrap items-center justify-center gap-8 text-sm text-blue-100">
                             <div className="flex items-center gap-2">
                                 <FaCheckCircle className="text-green-400" />
@@ -388,6 +747,8 @@ export default function Home() {
         </>
     );
 }
+
+// ─── Sub-components (unchanged from original) ────────────────────────────────
 
 function ProblemSolutionCard({ problem, solution, icon, accentColor }) {
     const colorMap = {
@@ -438,23 +799,19 @@ function CourseCard({ level, title, description, lessons, link, gradient, icon, 
                         MOST POPULAR
                     </div>
                 )}
-
                 <div className="text-center">
                     <div className="flex justify-center mb-6 transform group-hover:scale-110 transition-transform duration-300">
                         {icon}
                     </div>
-
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{level}</p>
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">{title}</h3>
                     <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
-
                     <div className="flex items-center justify-center text-sm text-gray-500 mb-6">
                         <span className="flex items-center gap-1.5">
                             <FaBook className="text-xs" />
                             {lessons}
                         </span>
                     </div>
-
                     <button className={`w-full bg-gradient-to-r ${gradient} text-white px-6 py-4 rounded-xl font-bold shadow-md group-hover:shadow-lg transition-all duration-300`}>
                         <span className="flex items-center justify-center gap-2">
                             Start Course
@@ -486,6 +843,7 @@ function TestimonialCard({ quote, name, location, avatar }) {
         </div>
     );
 }
+
 function FAQItem({ question, answer }) {
     return (
         <details className="group bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl p-6 border border-blue-100 hover:border-blue-200 transition-colors">
