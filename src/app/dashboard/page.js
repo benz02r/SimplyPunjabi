@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { FaGraduationCap, FaUser, FaTrophy, FaFire, FaChartLine, FaBook, FaRobot, FaBookOpen, FaArrowRight } from "react-icons/fa";
+import { FaGraduationCap, FaUser, FaFire, FaBook, FaRobot, FaBookOpen, FaArrowRight } from "react-icons/fa";
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -40,159 +40,193 @@ export default function Dashboard() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
-                <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600 font-medium">Loading your dashboard...</p>
+            <>
+                <style jsx global>{`
+                    :root {
+                        --color-navy: #1B2A4A;
+                        --color-cream: #FDFBF7;
+                        --font-display: 'DM Serif Display', Georgia, serif;
+                        --font-body: 'DM Sans', system-ui, sans-serif;
+                    }
+                    body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+                `}</style>
+                <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: 'var(--color-cream)' }}>
+                    <div className="text-center">
+                        <div className="w-14 h-14 border-3 rounded-full animate-spin mx-auto mb-4"
+                             style={{ borderColor: '#1B2A4A', borderTopColor: 'transparent', borderWidth: '3px' }}></div>
+                        <p className="text-gray-500 font-medium text-sm">Loading your dashboard...</p>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-            <div className="max-w-7xl mx-auto">
-                {/* Welcome Header */}
-                <div className="mb-12">
-                    <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+        <>
+            <style jsx global>{`
+                :root {
+                    --color-saffron: #E67E22;
+                    --color-navy: #1B2A4A;
+                    --color-cream: #FDFBF7;
+                    --color-warm-gray: #F7F5F2;
+                    --font-display: 'DM Serif Display', Georgia, serif;
+                    --font-body: 'DM Sans', system-ui, sans-serif;
+                }
+                body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+                .font-display { font-family: var(--font-display); }
+                .text-saffron { color: var(--color-saffron); }
+                .text-navy { color: var(--color-navy); }
+                .bg-navy { background-color: var(--color-navy); }
+            `}</style>
 
-                        <div className="relative z-10 text-center">
-                            <h1 className="text-4xl sm:text-5xl font-bold mb-3">
-                                Welcome back, {userName}!
+            <div className="min-h-screen px-6 sm:px-10 pt-28 pb-16" style={{ backgroundColor: 'var(--color-cream)' }}>
+                <div className="max-w-6xl mx-auto">
+
+                    {/* Welcome Header */}
+                    <div className="mb-12 relative overflow-hidden rounded-2xl" style={{ backgroundColor: 'var(--color-navy)' }}>
+                        {/* Decorative elements */}
+                        <div className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-10"
+                             style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.6) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+                        <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-10"
+                             style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)', transform: 'translate(-20%, 20%)' }} />
+
+                        {/* Gurmukhi watermark */}
+                        <div className="absolute top-1/2 right-8 -translate-y-1/2 text-[8rem] font-bold opacity-[0.04] text-white select-none pointer-events-none leading-none"
+                             style={{ fontFamily: 'serif' }}>
+                            ੴ
+                        </div>
+
+                        <div className="relative z-10 px-8 sm:px-12 py-10 sm:py-14 text-center">
+                            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-400 mb-3">Dashboard</p>
+                            <h1 className="text-3xl sm:text-4xl font-display text-white mb-2">
+                                Welcome back, <span className="text-saffron">{userName}</span>
                             </h1>
-                            <p className="text-xl text-blue-50">
+                            <p className="text-gray-400 text-base">
                                 Ready to continue your Punjabi learning journey?
                             </p>
                         </div>
                     </div>
-                </div>
 
-                {/* Main Dashboard Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    {/* Continue Learning - Takes 2 columns */}
-                    <div className="lg:col-span-2">
-                        <DashboardCard
-                            icon={<FaGraduationCap className="text-5xl" />}
-                            title="Continue Learning"
-                            description="Pick up where you left off and keep building your skills"
-                            link="/learning"
-                            gradient="from-green-500 to-green-700"
-                            featured
-                        />
-                    </div>
+                    {/* Main Dashboard Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+                        {/* Continue Learning */}
+                        <div className="lg:col-span-2">
+                            <a href="/learning" className="block h-full group">
+                                <div className="relative h-full rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                                     style={{ backgroundColor: 'var(--color-navy)' }}>
+                                    <div className="absolute top-0 right-0 w-40 h-40 rounded-full opacity-10"
+                                         style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.5) 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
 
-                    {/* Profile Card */}
-                    <div>
-                        <DashboardCard
-                            icon={<FaUser className="text-4xl" />}
-                            title="Your Profile"
-                            description="Manage your account settings"
-                            link="/profile"
-                            gradient="from-blue-500 to-blue-700"
-                        />
-                    </div>
-                </div>
-
-                {/* Secondary Options Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <SmallCard
-                        icon={<FaRobot className="text-3xl text-purple-500" />}
-                        title="AI Punjabi Tutor"
-                        description="Chat with AI for personalised lessons"
-                        link="/punjabichat"
-                    />
-                    <SmallCard
-                        icon={<FaBookOpen className="text-3xl text-blue-500" />}
-                        title="Dictionary"
-                        description="Search Punjabi-English translations"
-                        link="/dictionary"
-                    />
-                    <SmallCard
-                        icon={<FaBook className="text-3xl text-green-500" />}
-                        title="Lesson Library"
-                        description="Browse all available lessons"
-                        link="/learning"
-                    />
-                </div>
-
-                {/* Daily Motivation Card */}
-                <div className="mt-8 bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-100">
-                    <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
-                            <FaFire className="text-white text-2xl" />
+                                    <div className="relative z-10 p-8 sm:p-10 h-full flex flex-col justify-between min-h-[220px]">
+                                        <div>
+                                            <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white mb-5"
+                                                 style={{ backgroundColor: 'rgba(230,126,34,0.2)' }}>
+                                                <FaGraduationCap className="text-2xl text-saffron" />
+                                            </div>
+                                            <h3 className="text-2xl font-bold text-white mb-2">Continue Learning</h3>
+                                            <p className="text-gray-400 text-sm">Pick up where you left off and keep building your skills</p>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-saffron font-semibold text-sm mt-6 group-hover:gap-3 transition-all">
+                                            <span>Go to Lessons</span>
+                                            <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
+
+                        {/* Profile Card */}
                         <div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                Ready to Learn Today?
-                            </h3>
-                            <p className="text-gray-600">
-                                Start your lesson and take another step towards mastering Punjabi. Every day brings you closer to fluency!
-                            </p>
-                            <button
-                                onClick={() => router.push("/learning")}
-                                className="mt-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-md"
-                            >
-                                Start Today's Lesson
-                            </button>
+                            <a href="/profile" className="block h-full group">
+                                <div className="relative h-full bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                                    <div className="relative z-10 p-8 h-full flex flex-col justify-between min-h-[220px]">
+                                        <div>
+                                            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5"
+                                                 style={{ backgroundColor: 'var(--color-warm-gray)' }}>
+                                                <FaUser className="text-xl text-navy" />
+                                            </div>
+                                            <h3 className="text-xl font-bold text-navy mb-2">Your Profile</h3>
+                                            <p className="text-gray-500 text-sm">Manage your account settings</p>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-saffron font-semibold text-sm mt-6 group-hover:gap-3 transition-all">
+                                            <span>View Profile</span>
+                                            <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Secondary Options Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+                        {[
+                            {
+                                icon: <FaRobot className="text-xl" />,
+                                title: "AI Punjabi Tutor",
+                                description: "Chat with AI for personalised lessons",
+                                link: "/punjabichat",
+                                color: "#8B5CF6"
+                            },
+                            {
+                                icon: <FaBookOpen className="text-xl" />,
+                                title: "Dictionary",
+                                description: "Search Punjabi-English translations",
+                                link: "/dictionary",
+                                color: "#3B82F6"
+                            },
+                            {
+                                icon: <FaBook className="text-xl" />,
+                                title: "Lesson Library",
+                                description: "Browse all available lessons",
+                                link: "/learning",
+                                color: "#059669"
+                            },
+                        ].map((item, i) => (
+                            <a key={i} href={item.link} className="block group">
+                                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-gray-300 transition-all duration-300 hover:-translate-y-1 p-7 h-full">
+                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-5 transition-transform group-hover:scale-105"
+                                         style={{ backgroundColor: item.color }}>
+                                        {item.icon}
+                                    </div>
+                                    <h3 className="text-lg font-bold text-navy mb-1.5 group-hover:text-saffron transition-colors">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-gray-500 text-sm leading-relaxed">
+                                        {item.description}
+                                    </p>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* Daily Motivation */}
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 overflow-hidden relative">
+                        <div className="flex items-start gap-5">
+                            <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white"
+                                 style={{ backgroundColor: 'var(--color-saffron)' }}>
+                                <FaFire className="text-xl" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-navy mb-1.5">
+                                    Ready to Learn Today?
+                                </h3>
+                                <p className="text-gray-500 text-sm leading-relaxed mb-5">
+                                    Start your lesson and take another step towards mastering Punjabi. Every day brings you closer to fluency.
+                                </p>
+                                <button
+                                    onClick={() => router.push("/learning")}
+                                    className="group flex items-center gap-2 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
+                                    style={{ backgroundColor: 'var(--color-saffron)' }}
+                                >
+                                    Start Today's Lesson
+                                    <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-}
-
-function DashboardCard({ icon, title, description, link, gradient, featured = false }) {
-    return (
-        <a href={link} className="block h-full group">
-            <div className={`relative h-full bg-gradient-to-br ${gradient} rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] overflow-hidden ${
-                featured ? 'min-h-[240px]' : 'min-h-[200px]'
-            }`}>
-                {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                <div className="relative z-10 p-8 h-full flex flex-col justify-between">
-                    <div>
-                        <div className="text-white mb-4">
-                            {icon}
-                        </div>
-                        <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-                            {title}
-                        </h3>
-                        <p className="text-white/90 text-lg">
-                            {description}
-                        </p>
-                    </div>
-
-                    <div className="flex items-center text-white font-semibold group-hover:gap-3 gap-2 transition-all">
-                        <span>Get Started</span>
-                        <FaArrowRight className="transform group-hover:translate-x-1 transition-transform" />
-                    </div>
-                </div>
-
-                {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-            </div>
-        </a>
-    );
-}
-
-function SmallCard({ icon, title, description, link }) {
-    return (
-        <a href={link} className="block group">
-            <div className="bg-white rounded-2xl shadow-md hover:shadow-xl border-2 border-gray-100 hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-1 p-6 h-full">
-                <div className="mb-4">
-                    {icon}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {title}
-                </h3>
-                <p className="text-gray-600 text-sm">
-                    {description}
-                </p>
-            </div>
-        </a>
+        </>
     );
 }

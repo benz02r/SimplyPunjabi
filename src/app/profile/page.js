@@ -24,7 +24,7 @@ export default function Profile() {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState(""); // 'success' or 'error'
+    const [messageType, setMessageType] = useState("");
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [points, setPoints] = useState(0);
@@ -154,225 +154,266 @@ export default function Profile() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-            <div className="max-w-6xl mx-auto">
-                {/* Level Up Notification */}
-                {levelUp && (
-                    <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-4 rounded-2xl shadow-2xl text-xl font-bold animate-bounce z-50">
-                        🎉 LEVEL UP! You're now Level {level} 🎯
-                    </div>
-                )}
+        <>
+            <style jsx global>{`
+                :root {
+                    --color-saffron: #E67E22;
+                    --color-navy: #1B2A4A;
+                    --color-cream: #FDFBF7;
+                    --color-warm-gray: #F7F5F2;
+                    --font-display: 'DM Serif Display', Georgia, serif;
+                    --font-body: 'DM Sans', system-ui, sans-serif;
+                }
+                body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+                .font-display { font-family: var(--font-display); }
+                .text-saffron { color: var(--color-saffron); }
+                .text-navy { color: var(--color-navy); }
+                .bg-navy { background-color: var(--color-navy); }
+            `}</style>
 
-                {/* Back Button */}
-                <button
-                    onClick={() => router.push("/dashboard")}
-                    className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors group"
-                >
-                    <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
-                    <span>Back to Dashboard</span>
-                </button>
+            <div className="min-h-screen px-6 sm:px-10 pt-28 pb-16" style={{ backgroundColor: 'var(--color-cream)' }}>
+                <div className="max-w-6xl mx-auto">
 
-                {/* Profile Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-3xl p-8 sm:p-12 text-white shadow-xl mb-8 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
-
-                    <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6">
-                        <img
-                            src={selectedAvatar}
-                            alt="User Avatar"
-                            className="w-32 h-32 rounded-full border-4 border-white shadow-2xl"
-                        />
-                        <div className="text-center sm:text-left flex-1">
-                            <h1 className="text-4xl font-bold mb-2">{name}</h1>
-                            <p className="text-blue-100 text-lg mb-4">{email}</p>
-                            <div className="flex flex-wrap gap-4 justify-center sm:justify-start">
-                                <StatBadge icon={<FaTrophy />} value={points} label="Total Points" />
-                                <StatBadge icon={<FaStar />} value={`Level ${level}`} label="Current Level" />
-                                <StatBadge icon={<FaChartLine />} value={`${progress}%`} label="Progress" />
-                            </div>
+                    {/* Level Up Notification */}
+                    {levelUp && (
+                        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 text-white px-8 py-4 rounded-xl shadow-2xl text-lg font-bold animate-bounce z-50"
+                             style={{ backgroundColor: 'var(--color-saffron)' }}>
+                            Level Up! You're now Level {level}
                         </div>
-                    </div>
-                </div>
+                    )}
 
-                {/* Message Display */}
-                {message && (
-                    <div className={`mb-6 p-4 rounded-xl font-medium ${
-                        messageType === "success"
-                            ? "bg-green-100 text-green-800 border-2 border-green-300"
-                            : "bg-red-100 text-red-800 border-2 border-red-300"
-                    }`}>
-                        {message}
-                    </div>
-                )}
+                    {/* Back Button */}
+                    <button
+                        onClick={() => router.push("/dashboard")}
+                        className="mb-6 flex items-center gap-2 text-gray-400 hover:text-navy font-medium text-sm transition-colors group"
+                    >
+                        <FaArrowLeft className="text-xs group-hover:-translate-x-1 transition-transform" />
+                        <span>Back to Dashboard</span>
+                    </button>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Left Column - Stats & Progress */}
-                    <div className="lg:col-span-1 space-y-6">
-                        {/* Lesson Progress */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaChartLine className="text-blue-600" />
-                                Lesson Progress
-                            </h2>
-                            <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner mb-2">
-                                <div
-                                    className="bg-gradient-to-r from-green-500 to-green-600 h-full flex items-center justify-end pr-3 text-white text-sm font-bold transition-all duration-500"
-                                    style={{ width: `${progress}%` }}
-                                >
-                                    {progress}%
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-600 text-center">
-                                {Math.round((progress / 100) * totalLessons)} of {totalLessons} lessons completed
-                            </p>
-                        </div>
+                    {/* Profile Header */}
+                    <div className="rounded-2xl mb-8 relative overflow-hidden" style={{ backgroundColor: 'var(--color-navy)' }}>
+                        <div className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-10"
+                             style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.6) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+                        <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-10"
+                             style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)', transform: 'translate(-20%, 20%)' }} />
 
-                        {/* Level Progress */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaFire className="text-orange-500" />
-                                Level Progress
-                            </h2>
-                            <div className="text-center mb-4">
-                                <p className="text-3xl font-bold text-blue-600">Level {level}</p>
-                                <p className="text-sm text-gray-600">Next level at {(level + 1) * 30} points</p>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner">
-                                <div
-                                    className="bg-gradient-to-r from-blue-500 to-purple-600 h-full flex items-center justify-end pr-3 text-white text-sm font-bold transition-all duration-500"
-                                    style={{ width: `${((points % 30) / 30) * 100}%` }}
-                                >
-                                    {points % 30}/30
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Right Column - Settings */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Avatar Selection */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4">Choose Your Avatar</h2>
-                            <div className="grid grid-cols-4 sm:grid-cols-8 gap-4">
-                                {avatars.map((avatar, index) => {
-                                    const isUnlocked = index <= level;
-                                    return (
-                                        <div key={index} className="relative group">
-                                            <img
-                                                src={avatar}
-                                                alt={`Avatar ${index + 1}`}
-                                                className={`w-full aspect-square rounded-full cursor-pointer border-4 transition-all duration-300 ${
-                                                    selectedAvatar === avatar
-                                                        ? "border-blue-500 shadow-xl scale-110"
-                                                        : "border-gray-300"
-                                                } ${!isUnlocked ? "opacity-40 grayscale" : "hover:scale-110 hover:shadow-lg"}`}
-                                                onClick={() => {
-                                                    if (isUnlocked) setSelectedAvatar(avatar);
-                                                }}
-                                            />
-                                            {!isUnlocked && (
-                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-xs font-bold text-white bg-black/60 rounded-full">
-                                                    <FaLock className="mb-1" />
-                                                    <span>Lvl {index}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                            <p className="text-sm text-gray-500 mt-4 text-center">
-                                Unlock more avatars by leveling up! ({level + 1} / {avatars.length} unlocked)
-                            </p>
-                        </div>
-
-                        {/* Update Name */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaEdit className="text-blue-600" />
-                                Update Profile
-                            </h2>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
-                            <input
-                                type="text"
-                                value={newName}
-                                onChange={(e) => setNewName(e.target.value)}
-                                className="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors mb-4"
-                                placeholder="Enter your name"
+                        <div className="relative z-10 px-8 sm:px-12 py-10 flex flex-col sm:flex-row items-center gap-6">
+                            <img
+                                src={selectedAvatar}
+                                alt="User Avatar"
+                                className="w-28 h-28 rounded-2xl border-4 border-white/20 shadow-xl"
                             />
-                            <button
-                                onClick={updateProfile}
-                                disabled={loading}
-                                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {loading ? "Updating..." : "Update Name"}
-                            </button>
+                            <div className="text-center sm:text-left flex-1">
+                                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-400 mb-1">Profile</p>
+                                <h1 className="text-3xl font-display text-white mb-1">{name}</h1>
+                                <p className="text-gray-400 text-sm mb-5">{email}</p>
+                                <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
+                                    <StatBadge icon={<FaTrophy className="text-saffron" />} value={points} label="Points" />
+                                    <StatBadge icon={<FaStar className="text-saffron" />} value={`Level ${level}`} label="Current" />
+                                    <StatBadge icon={<FaChartLine className="text-saffron" />} value={`${progress}%`} label="Progress" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Message Display */}
+                    {message && (
+                        <div className={`mb-6 p-4 rounded-xl font-medium text-sm ${
+                            messageType === "success"
+                                ? "bg-green-50 text-green-700 border border-green-200"
+                                : "bg-red-50 text-red-600 border border-red-200"
+                        }`}>
+                            {message}
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                        {/* Left Column */}
+                        <div className="lg:col-span-1 space-y-5">
+                            {/* Lesson Progress */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                                <h2 className="text-base font-bold text-navy mb-4 flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#3B82F615' }}>
+                                        <FaChartLine className="text-sm" style={{ color: '#3B82F6' }} />
+                                    </div>
+                                    Lesson Progress
+                                </h2>
+                                <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden mb-2">
+                                    <div
+                                        className="h-full rounded-full transition-all duration-500"
+                                        style={{ width: `${progress}%`, backgroundColor: '#059669' }}
+                                    >
+                                    </div>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <p className="text-xs text-gray-400">
+                                        {Math.round((progress / 100) * totalLessons)} of {totalLessons} lessons
+                                    </p>
+                                    <p className="text-xs font-semibold" style={{ color: '#059669' }}>{progress}%</p>
+                                </div>
+                            </div>
+
+                            {/* Level Progress */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                                <h2 className="text-base font-bold text-navy mb-4 flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(230,126,34,0.1)' }}>
+                                        <FaFire className="text-sm text-saffron" />
+                                    </div>
+                                    Level Progress
+                                </h2>
+                                <div className="text-center mb-4">
+                                    <p className="text-2xl font-display text-navy">Level {level}</p>
+                                    <p className="text-xs text-gray-400">Next level at {(level + 1) * 30} points</p>
+                                </div>
+                                <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden mb-1">
+                                    <div
+                                        className="h-full rounded-full transition-all duration-500"
+                                        style={{ width: `${((points % 30) / 30) * 100}%`, backgroundColor: 'var(--color-navy)' }}
+                                    >
+                                    </div>
+                                </div>
+                                <p className="text-xs text-gray-400 text-right">{points % 30} / 30</p>
+                            </div>
                         </div>
 
-                        {/* Change Password */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaKey className="text-orange-600" />
-                                Change Password
-                            </h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Old Password</label>
-                                    <input
-                                        type="password"
-                                        placeholder="Enter old password"
-                                        value={oldPassword}
-                                        onChange={(e) => setOldPassword(e.target.value)}
-                                        className="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
-                                    />
+                        {/* Right Column */}
+                        <div className="lg:col-span-2 space-y-5">
+                            {/* Avatar Selection */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                                <h2 className="text-base font-bold text-navy mb-4">Choose Your Avatar</h2>
+                                <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">
+                                    {avatars.map((avatar, index) => {
+                                        const isUnlocked = index <= level;
+                                        return (
+                                            <div key={index} className="relative group">
+                                                <img
+                                                    src={avatar}
+                                                    alt={`Avatar ${index + 1}`}
+                                                    className={`w-full aspect-square rounded-xl cursor-pointer border-2 transition-all duration-300 ${
+                                                        selectedAvatar === avatar
+                                                            ? "shadow-lg scale-105"
+                                                            : "border-gray-200"
+                                                    } ${!isUnlocked ? "opacity-40 grayscale" : "hover:scale-105 hover:shadow-md"}`}
+                                                    style={selectedAvatar === avatar ? { borderColor: 'var(--color-saffron)' } : {}}
+                                                    onClick={() => {
+                                                        if (isUnlocked) setSelectedAvatar(avatar);
+                                                    }}
+                                                />
+                                                {!isUnlocked && (
+                                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-xs font-bold text-white bg-black/50 rounded-xl">
+                                                        <FaLock className="mb-0.5 text-[10px]" />
+                                                        <span className="text-[10px]">Lvl {index}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">New Password</label>
-                                    <input
-                                        type="password"
-                                        placeholder="Enter new password"
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
-                                        className="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
-                                    />
-                                </div>
+                                <p className="text-xs text-gray-400 mt-4 text-center">
+                                    Unlock more avatars by levelling up ({level + 1} / {avatars.length} unlocked)
+                                </p>
+                            </div>
+
+                            {/* Update Name */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                                <h2 className="text-base font-bold text-navy mb-4 flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#3B82F615' }}>
+                                        <FaEdit className="text-sm" style={{ color: '#3B82F6' }} />
+                                    </div>
+                                    Update Profile
+                                </h2>
+                                <label className="block text-sm font-semibold text-navy mb-2">Name</label>
+                                <input
+                                    type="text"
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                    className="w-full p-3 rounded-xl border border-gray-200 text-sm placeholder-gray-400 focus:border-gray-400 focus:ring-2 focus:ring-gray-100 focus:outline-none transition-all mb-4"
+                                    style={{ color: 'var(--color-navy)' }}
+                                    placeholder="Enter your name"
+                                />
                                 <button
-                                    onClick={updatePassword}
+                                    onClick={updateProfile}
                                     disabled={loading}
-                                    className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-3 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full sm:w-auto text-white px-7 py-3 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                                    style={{ backgroundColor: 'var(--color-navy)' }}
                                 >
-                                    {loading ? "Updating..." : "Change Password"}
+                                    {loading ? "Updating..." : "Update Name"}
                                 </button>
                             </div>
-                        </div>
 
-                        {/* Logout */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <FaSignOutAlt className="text-red-600" />
-                                Account Actions
-                            </h2>
-                            <button
-                                onClick={handleLogout}
-                                className="w-full sm:w-auto bg-gradient-to-r from-red-500 to-red-600 text-white px-8 py-3 rounded-xl font-bold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg"
-                            >
-                                Logout
-                            </button>
+                            {/* Change Password */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                                <h2 className="text-base font-bold text-navy mb-4 flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(230,126,34,0.1)' }}>
+                                        <FaKey className="text-sm text-saffron" />
+                                    </div>
+                                    Change Password
+                                </h2>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-navy mb-2">Old Password</label>
+                                        <input
+                                            type="password"
+                                            placeholder="Enter old password"
+                                            value={oldPassword}
+                                            onChange={(e) => setOldPassword(e.target.value)}
+                                            className="w-full p-3 rounded-xl border border-gray-200 text-sm placeholder-gray-400 focus:border-gray-400 focus:ring-2 focus:ring-gray-100 focus:outline-none transition-all"
+                                            style={{ color: 'var(--color-navy)' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-navy mb-2">New Password</label>
+                                        <input
+                                            type="password"
+                                            placeholder="Enter new password"
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                            className="w-full p-3 rounded-xl border border-gray-200 text-sm placeholder-gray-400 focus:border-gray-400 focus:ring-2 focus:ring-gray-100 focus:outline-none transition-all"
+                                            style={{ color: 'var(--color-navy)' }}
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={updatePassword}
+                                        disabled={loading}
+                                        className="w-full sm:w-auto text-white px-7 py-3 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                                        style={{ backgroundColor: 'var(--color-saffron)' }}
+                                    >
+                                        {loading ? "Updating..." : "Change Password"}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Logout */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                                <h2 className="text-base font-bold text-navy mb-4 flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-50">
+                                        <FaSignOutAlt className="text-sm text-red-500" />
+                                    </div>
+                                    Account
+                                </h2>
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full sm:w-auto bg-red-500 text-white px-7 py-3 rounded-xl font-semibold text-sm hover:bg-red-600 transition-all duration-300 hover:-translate-y-0.5 shadow-md hover:shadow-lg"
+                                >
+                                    Log Out
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 
 function StatBadge({ icon, value, label }) {
     return (
-        <div className="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 flex items-center gap-2">
-            <span className="text-xl">{icon}</span>
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 flex items-center gap-2.5 border border-white/10">
+            <span className="text-base">{icon}</span>
             <div>
-                <p className="text-lg font-bold">{value}</p>
-                <p className="text-xs text-blue-100">{label}</p>
+                <p className="text-sm font-bold text-white leading-tight">{value}</p>
+                <p className="text-[10px] text-gray-400">{label}</p>
             </div>
         </div>
     );

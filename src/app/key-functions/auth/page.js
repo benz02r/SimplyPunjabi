@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { Mail, Lock, ArrowRight, UserCircle, Loader2, AlertCircle, Home } from "lucide-react";
+import { Mail, Lock, ArrowRight, UserCircle, Loader2, AlertCircle, Home, Eye, EyeOff } from "lucide-react";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -18,7 +18,6 @@ export default function SignIn() {
         setLoading(true);
         setErrorMessage("");
 
-        // Basic validation
         if (!email || !password) {
             setErrorMessage("Please enter both email and password.");
             setLoading(false);
@@ -39,137 +38,172 @@ export default function SignIn() {
             return;
         }
 
-        // Successfully logged in
         router.push("/dashboard");
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center px-4 py-24">
-            <div className="w-full max-w-md">
+        <>
+            <style jsx global>{`
+                :root {
+                    --color-saffron: #E67E22;
+                    --color-navy: #1B2A4A;
+                    --color-cream: #FDFBF7;
+                    --color-warm-gray: #F7F5F2;
+                    --font-display: 'DM Serif Display', Georgia, serif;
+                    --font-body: 'DM Sans', system-ui, sans-serif;
+                }
+                body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+                .font-display { font-family: var(--font-display); }
+                .text-saffron { color: var(--color-saffron); }
+                .text-navy { color: var(--color-navy); }
+            `}</style>
 
+            <div className="min-h-screen flex items-center justify-center px-4 py-28 relative overflow-hidden" style={{ backgroundColor: 'var(--color-cream)' }}>
+                {/* Decorative background */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-30 -z-10"
+                     style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.12) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-20 -z-10"
+                     style={{ background: 'radial-gradient(circle, rgba(27,42,74,0.08) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
 
+                {/* Gurmukhi watermark */}
+                <div className="absolute top-1/2 right-12 -translate-y-1/2 text-[16rem] font-bold opacity-[0.02] select-none pointer-events-none leading-none hidden lg:block"
+                     style={{ fontFamily: 'serif', color: 'var(--color-navy)' }}>
+                    ੴ
+                </div>
 
-                {/* Login Form Card */}
-                <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-                    {/* Form Header */}
-                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
-                        <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                            <UserCircle className="w-12 h-12 text-blue-600" />
+                <div className="w-full max-w-md relative z-10">
+                    <div className="bg-white rounded-2xl shadow-xl border border-gray-200/80 overflow-hidden">
+
+                        {/* Header */}
+                        <div className="px-8 pt-10 pb-8 text-center" style={{ backgroundColor: 'var(--color-navy)' }}>
+                            <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-5 border border-white/20">
+                                <UserCircle className="w-8 h-8 text-white" />
+                            </div>
+                            <h2 className="text-2xl font-display text-white mb-1.5">Welcome Back</h2>
+                            <p className="text-gray-400 text-sm">Log in to continue learning</p>
                         </div>
-                        <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-                        <p className="text-blue-100">Log in to continue learning</p>
-                    </div>
 
-                    {/* Form Body */}
-                    <div className="px-8 py-8">
-                        {/* Error Message */}
-                        {errorMessage && (
-                            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-                                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                <p className="text-red-700 text-sm font-medium">{errorMessage}</p>
-                            </div>
-                        )}
-
-                        <form onSubmit={handleLogin} className="space-y-5">
-                            {/* Email Input */}
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Email Address
-                                </label>
-                                <div className="relative">
-                                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        id="email"
-                                        className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                        type="email"
-                                        placeholder="Enter your email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        disabled={loading}
-                                        required
-                                    />
+                        {/* Form body */}
+                        <div className="px-8 py-8">
+                            {/* Error */}
+                            {errorMessage && (
+                                <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
+                                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                                    <p className="text-red-600 text-sm font-medium">{errorMessage}</p>
                                 </div>
+                            )}
+
+                            <form onSubmit={handleLogin} className="space-y-5">
+                                {/* Email */}
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-semibold text-navy mb-2">
+                                        Email Address
+                                    </label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            id="email"
+                                            className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
+                                            style={{ color: 'var(--color-navy)' }}
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            disabled={loading}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Password */}
+                                <div>
+                                    <label htmlFor="password" className="block text-sm font-semibold text-navy mb-2">
+                                        Password
+                                    </label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            id="password"
+                                            className="w-full pl-12 pr-12 py-3.5 border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
+                                            style={{ color: 'var(--color-navy)' }}
+                                            type={showPassword ? "text" : "password"}
+                                            placeholder="Enter your password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            disabled={loading}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                            disabled={loading}
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
+                                    </div>
+                                    <div className="mt-2 text-right">
+                                        <a
+                                            href="/key-functions/forgot-password"
+                                            className="text-sm text-saffron font-semibold hover:underline transition-colors"
+                                        >
+                                            Forgot Password?
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Submit */}
+                                <button
+                                    type="submit"
+                                    className="group w-full py-4 rounded-xl font-semibold text-base text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg flex items-center justify-center gap-2"
+                                    style={{ backgroundColor: 'var(--color-navy)' }}
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                        <>
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            <span>Logging in...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>Log In</span>
+                                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                        </>
+                                    )}
+                                </button>
+                            </form>
+
+                            {/* Divider */}
+                            <div className="my-6 flex items-center gap-4">
+                                <div className="flex-1 h-px bg-gray-200"></div>
+                                <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">or</span>
+                                <div className="flex-1 h-px bg-gray-200"></div>
                             </div>
 
-                            {/* Password Input */}
-                            <div>
-                                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Password
-                                </label>
-                                <div className="relative">
-                                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        id="password"
-                                        className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="Enter your password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        disabled={loading}
-                                        required
-                                    />
-                                </div>
-                                {/* Forgot Password Link */}
-                                <div className="mt-2 text-right">
-                                    <a
-                                        href="/key-functions/forgot-password"
-                                        className="text-sm text-blue-600 font-semibold hover:text-blue-700 hover:underline transition-colors"
-                                    >
-                                        Forgot Password?
-                                    </a>
-                                </div>
-                            </div>
-
-                            {/* Login Button */}
+                            {/* Back to Home */}
                             <button
-                                type="submit"
-                                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                                onClick={() => router.push("/")}
                                 disabled={loading}
+                                className="w-full py-3.5 rounded-xl font-semibold text-sm text-navy border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {loading ? (
-                                    <>
-                                        <Loader2 className="w-5 h-5 animate-spin" />
-                                        <span>Logging in...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <span>Log In</span>
-                                        <ArrowRight className="w-5 h-5" />
-                                    </>
-                                )}
+                                <Home className="w-4 h-4" />
+                                Back to Home
                             </button>
-                        </form>
 
-                        {/* Divider */}
-                        <div className="my-6 flex items-center gap-4">
-                            <div className="flex-1 h-px bg-gray-200"></div>
-                            <span className="text-sm text-gray-500 font-medium">OR</span>
-                            <div className="flex-1 h-px bg-gray-200"></div>
+                            {/* Signup link */}
+                            <p className="mt-6 text-center text-sm text-gray-500">
+                                Don&apos;t have an account?{" "}
+                                <a
+                                    href="/key-functions/signup"
+                                    className="text-saffron font-semibold hover:underline transition-colors"
+                                >
+                                    Sign Up
+                                </a>
+                            </p>
                         </div>
-
-                        {/* Back to Home */}
-                        <button
-                            onClick={() => router.push("/")}
-                            disabled={loading}
-                            className="w-full bg-gray-100 text-gray-700 py-3.5 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300 border-2 border-gray-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <Home className="w-5 h-5" />
-                            Back to Home
-                        </button>
-
-                        {/* Signup Link */}
-                        <p className="mt-6 text-center text-sm text-gray-600">
-                            Don't have an account?{" "}
-                            <a
-                                href="/key-functions/signup"
-                                className="text-blue-600 font-bold hover:text-blue-700 hover:underline transition-colors"
-                            >
-                                Sign Up
-                            </a>
-                        </p>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
