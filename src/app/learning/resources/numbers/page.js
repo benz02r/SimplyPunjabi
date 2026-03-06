@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { FaVolumeUp, FaCheckCircle, FaCalculator, FaRedo } from "react-icons/fa";
+import { FaVolumeUp, FaInfoCircle, FaCalculator, FaRedo, FaArrowLeft } from "react-icons/fa";
 
 const numbers = [
     { english: "Zero", numeral: "0", punjabi: "ਸਿਫ਼ਰ", pronunciation: "Sifar" },
@@ -44,7 +44,7 @@ const NumberCard = ({ number, isFlipped, onClick }) => {
 
     return (
         <div
-            className="relative w-full h-56 cursor-pointer"
+            className="relative w-full h-52 cursor-pointer group"
             style={{ perspective: '1000px' }}
         >
             <div
@@ -57,40 +57,41 @@ const NumberCard = ({ number, isFlipped, onClick }) => {
                 {/* Front - Numeral and English */}
                 <div
                     onClick={onClick}
-                    className="absolute w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 flex flex-col items-center justify-center text-white"
+                    className="absolute w-full h-full bg-white rounded-lg border border-[#1B2A4A]/15 shadow-sm p-6 flex flex-col items-center justify-center text-[#1B2A4A] group-hover:shadow-md transition-shadow duration-300"
                     style={{ backfaceVisibility: 'hidden' }}
                 >
-                    <p className="text-6xl font-bold mb-3">{number.numeral}</p>
-                    <p className="text-xl font-semibold">{number.english}</p>
-                    <p className="text-sm opacity-90 mt-3">Click to reveal Punjabi</p>
+                    <p className="text-5xl font-serif font-bold mb-2 text-[#1B2A4A]">{number.numeral}</p>
+                    <p className="text-lg font-medium font-sans text-[#1B2A4A]/80">{number.english}</p>
                 </div>
 
                 {/* Back - Punjabi with pronunciation */}
                 <div
-                    className="absolute w-full h-full bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 flex flex-col items-center justify-center text-white"
+                    className="absolute w-full h-full bg-[#1B2A4A] rounded-lg shadow-md p-6 flex flex-col items-center justify-center text-white border border-[#1B2A4A]"
                     style={{
                         backfaceVisibility: 'hidden',
                         transform: 'rotateY(180deg)'
                     }}
                 >
-                    <p className="text-4xl font-bold mb-2">{number.punjabi}</p>
-                    <p className="text-xl font-semibold mb-1">{number.pronunciation}</p>
-                    <p className="text-sm opacity-90 mb-4">{number.numeral} - {number.english}</p>
+                    <p className="text-4xl font-bold mb-2 text-[#E67E22]">{number.punjabi}</p>
+                    <p className="text-lg font-medium mb-1 font-sans text-white/90">{number.pronunciation}</p>
+                    <p className="text-xs opacity-60 mb-5 font-sans uppercase tracking-wider">{number.numeral} • {number.english}</p>
+
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
                             speak(number.punjabi);
                         }}
-                        className="flex items-center gap-2 bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-full transition-all duration-300"
+                        className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded border border-white/10 transition-colors duration-200"
                     >
-                        <FaVolumeUp />
-                        <span className="text-sm font-semibold">Listen</span>
+                        <FaVolumeUp size={12} className="text-[#E67E22]" />
+                        <span className="text-xs font-semibold font-sans tracking-wide">Pronounce</span>
                     </button>
+
                     <button
                         onClick={onClick}
-                        className="mt-3 text-sm opacity-75 hover:opacity-100"
+                        className="absolute bottom-4 text-[10px] uppercase tracking-wider opacity-40 hover:opacity-100 font-sans transition-opacity"
                     >
-                        Click to flip back
+                        Flip Back
                     </button>
                 </div>
             </div>
@@ -138,121 +139,124 @@ export default function PunjabiNumbersLesson() {
     const progressPercentage = Math.round((totalLearned / numbers.length) * 100);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-            <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-8 sm:p-12 text-white shadow-xl mb-8 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="min-h-screen bg-[#FDFBF7] px-4 sm:px-6 lg:px-8 pt-12 pb-20 font-sans text-[#1B2A4A]">
+            <div className="max-w-6xl mx-auto">
 
-                    <div className="relative z-10 text-center">
-                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
-                            <FaCalculator className="text-blue-200" />
-                            <span className="text-sm font-semibold">NUMBERS LESSON</span>
+                {/* Subtle Header Navigation */}
+                <div className="flex items-center justify-between mb-8">
+                    <button className="flex items-center gap-2 text-[#1B2A4A]/60 hover:text-[#1B2A4A] text-sm font-medium transition-colors">
+                        <FaArrowLeft size={12} />
+                        <span>Course Overview</span>
+                    </button>
+                </div>
+
+                {/* Hero Section - Clean & Structured */}
+                <div className="bg-[#1B2A4A] rounded-2xl p-8 sm:p-10 text-white shadow-md mb-10 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                    {/* Minimalist Watermark */}
+                    <div className="absolute -right-4 -top-8 text-[16rem] text-white/5 font-serif leading-none select-none pointer-events-none">
+                        ੧
+                    </div>
+
+                    <div className="relative z-10 max-w-2xl">
+                        <div className="inline-flex items-center gap-2 mb-4">
+                            <FaCalculator size={14} className="text-[#E67E22]" />
+                            <span className="text-xs font-semibold tracking-widest uppercase text-[#E67E22]">Module 02</span>
                         </div>
-                        <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-                            Learn Punjabi Numbers
+                        <h1 className="text-3xl sm:text-4xl font-serif font-bold mb-3">
+                            Numerical Foundations
                         </h1>
-                        <p className="text-xl text-blue-100">
-                            Master counting from 0 to 100 with interactive flashcards
+                        <p className="text-base text-white/70 font-sans leading-relaxed">
+                            A comprehensive guide to Gurmukhi numerals. Master counting from 0 to 100 through interactive memory reinforcement and native audio pronunciation.
+                        </p>
+                    </div>
+
+                    {/* Quick Stats Box in Hero */}
+                    <div className="relative z-10 bg-white/10 backdrop-blur-md border border-white/10 rounded-lg p-5 w-full md:w-auto min-w-[200px]">
+                        <p className="text-xs text-white/60 uppercase tracking-wider mb-1">Total Progress</p>
+                        <div className="flex items-end gap-2 mb-2">
+                            <span className="text-3xl font-serif font-bold text-white">{progressPercentage}%</span>
+                        </div>
+                        <div className="w-full bg-white/10 rounded-full h-1 overflow-hidden">
+                            <div className="bg-[#E67E22] h-full transition-all duration-700 ease-out" style={{ width: `${progressPercentage}%` }}></div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Informational Alert */}
+                <div className="bg-white border-l-4 border-[#E67E22] rounded-r-lg p-5 shadow-sm mb-10 flex gap-4 items-start">
+                    <FaInfoCircle className="text-[#E67E22] mt-0.5" size={18} />
+                    <div>
+                        <h3 className="text-sm font-bold text-[#1B2A4A] mb-1 font-sans">Study Methodology</h3>
+                        <p className="text-sm text-[#1B2A4A]/70 leading-relaxed font-sans">
+                            Select a numerical range below. Click a card to reveal the Gurmukhi translation. Use the pronunciation tool to practice auditory recognition. Cards remain flipped to track your active session progress.
                         </p>
                     </div>
                 </div>
 
-                {/* Pronunciation Tip */}
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border-2 border-orange-200 mb-8">
-                    <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <FaCheckCircle className="text-orange-600" />
-                        <span>Learning Tip</span>
-                    </h3>
-                    <p className="text-gray-700">
-                        Click each card to reveal the Punjabi word and pronunciation. Use the listen button to hear native pronunciation. Practice saying each number out loud!
-                    </p>
+                {/* Professional Underline Tabs */}
+                <div className="flex border-b border-[#1B2A4A]/10 mb-8 overflow-x-auto no-scrollbar">
+                    {ranges.map(range => (
+                        <button
+                            key={range.id}
+                            onClick={() => setSelectedRange(range.id)}
+                            className={`pb-4 px-6 text-sm font-semibold transition-colors relative whitespace-nowrap ${
+                                selectedRange === range.id
+                                    ? 'text-[#1B2A4A]'
+                                    : 'text-[#1B2A4A]/50 hover:text-[#1B2A4A]/80'
+                            }`}
+                        >
+                            {range.label}
+                            {selectedRange === range.id && (
+                                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#E67E22]" />
+                            )}
+                        </button>
+                    ))}
                 </div>
 
-                {/* Range Selection */}
-                <div className="mb-8">
-                    <div className="flex flex-wrap justify-center gap-3">
-                        {ranges.map(range => (
-                            <button
-                                key={range.id}
-                                onClick={() => setSelectedRange(range.id)}
-                                className={`px-6 py-3 rounded-lg font-semibold transition-all shadow-md ${
-                                    selectedRange === range.id
-                                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white scale-105'
-                                        : 'bg-white text-gray-700 hover:bg-gray-100'
-                                }`}
-                            >
-                                {range.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Main Content Card */}
-                <div className="bg-white rounded-3xl shadow-xl p-8 sm:p-10 border-2 border-gray-100 mb-8">
-                    <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
-                        <div>
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                                Numbers {currentRange.label}
-                            </h2>
-                            <p className="text-gray-600">
-                                {displayNumbers.length} numbers to learn in this section
-                            </p>
-                        </div>
-                        <div className="flex gap-3">
-                            <button
-                                onClick={flipAllCards}
-                                className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg hover:shadow-xl"
-                            >
-                                Show All
-                            </button>
-                            <button
-                                onClick={resetCards}
-                                className="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-semibold hover:from-gray-600 hover:to-gray-700 transition-all duration-300 shadow-lg hover:shadow-xl"
-                            >
-                                <FaRedo className="inline mr-2" />
-                                Reset
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Number Cards Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {displayNumbers.map((number, index) => (
-                            <NumberCard
-                                key={currentRange.start + index}
-                                number={number}
-                                isFlipped={flippedCards[currentRange.start + index] || false}
-                                onClick={() => toggleCard(currentRange.start + index)}
-                            />
-                        ))}
-                    </div>
-                </div>
-
-                {/* Overall Progress */}
-                <div className="bg-white rounded-3xl shadow-xl p-8 sm:p-10 border-2 border-gray-100">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-6">Overall Progress</h3>
-                    <div className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-xl p-6 border-2 border-gray-100">
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm font-semibold text-gray-700">Numbers Learned</span>
-                            <span className="text-sm font-bold text-blue-600">
-                {totalLearned} / {numbers.length}
-              </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden mb-2">
-                            <div
-                                className="bg-gradient-to-r from-blue-500 to-orange-500 h-full transition-all duration-500"
-                                style={{ width: `${progressPercentage}%` }}
-                            ></div>
-                        </div>
-                        <p className="text-sm text-gray-600 text-center">
-                            {progressPercentage}% Complete
+                {/* Grid Controls */}
+                <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+                    <div>
+                        <h2 className="text-xl font-serif font-bold text-[#1B2A4A]">
+                            Active Set: {currentRange.label}
+                        </h2>
+                        <p className="text-sm text-[#1B2A4A]/60 mt-1">
+                            {displayNumbers.length} items
                         </p>
                     </div>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={flipAllCards}
+                            className="px-4 py-2 bg-white border border-[#1B2A4A]/20 text-[#1B2A4A] rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm"
+                        >
+                            Reveal All
+                        </button>
+                        <button
+                            onClick={resetCards}
+                            className="px-4 py-2 bg-white border border-[#1B2A4A]/20 text-[#1B2A4A] rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm flex items-center gap-2"
+                        >
+                            <FaRedo size={10} className="text-[#1B2A4A]/60" />
+                            Reset Set
+                        </button>
+                    </div>
+                </div>
 
-                    {/* Range Progress */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                {/* Number Cards Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-16">
+                    {displayNumbers.map((number, index) => (
+                        <NumberCard
+                            key={currentRange.start + index}
+                            number={number}
+                            isFlipped={flippedCards[currentRange.start + index] || false}
+                            onClick={() => toggleCard(currentRange.start + index)}
+                        />
+                    ))}
+                </div>
+
+                {/* Analytics / Progress Dashboard */}
+                <div className="border-t border-[#1B2A4A]/10 pt-10">
+                    <h3 className="text-lg font-serif font-bold text-[#1B2A4A] mb-6">Module Analytics</h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {ranges.map(range => {
                             const rangeNumbers = numbers.slice(range.start, range.end);
                             const rangeFlipped = rangeNumbers.filter((_, idx) =>
@@ -261,18 +265,20 @@ export default function PunjabiNumbersLesson() {
                             const rangePercentage = Math.round((rangeFlipped / rangeNumbers.length) * 100);
 
                             return (
-                                <div key={range.id} className="bg-white rounded-xl p-4 border-2 border-gray-100">
-                                    <p className="text-sm font-semibold text-gray-700 mb-2">{range.label}</p>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-gradient-to-r from-blue-500 to-orange-500 h-2 rounded-full transition-all duration-300"
-                                                style={{ width: `${rangePercentage}%` }}
-                                            ></div>
-                                        </div>
-                                        <span className="text-xs font-bold text-gray-600">{rangePercentage}%</span>
+                                <div key={range.id} className="bg-white rounded-lg p-5 border border-[#1B2A4A]/10 shadow-sm">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <p className="text-sm font-medium text-[#1B2A4A]">{range.label}</p>
+                                        <span className="text-xs font-bold text-[#1B2A4A]/60 bg-[#1B2A4A]/5 px-2 py-1 rounded">
+                                            {rangePercentage}%
+                                        </span>
                                     </div>
-                                    <p className="text-xs text-gray-500">{rangeFlipped} of {rangeNumbers.length}</p>
+                                    <div className="w-full bg-[#1B2A4A]/5 rounded-full h-1.5 mb-2">
+                                        <div
+                                            className="bg-[#1B2A4A] h-1.5 rounded-full transition-all duration-500"
+                                            style={{ width: `${rangePercentage}%` }}
+                                        ></div>
+                                    </div>
+                                    <p className="text-xs text-[#1B2A4A]/50">{rangeFlipped} of {rangeNumbers.length} items reviewed</p>
                                 </div>
                             );
                         })}

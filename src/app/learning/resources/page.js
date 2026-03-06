@@ -1,9 +1,36 @@
 "use client";
 
-"use client";
-
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { FaArrowLeft, FaBook, FaHashtag, FaClock, FaUsers, FaChartBar, FaLanguage } from "react-icons/fa";
+import { FaArrowLeft, FaBook, FaHashtag, FaClock, FaUsers, FaChartBar, FaLanguage, FaArrowRight } from "react-icons/fa";
+
+/* Fade-in-on-scroll */
+function FadeIn({ children, className = '', delay = 0 }) {
+    const ref = useRef(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) setVisible(true);
+        }, { threshold: 0.15 });
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            className={className}
+            style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(24px)',
+                transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+            }}
+        >
+            {children}
+        </div>
+    );
+}
 
 export default function LearningResources() {
     const router = useRouter();
@@ -12,167 +39,159 @@ export default function LearningResources() {
         {
             title: "Gurmukhi Alphabet",
             description: "Master the foundation of Punjabi writing",
-            icon: <FaLanguage className="text-5xl" />,
+            icon: <FaLanguage className="text-2xl" />,
             link: "/learning/resources/alphabet",
-            color: "from-blue-500 to-blue-700",
-            bgColor: "from-blue-50 to-blue-100"
+            color: "#3B82F6"
         },
         {
             title: "Numbers in Punjabi",
             description: "Learn counting and numerical expressions",
-            icon: <FaHashtag className="text-5xl" />,
+            icon: <FaHashtag className="text-2xl" />,
             link: "/learning/resources/numbers",
-            color: "from-orange-500 to-orange-700",
-            bgColor: "from-orange-50 to-orange-100"
+            color: "#E67E22"
         },
         {
             title: "Common Phrases",
             description: "Essential everyday expressions",
-            icon: <FaUsers className="text-5xl" />,
+            icon: <FaUsers className="text-2xl" />,
             link: "/learning/resources/phrases",
-            color: "from-green-500 to-green-700",
-            bgColor: "from-green-50 to-green-100"
+            color: "#059669"
         },
         {
-            title: "Time & Days",
+            title: "Time and Days",
             description: "Tell time and discuss dates",
-            icon: <FaClock className="text-5xl" />,
+            icon: <FaClock className="text-2xl" />,
             link: "/learning/resources/time",
-            color: "from-purple-500 to-purple-700",
-            bgColor: "from-purple-50 to-purple-100"
+            color: "#8B5CF6"
         },
         {
             title: "Grammar Basics",
             description: "Understand sentence structure",
-            icon: <FaChartBar className="text-5xl" />,
+            icon: <FaChartBar className="text-2xl" />,
             link: "/learning/resources/grammar",
-            color: "from-pink-500 to-pink-700",
-            bgColor: "from-pink-50 to-pink-100"
+            color: "#EC4899"
         },
         {
             title: "Study Guide",
             description: "Tips and strategies for effective learning",
-            icon: <FaBook className="text-5xl" />,
+            icon: <FaBook className="text-2xl" />,
             link: "/learning/resources/study-guide",
-            color: "from-indigo-500 to-indigo-700",
-            bgColor: "from-indigo-50 to-indigo-100"
+            color: "#1B2A4A"
         }
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-            <div className="max-w-7xl mx-auto">
-                {/* Back Button */}
-                <button
-                    onClick={() => router.push("/learning")}
-                    className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors group"
-                >
-                    <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
-                    <span>Back to Learning Hub</span>
-                </button>
+        <>
+            <style jsx global>{`
+                :root {
+                    --color-saffron: #E67E22;
+                    --color-navy: #1B2A4A;
+                    --color-cream: #FDFBF7;
+                    --color-warm-gray: #F7F5F2;
+                    --font-display: 'DM Serif Display', Georgia, serif;
+                    --font-body: 'DM Sans', system-ui, sans-serif;
+                }
+                body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+                .font-display { font-family: var(--font-display); }
+                .text-saffron { color: var(--color-saffron); }
+                .text-navy { color: var(--color-navy); }
+                .bg-navy { background-color: var(--color-navy); }
+            `}</style>
 
-                {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 sm:p-12 text-white shadow-xl mb-12 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="min-h-screen px-6 sm:px-10 pt-28 pb-16" style={{ backgroundColor: 'var(--color-cream)' }}>
+                <div className="max-w-6xl mx-auto">
 
-                    <div className="relative z-10 text-center">
-                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
-                            <FaBook className="text-blue-200" />
-                            <span className="text-sm font-semibold">REFERENCE MATERIALS</span>
+                    {/* Back Button */}
+                    <button
+                        onClick={() => router.push("/learning")}
+                        className="mb-6 flex items-center gap-2 text-gray-400 hover:text-navy font-medium text-sm transition-colors group"
+                    >
+                        <FaArrowLeft className="text-xs group-hover:-translate-x-1 transition-transform" />
+                        <span>Back to Learning Hub</span>
+                    </button>
+
+                    {/* Header */}
+                    <div className="rounded-2xl mb-14 relative overflow-hidden" style={{ backgroundColor: 'var(--color-navy)' }}>
+                        <div className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-10"
+                             style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.6) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+                        <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-10"
+                             style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)', transform: 'translate(-20%, 20%)' }} />
+
+                        <div className="absolute top-1/2 right-8 -translate-y-1/2 text-[8rem] font-bold opacity-[0.04] text-white select-none pointer-events-none leading-none"
+                             style={{ fontFamily: 'serif' }}>
+                            ੴ
                         </div>
-                        <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-                             Learning Resources
-                        </h1>
-                        <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-                            Essential materials and references to support your Punjabi learning journey
-                        </p>
-                    </div>
-                </div>
 
-                {/* Resources Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                    {resources.map((resource, index) => (
-                        <ResourceCard key={index} resource={resource} />
-                    ))}
-                </div>
-
-                {/* Info Card */}
-                <div className="bg-white rounded-3xl shadow-xl p-8 sm:p-12 border-2 border-gray-100">
-                    <div className="text-center max-w-3xl mx-auto">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                            Make the Most of These Resources
-                        </h2>
-                        <p className="text-lg text-gray-600 mb-8">
-                            These reference materials are designed to complement your lessons. Use them to:
-                        </p>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
-                            <TipCard
-                                icon=""
-                                title="Quick Reference"
-                                description="Look up words, phrases, and grammar rules on the go"
-                            />
-                            <TipCard
-                                icon=""
-                                title="Review & Practice"
-                                description="Reinforce what you've learned in your lessons"
-                            />
-                            <TipCard
-                                icon=""
-                                title="Study Notes"
-                                description="Create your own notes using these as a foundation"
-                            />
-                            <TipCard
-                                icon=""
-                                title="Targeted Learning"
-                                description="Focus on specific areas where you need more practice"
-                            />
+                        <div className="relative z-10 px-8 sm:px-12 py-10 sm:py-14 text-center">
+                            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-3">Reference Materials</p>
+                            <h1 className="text-3xl sm:text-4xl font-display text-white mb-3">
+                                Learning Resources
+                            </h1>
+                            <p className="text-gray-400 text-base max-w-xl mx-auto">
+                                Essential materials and references to support your Punjabi learning journey.
+                            </p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    );
-}
 
-function ResourceCard({ resource }) {
-    return (
-        <a href={resource.link} className="block group">
-            <div className="h-full bg-white rounded-2xl border-2 border-gray-200 hover:border-gray-300 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
-                {/* Icon Header with Gradient */}
-                <div className={`bg-gradient-to-br ${resource.bgColor} p-8 text-center border-b-2 border-gray-100`}>
-                    <div className={`inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${resource.color} rounded-2xl shadow-lg mb-4 text-white transform group-hover:scale-110 transition-transform duration-300`}>
-                        {resource.icon}
+                    {/* Resources Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+                        {resources.map((resource, index) => (
+                            <FadeIn key={index} delay={index * 80}>
+                                <a href={resource.link} className="block group h-full">
+                                    <div className="h-full bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-gray-300 transition-all duration-300 hover:-translate-y-1 overflow-hidden p-7">
+                                        <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white mb-5 transition-transform group-hover:scale-105"
+                                             style={{ backgroundColor: resource.color }}>
+                                            {resource.icon}
+                                        </div>
+                                        <h3 className="text-lg font-bold text-navy mb-1.5 group-hover:text-saffron transition-colors">
+                                            {resource.title}
+                                        </h3>
+                                        <p className="text-sm text-gray-500 leading-relaxed mb-5">
+                                            {resource.description}
+                                        </p>
+                                        <div className="flex items-center gap-2 text-saffron font-semibold text-sm group-hover:gap-3 transition-all">
+                                            <span>Explore</span>
+                                            <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    </div>
+                                </a>
+                            </FadeIn>
+                        ))}
                     </div>
-                </div>
 
-                {/* Content */}
-                <div className="p-6 text-center">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                        {resource.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                        {resource.description}
-                    </p>
-                    <div className={`inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r ${resource.color} bg-clip-text text-transparent`}>
-                        <span>Explore Resource</span>
-                        <span className="transform group-hover:translate-x-1 transition-transform">→</span>
-                    </div>
+                    {/* Tips Section */}
+                    <FadeIn>
+                        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-10">
+                            <div className="max-w-3xl mx-auto">
+                                <div className="text-center mb-8">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-2">Tips</p>
+                                    <h2 className="text-2xl font-display text-navy">Make the Most of These Resources</h2>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {[
+                                        { title: "Quick Reference", description: "Look up words, phrases, and grammar rules on the go" },
+                                        { title: "Review and Practice", description: "Reinforce what you've learned in your lessons" },
+                                        { title: "Study Notes", description: "Create your own notes using these as a foundation" },
+                                        { title: "Targeted Learning", description: "Focus on specific areas where you need more practice" },
+                                    ].map((tip, i) => (
+                                        <div key={i} className="flex items-start gap-4 p-5 rounded-xl border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all duration-300">
+                                            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                                                 style={{ backgroundColor: 'rgba(230,126,34,0.1)' }}>
+                                                <span className="text-saffron font-bold text-sm">{i + 1}</span>
+                                            </div>
+                                            <div>
+                                                <h3 className="font-bold text-navy text-sm mb-1">{tip.title}</h3>
+                                                <p className="text-xs text-gray-500 leading-relaxed">{tip.description}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </FadeIn>
                 </div>
             </div>
-        </a>
-    );
-}
-
-function TipCard({ icon, title, description }) {
-    return (
-        <div className="flex items-start gap-4 p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border-2 border-blue-100">
-            <div className="text-3xl flex-shrink-0">{icon}</div>
-            <div>
-                <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
-                <p className="text-sm text-gray-600">{description}</p>
-            </div>
-        </div>
+        </>
     );
 }

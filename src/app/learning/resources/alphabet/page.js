@@ -1,8 +1,36 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ArrowLeft, Volume2, Book, CheckCircle, Play, Sparkles, Info } from "lucide-react";
+
+/* Fade-in-on-scroll */
+function FadeIn({ children, className = '', delay = 0 }) {
+    const ref = useRef(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) setVisible(true);
+        }, { threshold: 0.15 });
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            className={className}
+            style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(24px)',
+                transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+            }}
+        >
+            {children}
+        </div>
+    );
+}
 
 export default function GurmukhiAlphabet() {
     const router = useRouter();
@@ -63,157 +91,174 @@ export default function GurmukhiAlphabet() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 px-4 sm:px-6 lg:px-8 pt-28 pb-12">
-            <div className="max-w-7xl mx-auto">
-                {/* Back Button */}
-                <button
-                    onClick={() => router.push("/learning/resources")}
-                    className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold transition-colors text-sm"
-                >
-                    <ArrowLeft size={18} />
-                    <span>Back to Resources</span>
-                </button>
+        <>
+            <style jsx global>{`
+                :root {
+                    --color-saffron: #E67E22;
+                    --color-navy: #1B2A4A;
+                    --color-cream: #FDFBF7;
+                    --color-warm-gray: #F7F5F2;
+                    --font-display: 'DM Serif Display', Georgia, serif;
+                    --font-body: 'DM Sans', system-ui, sans-serif;
+                }
+                body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+                .font-display { font-family: var(--font-display); }
+                .text-saffron { color: var(--color-saffron); }
+                .text-navy { color: var(--color-navy); }
+                .bg-navy { background-color: var(--color-navy); }
+            `}</style>
 
-                {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg mb-6">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Book size={18} />
-                        <span className="text-xs font-semibold uppercase tracking-wide">Reference Guide</span>
-                    </div>
-                    <h1 className="text-3xl font-bold mb-2">
-                        Gurmukhi Alphabet
-                    </h1>
-                    <p className="text-base text-blue-100">
-                        Click any letter to hear authentic Punjabi pronunciation
-                    </p>
-                </div>
+            <div className="min-h-screen px-6 sm:px-10 pt-28 pb-16" style={{ backgroundColor: 'var(--color-cream)' }}>
+                <div className="max-w-6xl mx-auto">
 
-                {/* Quality Badge */}
-                <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r mb-6">
-                    <div className="flex items-center gap-3">
-                        <CheckCircle size={20} className="text-green-600 flex-shrink-0" />
-                        <div>
-                            <p className="text-sm font-semibold text-gray-900">
-                                Authentic Punjabi Pronunciation
+                    {/* Back Button */}
+                    <button
+                        onClick={() => router.push("/learning/resources")}
+                        className="mb-6 flex items-center gap-2 text-gray-400 hover:text-navy font-medium text-sm transition-colors group"
+                    >
+                        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+                        <span>Back to Resources</span>
+                    </button>
+
+                    {/* Header */}
+                    <div className="rounded-2xl mb-8 relative overflow-hidden" style={{ backgroundColor: 'var(--color-navy)' }}>
+                        <div className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-10"
+                             style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.6) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+
+                        <div className="absolute top-1/2 right-8 -translate-y-1/2 text-[8rem] font-bold opacity-[0.04] text-white select-none pointer-events-none leading-none"
+                             style={{ fontFamily: 'serif' }}>
+                            ੴ
+                        </div>
+
+                        <div className="relative z-10 px-8 sm:px-12 py-10">
+                            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-3">Reference Guide</p>
+                            <h1 className="text-3xl sm:text-4xl font-display text-white mb-2">
+                                Gurmukhi Alphabet
+                            </h1>
+                            <p className="text-gray-400 text-base">
+                                Click any letter to hear authentic Punjabi pronunciation.
                             </p>
-                            <p className="text-xs text-gray-600 mt-1">
-                                Powered by Google Cloud Text-to-Speech with native Punjabi voices
-                            </p>
                         </div>
                     </div>
-                </div>
 
-                {/* Info Card */}
-                <div className="bg-orange-50 rounded-xl p-6 mb-8 border border-orange-200">
-                    <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <Info size={20} className="text-white" />
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                <span>How to Use This Guide</span>
-                            </h3>
-                            <ul className="space-y-2 text-sm text-gray-700">
-                                <li className="flex items-start gap-2">
-                                    <span className="text-orange-600 font-bold mt-0.5">1.</span>
-                                    <span>Click on any letter card to hear its authentic pronunciation</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-orange-600 font-bold mt-0.5">2.</span>
-                                    <span>Pay attention to the transliteration (how it sounds in English)</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-orange-600 font-bold mt-0.5">3.</span>
-                                    <span>Practice writing each letter while saying it out loud</span>
-                                </li>
-                            </ul>
+                    {/* Quality Badge */}
+                    <div className="bg-white border-l-4 p-4 rounded-r-xl mb-6 shadow-sm" style={{ borderColor: '#059669' }}>
+                        <div className="flex items-center gap-3">
+                            <CheckCircle size={18} className="flex-shrink-0" style={{ color: '#059669' }} />
+                            <div>
+                                <p className="text-sm font-semibold text-navy">Authentic Punjabi Pronunciation</p>
+                                <p className="text-xs text-gray-400 mt-0.5">Powered by Google Cloud Text-to-Speech with native Punjabi voices</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Alphabet Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-12">
-                    {alphabet.map((char, index) => (
-                        <button
-                            key={index}
-                            onClick={() => playAudio(char, index)}
-                            className={`relative p-6 bg-white rounded-xl shadow-lg border-2 transition-all duration-300 transform hover:scale-105 hover:shadow-xl group ${
-                                selectedLetter === index
-                                    ? 'border-blue-500 bg-blue-50'
-                                    : playingAudio === index
-                                        ? 'border-orange-500 bg-orange-50 scale-105'
-                                        : 'border-gray-200 hover:border-blue-300'
-                            }`}
-                        >
-                            {/* Audio Playing Indicator */}
-                            {playingAudio === index && (
-                                <div className="absolute top-2 right-2">
-                                    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center animate-pulse">
-                                        <Volume2 size={14} className="text-white" />
+                    {/* How to Use */}
+                    <div className="bg-white rounded-2xl p-6 mb-8 border border-gray-200 shadow-sm">
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-white"
+                                 style={{ backgroundColor: 'var(--color-saffron)' }}>
+                                <Info size={18} />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-navy mb-3 text-sm">How to Use This Guide</h3>
+                                <div className="space-y-2">
+                                    {[
+                                        "Click on any letter card to hear its authentic pronunciation",
+                                        "Pay attention to the transliteration (how it sounds in English)",
+                                        "Practice writing each letter while saying it out loud"
+                                    ].map((step, i) => (
+                                        <div key={i} className="flex items-start gap-2.5">
+                                            <span className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 text-[10px] font-bold text-white mt-0.5"
+                                                  style={{ backgroundColor: 'var(--color-saffron)' }}>
+                                                {i + 1}
+                                            </span>
+                                            <p className="text-sm text-gray-500 leading-relaxed">{step}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Alphabet Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-12">
+                        {alphabet.map((char, index) => (
+                            <button
+                                key={index}
+                                onClick={() => playAudio(char, index)}
+                                className={`relative p-5 bg-white rounded-xl border transition-all duration-200 group ${
+                                    playingAudio === index
+                                        ? 'shadow-lg -translate-y-1'
+                                        : selectedLetter === index
+                                            ? 'shadow-md'
+                                            : 'shadow-sm hover:shadow-md hover:-translate-y-0.5'
+                                }`}
+                                style={{
+                                    borderColor: playingAudio === index
+                                        ? 'var(--color-saffron)'
+                                        : selectedLetter === index
+                                            ? 'var(--color-navy)'
+                                            : '#e5e7eb'
+                                }}
+                            >
+                                {/* Audio Playing Indicator */}
+                                {playingAudio === index && (
+                                    <div className="absolute top-2 right-2">
+                                        <div className="w-6 h-6 rounded-md flex items-center justify-center animate-pulse"
+                                             style={{ backgroundColor: 'var(--color-saffron)' }}>
+                                            <Volume2 size={12} className="text-white" />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Letter */}
+                                <div className="text-4xl font-bold text-navy mb-2 text-center">
+                                    {char.letter}
+                                </div>
+
+                                {/* Transliteration */}
+                                <div className="text-center">
+                                    <p className="text-sm font-bold text-saffron mb-0.5">
+                                        {char.transliteration}
+                                    </p>
+                                    <p className="text-[10px] text-gray-400 capitalize">
+                                        {char.english}
+                                    </p>
+                                </div>
+
+                                {/* Hover Indicator */}
+                                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="text-white text-[10px] px-2 py-0.5 rounded-md flex items-center gap-1"
+                                         style={{ backgroundColor: 'var(--color-navy)' }}>
+                                        <Play size={8} />
+                                        <span>Play</span>
                                     </div>
                                 </div>
-                            )}
+                            </button>
+                        ))}
+                    </div>
 
-                            {/* Letter */}
-                            <div className="text-5xl font-bold text-gray-900 mb-3 text-center">
-                                {char.letter}
-                            </div>
-
-                            {/* Transliteration */}
-                            <div className="text-center">
-                                <p className="text-lg font-bold text-blue-600 mb-1">
-                                    {char.transliteration}
-                                </p>
-                                <p className="text-xs text-gray-500 capitalize">
-                                    {char.english}
-                                </p>
-                            </div>
-
-                            {/* Hover/Click Indicator */}
-                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
-                                    <Play size={12} />
-                                    <span>Play</span>
+                    {/* Practice Tips */}
+                    <FadeIn>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            {[
+                                { icon: <Book size={20} />, title: "Daily Practice", description: "Review 5 to 10 letters each day to build familiarity", color: "#3B82F6" },
+                                { icon: <Sparkles size={20} />, title: "Write It Down", description: "Practice writing each letter multiple times", color: "#059669" },
+                                { icon: <Volume2 size={20} />, title: "Listen and Repeat", description: "Say each letter out loud as you hear it", color: "#E67E22" },
+                            ].map((tip, i) => (
+                                <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-7 hover:shadow-md hover:border-gray-300 transition-all duration-300 group">
+                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-4 transition-transform group-hover:scale-105"
+                                         style={{ backgroundColor: tip.color }}>
+                                        {tip.icon}
+                                    </div>
+                                    <h3 className="text-base font-bold text-navy mb-1.5">{tip.title}</h3>
+                                    <p className="text-sm text-gray-500 leading-relaxed">{tip.description}</p>
                                 </div>
-                            </div>
-                        </button>
-                    ))}
-                </div>
-
-                {/* Practice Tips */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <TipCard
-                        icon={<Book size={24} className="text-white" />}
-                        title="Daily Practice"
-                        description="Review 5-10 letters each day to build familiarity"
-                        color="from-blue-500 to-blue-600"
-                    />
-                    <TipCard
-                        icon={<Sparkles size={24} className="text-white" />}
-                        title="Write It Down"
-                        description="Practice writing each letter multiple times"
-                        color="from-green-500 to-green-600"
-                    />
-                    <TipCard
-                        icon={<Volume2 size={24} className="text-white" />}
-                        title="Listen & Repeat"
-                        description="Say each letter out loud as you hear it"
-                        color="from-orange-500 to-orange-600"
-                    />
+                            ))}
+                        </div>
+                    </FadeIn>
                 </div>
             </div>
-        </div>
-    );
-}
-
-function TipCard({ icon, title, description, color }) {
-    return (
-        <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-100 hover:border-blue-300 transition-all duration-300">
-            <div className={`w-12 h-12 bg-gradient-to-br ${color} rounded-xl flex items-center justify-center mb-4 shadow-md`}>
-                {icon}
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-            <p className="text-gray-600 text-sm">{description}</p>
-        </div>
+        </>
     );
 }
