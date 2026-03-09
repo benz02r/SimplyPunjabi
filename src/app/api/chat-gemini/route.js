@@ -220,7 +220,7 @@ export async function POST(req) {
             temperature: userLevel === 'beginner' ? 0.3 : userLevel === 'intermediate' ? 0.5 : 0.7,
             topP: 0.8,
             topK: 40,
-            maxOutputTokens: 800,
+            maxOutputTokens: 2048,
         };
 
         if (responseFormat === 'structured') {
@@ -334,35 +334,104 @@ USER QUESTION: ${message}`;
         }
 
         const geminiData = await geminiResponse.json();
-        const responseText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const parts = geminiData.candidates?.[0]?.content?.parts || [];
+
+        // Gemini 2.5 Flash is a thinking model — it may return thought parts
+        // before the actual JSON. Find the last non-thought text part.
+        let responseText = '';
+        for (const part of parts) {
+            if (part.text && !part.thought) {
+                responseText = part.text;
+            }
+        }
+        // Fallback: if no non-thought text found, try any text part
+        if (!responseText) {
+            for (const part of parts) {
+                if (part.text) {
+                    responseText = part.text;
+                }
+            }
+        }
 
         if (!responseText) {
+            console.error('Empty response. Parts received:', JSON.stringify(parts, null, 2));
             throw new Error('Empty response from Gemini API');
         }
 
         let structuredData = null;
         if (responseFormat === 'structured') {
+            // Strip markdown code fences if Gemini wraps the JSON
+            let cleanedText = responseText.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?\s*```$/i, '').trim();
+
+            // Attempt 1: Direct parse
             try {
-                structuredData = JSON.parse(responseText);
+                structuredData = JSON.parse(cleanedText);
             } catch (parseError) {
-                console.error('Failed to parse structured response:', parseError);
-                structuredData = {
-                    gurmukhi: "",
-                    romanized: "",
-                    english: "",
-                    cultural_note: responseText,
-                    grammar_tip: "",
-                    difficulty_level: userLevel,
-                    new_vocabulary: [],
-                    follow_up_suggestion: "",
-                    rag_sources_used: "Parse error — raw response returned"
-                };
+                console.error('Direct JSON parse failed:', parseError.message);
+                console.error('Raw response (first 500 chars):', responseText.substring(0, 500));
+
+                // Attempt 2: Repair truncated JSON
+                // Gemini 2.5 Flash sometimes truncates output mid-JSON
+                try {
+                    let repaired = cleanedText;
+                    // Check if it looks like truncated JSON (starts with { but doesn't end with })
+                    if (repaired.startsWith('{') && !repaired.endsWith('}')) {
+                        console.log('Attempting truncated JSON repair...');
+                        // Remove any trailing incomplete key-value pair (cut off mid-string)
+                        repaired = repaired.replace(/,?\s*"[^"]*"?\s*:?\s*"?[^"]*$/, '');
+                        // Remove trailing incomplete array element
+                        repaired = repaired.replace(/,?\s*\{[^}]*$/, '');
+                        // Close any open arrays and objects
+                        const openBrackets = (repaired.match(/\[/g) || []).length;
+                        const closeBrackets = (repaired.match(/\]/g) || []).length;
+                        const openBraces = (repaired.match(/\{/g) || []).length;
+                        const closeBraces = (repaired.match(/\}/g) || []).length;
+                        // Remove any trailing comma before we close
+                        repaired = repaired.replace(/,\s*$/, '');
+                        for (let i = 0; i < openBrackets - closeBrackets; i++) repaired += ']';
+                        for (let i = 0; i < openBraces - closeBraces; i++) repaired += '}';
+                        structuredData = JSON.parse(repaired);
+                        console.log('Truncated JSON repair succeeded');
+                    }
+                } catch (repairError) {
+                    console.error('JSON repair also failed:', repairError.message);
+                }
+
+                // Attempt 3: Extract JSON object from surrounding text
+                if (!structuredData) {
+                    try {
+                        const jsonStart = responseText.indexOf('{');
+                        const jsonEnd = responseText.lastIndexOf('}');
+                        if (jsonStart !== -1 && jsonEnd > jsonStart) {
+                            structuredData = JSON.parse(responseText.substring(jsonStart, jsonEnd + 1));
+                            console.log('JSON extraction fallback succeeded');
+                        }
+                    } catch (extractError) {
+                        console.error('JSON extraction also failed:', extractError.message);
+                    }
+                }
+
+                // Final fallback: return raw text in structured format
+                if (!structuredData) {
+                    structuredData = {
+                        gurmukhi: "",
+                        romanized: "",
+                        english: "",
+                        cultural_note: responseText,
+                        grammar_tip: "",
+                        difficulty_level: userLevel,
+                        new_vocabulary: [],
+                        follow_up_suggestion: "",
+                        rag_sources_used: "Parse error — raw response returned"
+                    };
+                }
             }
         }
 
         return Response.json({
             response: responseText,
             structured: structuredData,
+            rawJson: structuredData ? JSON.stringify(structuredData) : responseText,
             // Expose RAG metadata for evaluation/debugging
             rag_metadata: {
                 cultural_scenarios_retrieved: ragResults.culturalScenarios.length,

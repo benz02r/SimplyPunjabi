@@ -17,34 +17,31 @@ function ChatSpotlight({ inPopup = false }) {
         {
             role: 'assistant',
             text: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! Ask me anything in English: greetings, family phrases, cultural context.',
-            structured: null
+            structured: null,
+            rawJson: null
         }
     ]);
     const [input, setInput] = useState('');
-    const [usesLeft, setUsesLeft] = useState(null);
+    const [usesLeft, setUsesLeft] = useState(999); // TEMP: unlimited for testing
     const [loading, setLoading] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const [isLoadingAudio, setIsLoadingAudio] = useState({});
 
-    const MAX_FREE_USES = 3;
+    const MAX_FREE_USES = 999; // TEMP: unlimited for testing
     const STORAGE_KEY = 'sp_chat_uses';
 
-    useEffect(() => {
-        try {
-            const stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
-            setUsesLeft(Math.max(0, MAX_FREE_USES - stored));
-        } catch {
-            setUsesLeft(MAX_FREE_USES);
-        }
-    }, []);
+    // TEMP: Skip usage tracking for testing
+    // useEffect(() => {
+    //     try {
+    //         const stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+    //         setUsesLeft(Math.max(0, MAX_FREE_USES - stored));
+    //     } catch {
+    //         setUsesLeft(MAX_FREE_USES);
+    //     }
+    // }, []);
 
     const incrementUses = () => {
-        try {
-            const stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
-            const next = stored + 1;
-            localStorage.setItem(STORAGE_KEY, String(next));
-            setUsesLeft(Math.max(0, MAX_FREE_USES - next));
-        } catch { }
+        // TEMP: No-op for testing
     };
 
     const speakPunjabi = async (text, msgIndex) => {
@@ -75,8 +72,16 @@ function ChatSpotlight({ inPopup = false }) {
         const trimmed = input.trim();
         if (!trimmed || loading || usesLeft <= 0) return;
 
-        const conversationHistory = messages.map(m => ({ role: m.role, content: m.text }));
-        const userMsg = { role: 'user', text: trimmed, structured: null };
+        // Only include messages that have actual conversation content
+        // Skip the initial hardcoded welcome message (no rawJson, not from Gemini)
+        const conversationHistory = messages
+            .filter(m => m.rawJson !== undefined || m.role === 'user')
+            .filter(m => !(m.role === 'assistant' && !m.rawJson))
+            .map(m => ({
+                role: m.role,
+                content: m.role === 'assistant' && m.rawJson ? m.rawJson : m.text
+            }));
+        const userMsg = { role: 'user', text: trimmed, structured: null, rawJson: null };
         setMessages(prev => [...prev, userMsg]);
         setInput('');
         setIsTyping(true);
@@ -84,25 +89,38 @@ function ChatSpotlight({ inPopup = false }) {
         incrementUses();
 
         try {
-            const response = await fetch('/api/chat-gemini', {
+            const response = await fetch('/api/chat-landing', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: trimmed,
-                    conversationHistory,
-                    responseFormat: 'structured',
-                    userLevel: 'beginner'
+                    conversationHistory
                 })
             });
             const data = await response.json();
-            const structured = data.structured;
-            let replyText = data.response || '';
+            let structured = data.structured || null;
+            const rawJson = data.rawJson || null;
+
+            // Defensive: if structured is missing but response looks like JSON, parse it client-side
+            if (!structured?.gurmukhi && data.response) {
+                try {
+                    const cleaned = data.response.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?\s*```$/i, '').trim();
+                    if (cleaned.startsWith('{')) {
+                        const parsed = JSON.parse(cleaned);
+                        if (parsed.gurmukhi) structured = parsed;
+                    }
+                } catch { /* not JSON, that's fine */ }
+            }
+
+            let replyText = '';
             if (structured?.romanized && structured?.english) {
                 replyText = structured.romanized + ' · ' + structured.english;
+            } else {
+                replyText = data.response || 'Something went wrong. Please try again.';
             }
-            setMessages(prev => [...prev, { role: 'assistant', text: replyText, structured }]);
+            setMessages(prev => [...prev, { role: 'assistant', text: replyText, structured, rawJson: rawJson || (structured ? JSON.stringify(structured) : null) }]);
         } catch {
-            setMessages(prev => [...prev, { role: 'assistant', text: 'Something went wrong. Please try again.', structured: null }]);
+            setMessages(prev => [...prev, { role: 'assistant', text: 'Something went wrong. Please try again.', structured: null, rawJson: null }]);
         } finally {
             setIsTyping(false);
             setLoading(false);
