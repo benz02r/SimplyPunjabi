@@ -22,26 +22,30 @@ function ChatSpotlight({ inPopup = false }) {
         }
     ]);
     const [input, setInput] = useState('');
-    const [usesLeft, setUsesLeft] = useState(999); // TEMP: unlimited for testing
+    const [usesLeft, setUsesLeft] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const [isLoadingAudio, setIsLoadingAudio] = useState({});
 
-    const MAX_FREE_USES = 999; // TEMP: unlimited for testing
+    const MAX_FREE_USES = 3;
     const STORAGE_KEY = 'sp_chat_uses';
 
-    // TEMP: Skip usage tracking for testing
-    // useEffect(() => {
-    //     try {
-    //         const stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
-    //         setUsesLeft(Math.max(0, MAX_FREE_USES - stored));
-    //     } catch {
-    //         setUsesLeft(MAX_FREE_USES);
-    //     }
-    // }, []);
+    useEffect(() => {
+        try {
+            const stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+            setUsesLeft(Math.max(0, MAX_FREE_USES - stored));
+        } catch {
+            setUsesLeft(MAX_FREE_USES);
+        }
+    }, []);
 
     const incrementUses = () => {
-        // TEMP: No-op for testing
+        try {
+            const stored = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+            const next = stored + 1;
+            localStorage.setItem(STORAGE_KEY, String(next));
+            setUsesLeft(Math.max(0, MAX_FREE_USES - next));
+        } catch { }
     };
 
     const speakPunjabi = async (text, msgIndex) => {
@@ -521,10 +525,6 @@ export default function Home() {
                                     </button>
                                 </div>
 
-                                <p className="text-xs text-gray-400 flex items-center gap-4">
-                                    <span className="flex items-center gap-1.5"><FaCheckCircle className="text-green-400" /> No credit card</span>
-                                    <span className="flex items-center gap-1.5"><FaClock className="text-gray-300" /> Ready in 2 minutes</span>
-                                </p>
                             </div>
                         </div>
 
@@ -827,11 +827,6 @@ export default function Home() {
                                     </span>
                                 </button>
                             </a>
-                            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400">
-                                <span className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /> No credit card required</span>
-                                <span className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /> Learn at your own pace</span>
-                                <span className="flex items-center gap-2"><FaCheckCircle className="text-green-400" /> Free to use</span>
-                            </div>
                         </div>
                     </FadeIn>
                 </section>

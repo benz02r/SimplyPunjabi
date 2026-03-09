@@ -1,78 +1,163 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Home, ArrowLeft, Compass, BookOpen, Sparkles } from "lucide-react";
+import { Home, ArrowLeft, Compass, BookOpen, GraduationCap, MessageCircle, Search } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+/* ═══════════════════════════════════════════════════════════════════
+   Fade-in-on-scroll wrapper (matches landing page)
+   ═══════════════════════════════════════════════════════════════════ */
+function FadeIn({ children, className = '', delay = 0 }) {
+    const ref = useRef(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) setVisible(true);
+        }, { threshold: 0.15 });
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            className={className}
+            style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(24px)',
+                transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+            }}
+        >
+            {children}
+        </div>
+    );
+}
 
 export default function NotFound() {
     const router = useRouter();
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center px-4 pt-32 pb-12">
-            <div className="max-w-xl w-full">
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-blue-100 text-center">
-                    {/* Animated Icon */}
-                    <div className="flex items-center justify-center mb-4">
-                        <div className="relative">
-                            <div className="bg-gradient-to-r from-blue-500 to-orange-500 p-4 rounded-full animate-pulse">
-                                <Compass className="w-12 h-12 text-white" />
-                            </div>
-                            <div className="absolute -top-1 -right-1">
-                                <Sparkles className="w-6 h-6 text-orange-500 animate-bounce" />
+        <>
+            <style jsx global>{`
+                :root {
+                    --color-saffron: #E67E22;
+                    --color-navy: #1B2A4A;
+                    --color-cream: #FDFBF7;
+                    --font-display: 'DM Serif Display', Georgia, serif;
+                    --font-body: 'DM Sans', system-ui, sans-serif;
+                }
+                body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+                .font-display { font-family: var(--font-display); }
+                .text-saffron { color: var(--color-saffron); }
+                .bg-saffron { background-color: var(--color-saffron); }
+                .text-navy { color: var(--color-navy); }
+                .bg-navy { background-color: var(--color-navy); }
+                @keyframes float {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-8px); }
+                }
+                .animate-float { animation: float 6s ease-in-out infinite; }
+            `}</style>
+
+            <div className="min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-16 relative overflow-hidden" style={{ backgroundColor: 'var(--color-cream)' }}>
+
+                {/* Decorative radial gradients */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-25 -z-10"
+                     style={{ background: 'radial-gradient(circle, rgba(230,126,34,0.12) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-15 -z-10"
+                     style={{ background: 'radial-gradient(circle, rgba(27,42,74,0.08) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
+
+                {/* Gurmukhi watermark */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[16rem] lg:text-[22rem] font-bold opacity-[0.025] text-navy select-none pointer-events-none leading-none"
+                     style={{ fontFamily: 'serif' }}>
+                    ਖੋਜ
+                </div>
+
+                {/* Floating Gurmukhi characters */}
+                <div className="absolute top-20 left-10 text-4xl text-saffron opacity-15 animate-float font-display select-none hidden lg:block" style={{ animationDelay: '0s' }}>ੳ</div>
+                <div className="absolute bottom-32 right-16 text-5xl text-navy opacity-10 animate-float font-display select-none hidden lg:block" style={{ animationDelay: '2s' }}>ਅ</div>
+                <div className="absolute top-1/3 right-10 text-3xl text-saffron opacity-10 animate-float font-display select-none hidden lg:block" style={{ animationDelay: '4s' }}>ੲ</div>
+
+                <div className="max-w-lg w-full relative z-10">
+                    <FadeIn>
+                        {/* 404 number */}
+                        <div className="text-center mb-2">
+                            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-saffron mb-4">Page Not Found</p>
+                            <h1 className="font-display text-navy leading-none mb-3" style={{ fontSize: 'clamp(5rem, 12vw, 8rem)' }}>
+                                4<span className="text-saffron">0</span>4
+                            </h1>
+                        </div>
+                    </FadeIn>
+
+                    <FadeIn delay={100}>
+                        <div className="text-center mb-10">
+                            <h2 className="text-xl sm:text-2xl font-display text-navy mb-3">
+                                This page doesn't exist yet
+                            </h2>
+                            <p className="text-gray-500 leading-relaxed max-w-sm mx-auto">
+                                The lesson or feature you're looking for is still being developed. In the meantime, explore what's already available.
+                            </p>
+                        </div>
+                    </FadeIn>
+
+                    {/* Action buttons */}
+                    <FadeIn delay={200}>
+                        <div className="space-y-3 mb-10">
+                            <button
+                                onClick={() => router.push('/learning/essential-punjabi')}
+                                className="group w-full flex items-center justify-center gap-3 bg-navy text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+                            >
+                                <GraduationCap className="w-5 h-5" />
+                                Go to Lessons
+                            </button>
+
+                            <button
+                                onClick={() => router.back()}
+                                className="w-full flex items-center justify-center gap-3 bg-white text-navy border-2 border-gray-200 py-4 rounded-xl font-semibold hover:border-saffron hover:text-saffron transition-all duration-300"
+                            >
+                                <ArrowLeft className="w-5 h-5" />
+                                Go Back
+                            </button>
+                        </div>
+                    </FadeIn>
+
+                    {/* Quick links */}
+                    <FadeIn delay={300}>
+                        <div className="grid grid-cols-3 gap-3">
+                            {[
+                                { label: "Home", icon: <Home className="w-5 h-5" />, href: "/" },
+                                { label: "AI Tutor", icon: <MessageCircle className="w-5 h-5" />, href: "/learning/punjabi-chat" },
+                                { label: "Dictionary", icon: <Search className="w-5 h-5" />, href: "/learning/dictionary" },
+                            ].map((link, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => router.push(link.href)}
+                                    className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-col items-center gap-2 group"
+                                >
+                                    <div className="text-gray-400 group-hover:text-saffron transition-colors">
+                                        {link.icon}
+                                    </div>
+                                    <span className="text-xs font-medium text-gray-500 group-hover:text-navy transition-colors">{link.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </FadeIn>
+
+                    {/* Fun fact */}
+                    <FadeIn delay={400}>
+                        <div className="mt-10 text-center">
+                            <div className="inline-flex items-center gap-2 bg-white rounded-full px-5 py-2.5 shadow-sm border border-gray-100">
+                                <BookOpen className="w-4 h-4 text-saffron" />
+                                <p className="text-xs text-gray-400">
+                                    <span className="font-display text-navy text-sm mr-1">ਖੋਜ</span>
+                                    (khoj) means "search" in Punjabi
+                                </p>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Main Message */}
-                    <h1 className="text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
-                        404
-                    </h1>
-
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                        Page Not Found
-                    </h2>
-
-                    <div className="bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl p-4 mb-6 border border-blue-200">
-                        <div className="flex items-center justify-center mb-2">
-                            <BookOpen className="w-5 h-5 text-orange-600 mr-2" />
-                            <h3 className="text-lg font-semibold text-gray-800">Coming Soon!</h3>
-                        </div>
-                        <p className="text-gray-700">
-                            This lesson or feature is currently under development. We're working hard to bring you more amazing Punjabi learning content!
-                        </p>
-                    </div>
-
-                    {/* Additional Info */}
-                    <p className="text-gray-600 mb-6">
-                        The page you're looking for doesn't exist yet, or the URL might be incorrect.
-                    </p>
-
-                    {/* Action Buttons */}
-                    <div className="space-y-3">
-                        <button
-                            onClick={() => router.push('/learning/essential-punjabi')}
-                            className="w-full bg-gradient-to-r from-blue-500 to-orange-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
-                        >
-                            <Home className="w-5 h-5 mr-2" />
-                            Go to Lessons
-                        </button>
-
-                        <button
-                            onClick={() => router.back()}
-                            className="w-full bg-white text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors border-2 border-gray-300 flex items-center justify-center"
-                        >
-                            <ArrowLeft className="w-5 h-5 mr-2" />
-                            Go Back
-                        </button>
-                    </div>
-
-                    {/* Fun Fact */}
-                    <div className="mt-6 pt-4 border-t border-gray-200">
-                        <p className="text-sm text-gray-500 italic">
-                             Did you know? While you're here, you can explore our existing lessons on greetings, introductions, family, and numbers!
-                        </p>
-                    </div>
+                    </FadeIn>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
